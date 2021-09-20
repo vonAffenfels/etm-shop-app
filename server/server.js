@@ -63,7 +63,8 @@ const updateProduct = async (id, fileName) => {
                             description: "filename of the associated download attachment",
                             namespace: "Download",
                             key: "filename",
-                            value: fileName
+                            value: fileName,
+                            type: "String"
                         }
                     ]
                 }
