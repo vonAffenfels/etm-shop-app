@@ -64,7 +64,7 @@ const updateProduct = async (id, fileName) => {
                             namespace: "Download",
                             key: "filename",
                             value: fileName,
-                            type: "single_line_text_field"
+                            valueType: "STRING"
                         }
                     ]
                 }
