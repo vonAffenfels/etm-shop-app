@@ -33,7 +33,7 @@ const Upload = () => {
         if (!files.length || !productId) {
             return;
         }
-        process.env.SCOPES
+
         const formData = new FormData();
         formData.append("file", files[0]);
 

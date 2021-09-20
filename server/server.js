@@ -166,6 +166,8 @@ app.prepare().then(async () => {
             return;
         }
 
+        const shopifyId = "gid://shopify/Product/" + productId;
+        console.log("in /product/upload/:productId, shopifyId", shopifyId)
         const slug = speakingurl(file.name);
         const filePath = path.join(process.cwd(), "data", slug);
         const reader = fs.createReadStream(file.path);
@@ -174,6 +176,7 @@ app.prepare().then(async () => {
 
         try {
             await aws.upload(reader, "downloads/" + slug);
+            await updateProduct(shopifyId, slug);
             ctx.body = "ok";
         } catch (e) {
             console.log(e);
