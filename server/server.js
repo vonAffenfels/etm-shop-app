@@ -78,11 +78,10 @@ const updateProduct = async (id, fileName) => {
     }
 };
 
-console.log(process.env)
 Shopify.Context.initialize({
     API_KEY: process.env.SHOPIFY_API_KEY,
     API_SECRET_KEY: process.env.SHOPIFY_API_SECRET,
-    SCOPES: (process.env.SCOPES || "write_products,write_customers,write_draft_orders").split(","),
+    SCOPES: process.env.SCOPES.split(","),
     HOST_NAME: process.env.HOST.replace(/https:\/\//, ""),
     API_VERSION: ApiVersion.October20,
     IS_EMBEDDED_APP: true,
