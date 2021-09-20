@@ -40,9 +40,9 @@ const updateProduct = async (id, fileName) => {
                                     node {
                                         id
                                         key
-                                        description
                                         namespace
-                                        type
+                                        createdAt
+                                        description
                                         value
                                     }
                                 }
@@ -63,7 +63,6 @@ const updateProduct = async (id, fileName) => {
                             description: "filename of the associated download attachment",
                             namespace: "Download",
                             key: "filename",
-                            type: "String",
                             value: fileName
                         }
                     ]
@@ -203,9 +202,17 @@ app.prepare().then(async () => {
                         product(id:$id) {
                             title
                             description
-                            metafields(namespace:"Download", key:"filename") {
-                                description
-                                value
+                            metafields {
+                                edges {
+                                    node {
+                                        id
+                                        key
+                                        namespace
+                                        createdAt
+                                        description
+                                        value
+                                    }
+                                }
                             }
                         }
                     }
@@ -216,6 +223,7 @@ app.prepare().then(async () => {
             });
             ctx.body = res.data;
         } catch (e) {
+            console.log(e);
             ctx.body = {
                 empty: true
             };
