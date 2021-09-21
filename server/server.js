@@ -122,8 +122,17 @@ app.prepare().then(async () => {
                     console.log(`Failed to register APP_UNINSTALLED webhook: ${response.result}`);
                 }
 
+                let redirectUrl = "/";
+                let queryString = "shop=" + shop + "&host=" + host;
+                if (ACTIVE_SHOPIFY_SHOPS_REDIRECTS && ACTIVE_SHOPIFY_SHOPS_REDIRECTS[shop]) {
+                    let tempUrl = new URL(process.env.SHOP + ACTIVE_SHOPIFY_SHOPS_REDIRECTS[shop]);
+                    redirectUrl = tempUrl.pathname;
+                    queryString += "&id=" + tempUrl.searchParams.get("id");
+                }
+
+                console.log("redirect to:::", `${redirectUrl}?${queryString}`)
                 // Redirect to app with shop parameter upon auth
-                ctx.redirect(`/?shop=${shop}&host=${host}`);
+                ctx.redirect(`${redirectUrl}?${queryString}`);
             },
         })
     );
