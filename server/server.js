@@ -24,56 +24,55 @@ const handle = app.getRequestHandler();
 const aws = new AWSService();
 const client = createClient(process.env.SHOP, process.env.ETM_SHOPIFY_KEY, process.env.ETM_SHOPIFY_PASSWORD);
 const updateProduct = async (id, fileName) => {
-    try {
-        const res = await client.query({
-            query: gql`
-                mutation productUpdate($input: ProductInput!) {
-                    productUpdate(input: $input) {
-                        product {
-                            id
-                            title
-                            descriptionHtml
-                            metafields(first: 1, namespace: "Download") {
-                                edges {
-                                    node {
-                                        id
-                                        key
-                                        namespace
-                                        createdAt
-                                        description
-                                        value
-                                    }
+    const res = await client.query({
+        query: gql`
+            mutation productUpdate($input: ProductInput!) {
+                productUpdate(input: $input) {
+                    product {
+                        id
+                        title
+                        descriptionHtml
+                        metafields(first: 1, namespace: "Download") {
+                            edges {
+                                node {
+                                    id
+                                    key
+                                    namespace
+                                    createdAt
+                                    description
+                                    value
                                 }
                             }
                         }
-                        userErrors {
-                            field
-                            message
-                        }
+                    }
+                    userErrors {
+                        field
+                        message
                     }
                 }
-            `,
-            variables: {
-                input: {
-                    id: id,
-                    metafields: [
-                        {
-                            description: "filename of the associated download attachment",
-                            namespace: "Download",
-                            key: "filename",
-                            value: fileName,
-                            valueType: "STRING"
-                        }
-                    ]
-                }
             }
-        });
+        `,
+        variables: {
+            input: {
+                id: id,
+                metafields: [
+                    {
+                        description: "filename of the associated download attachment",
+                        namespace: "Download",
+                        key: "filename",
+                        value: fileName,
+                        valueType: "STRING"
+                    }
+                ]
+            }
+        }
+    });
 
-        console.log("updateProduct:", JSON.stringify(res, null, 3));
-        return res;
-    } catch (e) {
-        console.log(e);
+    if (res.productUpdate && res.productUpdate.userErrors && res.productUpdate.userErrors.length) {
+        throw new Error(JSON.stringify(result.productUpdate.userErrors))
     }
+
+    return res;
 };
 
 Shopify.Context.initialize({
@@ -130,7 +129,6 @@ app.prepare().then(async () => {
                     queryString += "&id=" + tempUrl.searchParams.get("id");
                 }
 
-                console.log("redirect to:::", `${redirectUrl}?${queryString}`)
                 // Redirect to app with shop parameter upon auth
                 ctx.redirect(`${redirectUrl}?${queryString}`);
             },

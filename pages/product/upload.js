@@ -79,7 +79,7 @@ const Upload = () => {
             <Card sectioned title={"Vorhandene Dateianhänge"}>
                 <TextContainer>
                     <Heading>{node.value}</Heading>
-                    <p>Hochgeladen am {node.createdAt.substring(0, node.createdAt.indexOf("T") - 1)}</p>
+                    <p>Hochgeladen am {node.createdAt.substring(0, node.createdAt.indexOf("T"))}</p>
                 </TextContainer>
             </Card>
         ));
