@@ -55,4 +55,22 @@ module.exports = class AWSService {
             });
         });
     }
+
+    download(fileName) {
+        const params = {
+            Bucket: process.env.AWS_BUCKET_NAME,
+            Key: fileName
+        };
+
+        return new Promise((resolve, reject) => {
+            this.s3.getObject(params, function (err, data) {
+                if (err) {
+                    reject(err);
+                } else {
+                    console.log("getObject", data)
+                    resolve(data.Body);
+                }
+            });
+        });
+    }
 }

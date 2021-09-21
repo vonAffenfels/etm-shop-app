@@ -6,7 +6,7 @@ import dotenv from "dotenv";
 import "isomorphic-fetch";
 import createShopifyAuth, {verifyRequest} from "@shopify/koa-shopify-auth";
 import Shopify, {ApiVersion} from "@shopify/shopify-api";
-import {createClient, updateProduct, removeMetafield} from "./handlers/index";
+import {createClient, updateProduct, removeMetafield, getProduct} from "./handlers/index";
 import Koa from "koa";
 import next from "next";
 import Router from "koa-router";
@@ -101,16 +101,54 @@ app.prepare().then(async () => {
     });
 
     router.post("/graphql", verifyRequest({returnHeader: true}), async (ctx, next) => {
-        console.log("router: /graphql")
         await Shopify.Utils.graphqlProxy(ctx.req, ctx.res);
     });
 
+    router.get("/product/download/:productId", async (ctx, next) => {
+        const {productId} = ctx.params;
+
+        if (!productId) {
+            ctx.res.status = 400;
+            ctx.body = "productId missing";
+            return;
+        }
+
+        const shopifyId = "gid://shopify/Product/" + productId;
+        const res = await getProduct(client, shopifyId);
+
+        if (!res.data || !res.data.product) {
+            ctx.res.status = 404;
+            ctx.body = "no product found for id " + shopifyId;
+            return;
+        }
+
+        const metafields = res.data.product.metafields;
+
+        if (!metafields || !metafields.edges || !metafields.edges.length) {
+            ctx.res.status = 404;
+            ctx.body = "no attached files found for product with id " + shopifyId;
+            return;
+        }
+
+        const downloadFields = metafields.edges.map(edge => edge.node).filter(node => node.key === "filename");
+
+        if (!downloadFields.length) {
+            ctx.res.status = 404;
+            ctx.body = "no attached files found for product with id " + shopifyId;
+            return;
+        }
+
+        const downloadField = downloadFields[0];
+        console.log("downloadField", downloadField);
+        ctx.set("Content-disposition", "attachment; filename=" + downloadField.value);
+        //ctx.set("Content-type", "TODO mimetype");
+        ctx.body = await aws.download(downloadField.value);
+    });
+
     router.post("/product/upload/:productId", KoaBody({multipart: true, keepExtensions: true}), async (ctx, next) => {
-        console.log("/product/upload")
         const {productId} = ctx.params;
         const body = ctx.request.body;
         const file = ctx.request.files?.file;
-        console.log("body", body)
 
         if (!productId) {
             ctx.res.status = 400;
@@ -136,11 +174,8 @@ app.prepare().then(async () => {
         }
 
         const shopifyId = "gid://shopify/Product/" + productId;
-        console.log("in /product/upload/:productId, shopifyId", shopifyId)
         const slug = speakingurl(file.name);
-        const filePath = path.join(process.cwd(), "data", slug);
         const reader = fs.createReadStream(file.path);
-        console.log("filePath", filePath, "slug", slug)
 
         try {
             await aws.upload(reader, "downloads/" + slug);
@@ -163,34 +198,9 @@ app.prepare().then(async () => {
         }
 
         const shopifyId = "gid://shopify/Product/" + productId;
-        console.log("in /product/:productId, shopifyId", shopifyId)
 
         try {
-            const res = await client.query({
-                query: gql`
-                    query($id:ID!) {
-                        product(id:$id) {
-                            title
-                            description
-                            metafields(first: 1, namespace: "Download") {
-                                edges {
-                                    node {
-                                        id
-                                        key
-                                        namespace
-                                        createdAt
-                                        description
-                                        value
-                                    }
-                                }
-                            }
-                        }
-                    }
-                `,
-                variables: {
-                    id: shopifyId
-                }
-            });
+            const res = await getProduct(client, shopifyId);
             ctx.body = res.data;
         } catch (e) {
             console.log(e);
@@ -198,8 +208,6 @@ app.prepare().then(async () => {
                 empty: true
             };
         }
-
-
     });
 
     router.get("(/_next/static/.*)", handleRequest); // Static content is clear

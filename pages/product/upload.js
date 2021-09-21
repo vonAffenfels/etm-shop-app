@@ -106,7 +106,9 @@ const Upload = () => {
         return downloadFields.map((node, i) => (
             <Card sectioned title={"Vorhandene Dateianhänge"}>
                 <TextContainer>
-                    <Heading>{node.value}</Heading>
+                    <Heading>
+                        <a href={"/product/download/" + productId} download>{node.value}</a>
+                    </Heading>
                     <p>Hochgeladen am {node.createdAt.substring(0, node.createdAt.indexOf("T"))}</p>
                 </TextContainer>
             </Card>
