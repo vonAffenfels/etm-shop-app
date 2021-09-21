@@ -32,7 +32,7 @@ const updateProduct = async (id, fileName) => {
                         id
                         title
                         descriptionHtml
-                        metafields(first: 1, namespace: "Download") {
+                        metafields(first: 1, key: "filename") {
                             edges {
                                 node {
                                     id
@@ -211,7 +211,7 @@ app.prepare().then(async () => {
                         product(id:$id) {
                             title
                             description
-                            metafields(first: 1, namespace: "Download") {
+                            metafields(first: 1, key: "filename") {
                                 edges {
                                     node {
                                         id
