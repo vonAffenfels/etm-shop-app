@@ -91,6 +91,9 @@ Shopify.Context.initialize({
 // persist this object in your app.
 const ACTIVE_SHOPIFY_SHOPS = {};
 const ACTIVE_SHOPIFY_SHOPS_REDIRECTS = {};
+const ALLOWED_INITIAL_URL_FOR_REDIRECT = [
+    "/product/upload"
+];
 
 app.prepare().then(async () => {
     const server = new Koa();
@@ -100,13 +103,11 @@ app.prepare().then(async () => {
         createShopifyAuth({
             async afterAuth(ctx) {
                 // Access token and shop available in ctx.state.shopify
-                console.log("afterAuth", ctx.state)
-                console.log("query", ctx.query)
-                console.log("req", ctx.req)
                 const {shop, accessToken, scope} = ctx.state.shopify;
                 const host = ctx.query.host;
                 ACTIVE_SHOPIFY_SHOPS[shop] = scope;
-                console.log(ACTIVE_SHOPIFY_SHOPS_REDIRECTS)
+                console.log("ACTIVE_SHOPIFY_SHOPS_REDIRECTS", ACTIVE_SHOPIFY_SHOPS_REDIRECTS)
+                console.log("ALLOWED_INITIAL_URL_FOR_REDIRECT", ALLOWED_INITIAL_URL_FOR_REDIRECT)
 
                 const response = await Shopify.Webhooks.Registry.register({
                     shop,
@@ -239,6 +240,7 @@ app.prepare().then(async () => {
 
         // This shop hasn't been seen yet, go through OAuth to create a session
         if (ACTIVE_SHOPIFY_SHOPS[shop] === undefined) {
+            console.log("before auth redirect", ctx.route, ctx._matchedRoute, ctx._matchedRouteName)
             ACTIVE_SHOPIFY_SHOPS_REDIRECTS[shop] = ctx.req.url;
             ctx.redirect(`/auth?shop=${shop}`);
         } else {
