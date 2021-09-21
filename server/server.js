@@ -183,7 +183,8 @@ app.prepare().then(async () => {
 
         try {
             await aws.upload(reader, "downloads/" + slug);
-            await updateProduct(shopifyId, slug);
+            const res = await updateProduct(shopifyId, slug);
+            console.log("RESULT", JSON.stringify(res, null, 3))
             ctx.body = "ok";
         } catch (e) {
             console.log(e);
