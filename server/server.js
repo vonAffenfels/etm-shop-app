@@ -68,8 +68,8 @@ const updateProduct = async (id, fileName) => {
         }
     });
 
-    if (res.productUpdate && res.productUpdate.userErrors && res.productUpdate.userErrors.length) {
-        throw new Error(JSON.stringify(result.productUpdate.userErrors))
+    if (res.data.productUpdate && res.data.productUpdate.userErrors && res.data.productUpdate.userErrors.length) {
+        throw new Error(JSON.stringify(res.data.productUpdate.userErrors))
     }
 
     return res;
