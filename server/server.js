@@ -13,6 +13,8 @@ import Router from "koa-router";
 import KoaBody from "koa-body";
 import speakingurl from "speakingurl";
 import AWSService from "./aws";
+import updateProduct from "./handlers/mutations/updateProduct";
+import removeMetafield from "./handlers/mutations/removeMetafield";
 
 dotenv.config();
 const port = parseInt(process.env.PORT, 10) || 8081;
@@ -23,58 +25,6 @@ const app = next({
 const handle = app.getRequestHandler();
 const aws = new AWSService();
 const client = createClient(process.env.SHOP, process.env.ETM_SHOPIFY_KEY, process.env.ETM_SHOPIFY_PASSWORD);
-const updateProduct = async (id, fileName) => {
-    //TODO remove existing metafields if so
-    const res = await client.query({
-        query: gql`
-            mutation productUpdate($input: ProductInput!) {
-                productUpdate(input: $input) {
-                    product {
-                        id
-                        title
-                        descriptionHtml
-                        metafields(first: 1, namespace: "Download") {
-                            edges {
-                                node {
-                                    id
-                                    key
-                                    namespace
-                                    createdAt
-                                    description
-                                    value
-                                }
-                            }
-                        }
-                    }
-                    userErrors {
-                        field
-                        message
-                    }
-                }
-            }
-        `,
-        variables: {
-            input: {
-                id: id,
-                metafields: [
-                    {
-                        description: "filename of the associated download attachment",
-                        namespace: "Download",
-                        key: "filename",
-                        value: fileName,
-                        valueType: "STRING"
-                    }
-                ]
-            }
-        }
-    });
-
-    if (res.data.productUpdate && res.data.productUpdate.userErrors && res.data.productUpdate.userErrors.length) {
-        throw new Error(JSON.stringify(res.data.productUpdate.userErrors))
-    }
-
-    return res;
-};
 
 Shopify.Context.initialize({
     API_KEY: process.env.SHOPIFY_API_KEY,
@@ -176,6 +126,17 @@ app.prepare().then(async () => {
             return;
         }
 
+        try {
+            const downloads = String(body.downloads).length ? body.downloads.split(",") : [];
+            if (downloads && downloads.length) {
+                for (let i = 0; i < downloads.length; i++) {
+                    await removeMetafield(client, downloads[i]);
+                }
+            }
+        } catch (e) {
+            console.log("error in removeMetafield", e.toString());
+        }
+
         const shopifyId = "gid://shopify/Product/" + productId;
         console.log("in /product/upload/:productId, shopifyId", shopifyId)
         const slug = speakingurl(file.name);
@@ -185,13 +146,13 @@ app.prepare().then(async () => {
 
         try {
             await aws.upload(reader, "downloads/" + slug);
-            const res = await updateProduct(shopifyId, slug);
-            console.log("RESULT", JSON.stringify(res, null, 3))
-            ctx.body = "ok";
         } catch (e) {
             console.log(e);
             ctx.body = e.toString();
         }
+
+        const res = await updateProduct(client, shopifyId, slug);
+        ctx.body = "ok";
     });
 
     router.post("/product/:productId", async (ctx, next) => {
