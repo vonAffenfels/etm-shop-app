@@ -142,17 +142,14 @@ app.prepare().then(async () => {
         }
 
         const downloadField = downloadFields[0];
-        console.log("downloadField", downloadField);
         const fileName = String(downloadField.value);
         const fileSuffix = String(fileName.split("-").pop()).toLowerCase();
 
         ctx.set("Content-disposition", "attachment; filename=" + (fileName.replace("-" + fileSuffix, "." + fileSuffix)));
-        console.log("fileSuffix", fileSuffix)
         if (IMAGE_TYPE_SUFFIXES.indexOf(fileSuffix) !== -1) {
-            console.log("image/" + fileSuffix)
             ctx.set("Content-type", "image/" + fileSuffix);
         } else if (fileSuffix === "pdf") {
-            ctx.set("Content-type", "application/pdf");
+            ctx.set("Content-type", "application/" + fileSuffix);
         }
         ctx.body = await aws.download("downloads/" + fileName);
     });
