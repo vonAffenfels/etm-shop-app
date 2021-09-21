@@ -1,5 +1,5 @@
-import { createClient } from "./client";
-import { getOneTimeUrl } from "./mutations/get-one-time-url";
-import { getSubscriptionUrl } from "./mutations/get-subscription-url";
+import {createClient} from "./client";
+import updateProduct from "./mutations/updateProduct";
+import removeMetafield from "./mutations/removeMetafield";
 
-export { createClient, getOneTimeUrl, getSubscriptionUrl };
+export {createClient, updateProduct, removeMetafield};

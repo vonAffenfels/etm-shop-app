@@ -6,15 +6,13 @@ import dotenv from "dotenv";
 import "isomorphic-fetch";
 import createShopifyAuth, {verifyRequest} from "@shopify/koa-shopify-auth";
 import Shopify, {ApiVersion} from "@shopify/shopify-api";
-import {createClient} from "./handlers/index";
+import {createClient, updateProduct, removeMetafield} from "./handlers/index";
 import Koa from "koa";
 import next from "next";
 import Router from "koa-router";
 import KoaBody from "koa-body";
 import speakingurl from "speakingurl";
 import AWSService from "./aws";
-import updateProduct from "./handlers/mutations/updateProduct";
-import removeMetafield from "./handlers/mutations/removeMetafield";
 
 dotenv.config();
 const port = parseInt(process.env.PORT, 10) || 8081;
