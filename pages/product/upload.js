@@ -37,8 +37,22 @@ const Upload = () => {
         const formData = new FormData();
         formData.append("file", files[0]);
 
+        if (existingProduct && existingProduct.product) {
+            const metafields = existingProduct.product.metafields;
+
+            if (metafields && metafields.edges && metafields.edges.length) {
+                const downloadFields = metafields.edges.map(edge => edge.node).filter(node => node.key === "filename").map(node => node.id);
+                if (downloadFields.length) {
+                    formData.append("downloads", downloadFields.join(","))
+                }
+            }
+        }
+
+        console.log("formData", formData)
+
         try {
-            const data = await fetch("/product/upload/" + productId, {
+            const data = await fetch({
+                url: "/product/upload/" + productId,
                 method: "post",
                 body: formData
             }).then(response => response.text());

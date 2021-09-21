@@ -24,6 +24,7 @@ const handle = app.getRequestHandler();
 const aws = new AWSService();
 const client = createClient(process.env.SHOP, process.env.ETM_SHOPIFY_KEY, process.env.ETM_SHOPIFY_PASSWORD);
 const updateProduct = async (id, fileName) => {
+    //TODO remove existing metafields if so
     const res = await client.query({
         query: gql`
             mutation productUpdate($input: ProductInput!) {
@@ -159,7 +160,9 @@ app.prepare().then(async () => {
     router.post("/product/upload/:productId", KoaBody({multipart: true, keepExtensions: true}), async (ctx, next) => {
         console.log("/product/upload")
         const {productId} = ctx.params;
+        const body = ctx.request.body;
         const file = ctx.request.files?.file;
+        console.log("body", body)
 
         if (!productId) {
             ctx.res.status = 400;
@@ -179,7 +182,6 @@ app.prepare().then(async () => {
         const filePath = path.join(process.cwd(), "data", slug);
         const reader = fs.createReadStream(file.path);
         console.log("filePath", filePath, "slug", slug)
-        // const stream = fs.createWriteStream(filePath);
 
         try {
             await aws.upload(reader, "downloads/" + slug);
