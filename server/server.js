@@ -1,18 +1,16 @@
 import "@babel/polyfill";
+import fs from "fs";
+import path from "path";
+import gql from "graphql-tag";
 import dotenv from "dotenv";
 import "isomorphic-fetch";
 import createShopifyAuth, {verifyRequest} from "@shopify/koa-shopify-auth";
 import Shopify, {ApiVersion} from "@shopify/shopify-api";
 import {createClient} from "./handlers/index";
-import {GraphQLClient} from "graphql-request";
 import Koa from "koa";
 import next from "next";
 import Router from "koa-router";
 import KoaBody from "koa-body";
-import fs from "fs";
-import path from "path";
-import {ApolloClient, InMemoryCache} from "@apollo/client";
-import gql from "graphql-tag";
 import speakingurl from "speakingurl";
 import AWSService from "./aws";
 
@@ -101,6 +99,7 @@ app.prepare().then(async () => {
         createShopifyAuth({
             async afterAuth(ctx) {
                 // Access token and shop available in ctx.state.shopify
+                console.log("afterAuth", ctx.state)
                 const {shop, accessToken, scope} = ctx.state.shopify;
                 const host = ctx.query.host;
                 ACTIVE_SHOPIFY_SHOPS[shop] = scope;
@@ -113,6 +112,8 @@ app.prepare().then(async () => {
                     webhookHandler: async (topic, shop, body) =>
                         delete ACTIVE_SHOPIFY_SHOPS[shop],
                 });
+
+                console.log("register response", response)
 
                 if (!response.success) {
                     console.log(
@@ -127,6 +128,7 @@ app.prepare().then(async () => {
     );
 
     const handleRequest = async (ctx) => {
+        console.log("handleRequest", ctx.req.url)
         await handle(ctx.req, ctx.res);
         ctx.respond = false;
         ctx.res.statusCode = 200;
@@ -141,13 +143,10 @@ app.prepare().then(async () => {
         }
     });
 
-    router.post(
-        "/graphql",
-        verifyRequest({returnHeader: true}),
-        async (ctx, next) => {
-            await Shopify.Utils.graphqlProxy(ctx.req, ctx.res);
-        }
-    );
+    router.post("/graphql", verifyRequest({returnHeader: true}), async (ctx, next) => {
+        console.log("router: /graphql")
+        await Shopify.Utils.graphqlProxy(ctx.req, ctx.res);
+    });
 
     router.post("/product/upload/:productId", KoaBody({multipart: true, keepExtensions: true}), async (ctx, next) => {
         console.log("/product/upload")
@@ -237,11 +236,14 @@ app.prepare().then(async () => {
     router.get("/_next/webpack-hmr", handleRequest); // Webpack content is clear
     router.get("(.*)", async (ctx) => {
         const shop = ctx.query.shop;
+        console.log("router: \"(.*)\"", shop, ACTIVE_SHOPIFY_SHOPS[shop])
 
         // This shop hasn't been seen yet, go through OAuth to create a session
         if (ACTIVE_SHOPIFY_SHOPS[shop] === undefined) {
+            console.log("redirect to auth");
             ctx.redirect(`/auth?shop=${shop}`);
         } else {
+            console.log("handleRequest");
             await handleRequest(ctx);
         }
     });
