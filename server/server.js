@@ -141,8 +141,8 @@ app.prepare().then(async () => {
         const downloadField = downloadFields[0];
         console.log("downloadField", downloadField);
         ctx.set("Content-disposition", "attachment; filename=" + downloadField.value);
-        //ctx.set("Content-type", "TODO mimetype");
-        ctx.body = await aws.download(downloadField.value);
+        //ctx.set("Content-type", "TODO mimetype"); => mimetype slugged in fileName, daraus erschließbar
+        ctx.body = await aws.download("downloads/" + downloadField.value);
     });
 
     router.post("/product/upload/:productId", KoaBody({multipart: true, keepExtensions: true}), async (ctx, next) => {
