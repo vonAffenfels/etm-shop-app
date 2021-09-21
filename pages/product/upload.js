@@ -1,4 +1,4 @@
-import {Form, FormLayout, Layout, Card, Heading, Page, Badge} from "@shopify/polaris";
+import {Form, FormLayout, Layout, Card, TextContainer, Heading, Page, Badge} from "@shopify/polaris";
 import FileInput from "../../components/form/FileInput";
 import {useState, useEffect} from "react";
 import {useRouter} from "next/router";
@@ -62,6 +62,29 @@ const Upload = () => {
         setUploaded(false);
     }
 
+    function renderExistingProduct() {
+        if (!existingProduct || !existingProduct.product) {
+            return null;
+        }
+
+        const metafields = existingProduct.product.metafields;
+
+        if (!metafields || !metafields.edges || !metafields.edges.length) {
+            return null;
+        }
+
+        const downloadFields = metafields.edges.map(edge => edge.node).filter(node => node.key === "filename");
+
+        return downloadFields.map((node, i) => (
+            <Card sectioned title={"Vorhandene Dateianhänge"}>
+                <TextContainer>
+                    <Heading>{node.value}</Heading>
+                    <p>Hochgeladen am {node.createdAt.substring(0, node.createdAt.indexOf("T") - 1)}</p>
+                </TextContainer>
+            </Card>
+        ));
+    }
+
     return (
         <Page
             title="Download Content für Produkte"
@@ -81,11 +104,7 @@ const Upload = () => {
         >
             <Layout>
                 <Layout.Section>
-                    {existingProduct && existingProduct.product && (
-                        <Card sectioned title={"Existierende Datei"}>
-
-                        </Card>
-                    )}
+                    {renderExistingProduct()}
                     <Card sectioned title={"Upload Dateianhang"}>
                         <Form onSubmit={handleSubmit.bind(this)}>
                             <FormLayout>
