@@ -125,7 +125,7 @@ app.prepare().then(async () => {
                 let redirectUrl = "/";
                 let queryString = "shop=" + shop + "&host=" + host;
                 if (ACTIVE_SHOPIFY_SHOPS_REDIRECTS && ACTIVE_SHOPIFY_SHOPS_REDIRECTS[shop]) {
-                    let tempUrl = new URL(process.env.SHOP + ACTIVE_SHOPIFY_SHOPS_REDIRECTS[shop]);
+                    let tempUrl = new URL("https://" + process.env.SHOP + ACTIVE_SHOPIFY_SHOPS_REDIRECTS[shop]);
                     redirectUrl = tempUrl.pathname;
                     queryString += "&id=" + tempUrl.searchParams.get("id");
                 }
