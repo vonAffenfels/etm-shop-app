@@ -243,7 +243,6 @@ app.prepare().then(async () => {
             console.log("redirect to auth");
             ctx.redirect(`/auth?shop=${shop}`);
         } else {
-            console.log("handleRequest");
             await handleRequest(ctx);
         }
     });
