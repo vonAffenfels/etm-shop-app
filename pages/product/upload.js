@@ -142,15 +142,12 @@ const Upload = () => {
         }
 
         const downloadFields = metafields.edges.map(edge => edge.node).filter(node => node.key === "filename");
-
+        // https://etm-shop-app.herokuapp.com
         return downloadFields.map((node, i) => (
             <Card sectioned title={"Vorhandene Dateianhänge"}>
                 <TextContainer>
                     <Heading>
                         <a href={"/product/download/" + productId} download>{node.value}</a>
-                        <TextStyle variation="subdued">
-                            <span onClick={copyTextToClipboard("/product/download/" + productId)}>Link kopieren</span>
-                        </TextStyle>
                     </Heading>
                     <p>Hochgeladen am {node.createdAt.substring(0, node.createdAt.indexOf("T"))}</p>
                 </TextContainer>

@@ -42,6 +42,12 @@ const ACTIVE_SHOPIFY_SHOPS_REDIRECTS = {};
 const ALLOWED_INITIAL_URL_FOR_REDIRECT = [
     "/product/upload"
 ];
+const IMAGE_TYPE_SUFFIXES = [
+    "gif",
+    "jpg",
+    "jpeg",
+    "png"
+];
 
 app.prepare().then(async () => {
     const server = new Koa();
@@ -140,9 +146,16 @@ app.prepare().then(async () => {
 
         const downloadField = downloadFields[0];
         console.log("downloadField", downloadField);
-        ctx.set("Content-disposition", "attachment; filename=" + downloadField.value);
-        //ctx.set("Content-type", "TODO mimetype"); => mimetype slugged in fileName, daraus erschließbar
-        ctx.body = await aws.download("downloads/" + downloadField.value);
+        const fileName = String(downloadField.value);
+        const fileSuffix = String(fileName.split("-").pop()).toLowerCase();
+
+        ctx.set("Content-disposition", "attachment; filename=" + fileName);
+        if (IMAGE_TYPE_SUFFIXES.indexOf(fileSuffix) !== -1) {
+            ctx.set("Content-type", "image/" + fileSuffix);
+        } else if (fileSuffix === "pdf") {
+            ctx.set("Content-type", "application/pdf");
+        }
+        ctx.body = await aws.download("downloads/" + fileName);
     });
 
     router.post("/product/upload/:productId", KoaBody({multipart: true, keepExtensions: true}), async (ctx, next) => {
