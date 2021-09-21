@@ -67,7 +67,6 @@ module.exports = class AWSService {
                 if (err) {
                     reject(err);
                 } else {
-                    console.log("getObject", data)
                     resolve(data.Body);
                 }
             });

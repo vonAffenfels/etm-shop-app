@@ -60,8 +60,6 @@ app.prepare().then(async () => {
                 const {shop, accessToken, scope} = ctx.state.shopify;
                 const host = ctx.query.host;
                 ACTIVE_SHOPIFY_SHOPS[shop] = scope;
-                console.log("ACTIVE_SHOPIFY_SHOPS_REDIRECTS", ACTIVE_SHOPIFY_SHOPS_REDIRECTS)
-                console.log("ALLOWED_INITIAL_URL_FOR_REDIRECT", ALLOWED_INITIAL_URL_FOR_REDIRECT)
 
                 const response = await Shopify.Webhooks.Registry.register({
                     shop,
@@ -91,7 +89,6 @@ app.prepare().then(async () => {
     );
 
     const handleRequest = async (ctx) => {
-        console.log("handleRequest", ctx.req.url)
         await handle(ctx.req, ctx.res);
         ctx.respond = false;
         ctx.res.statusCode = 200;
@@ -149,8 +146,10 @@ app.prepare().then(async () => {
         const fileName = String(downloadField.value);
         const fileSuffix = String(fileName.split("-").pop()).toLowerCase();
 
-        ctx.set("Content-disposition", "attachment; filename=" + fileName);
+        ctx.set("Content-disposition", "attachment; filename=" + (fileName.replace("-" + fileSuffix, "." + fileSuffix)));
+        console.log("fileSuffix", fileSuffix)
         if (IMAGE_TYPE_SUFFIXES.indexOf(fileSuffix) !== -1) {
+            console.log("image/" + fileSuffix)
             ctx.set("Content-type", "image/" + fileSuffix);
         } else if (fileSuffix === "pdf") {
             ctx.set("Content-type", "application/pdf");
