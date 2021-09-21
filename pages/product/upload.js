@@ -51,8 +51,7 @@ const Upload = () => {
         console.log("formData", formData)
 
         try {
-            const data = await fetch({
-                url: "/product/upload/" + productId,
+            const data = await fetch("/product/upload/" + productId, {
                 method: "post",
                 body: formData
             }).then(response => response.text());
