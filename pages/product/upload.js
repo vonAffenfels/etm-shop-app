@@ -1,4 +1,4 @@
-import {Form, FormLayout, Layout, Card, TextContainer, Heading, Page, Badge} from "@shopify/polaris";
+import {Form, FormLayout, Layout, Card, TextContainer, Heading, Page, Badge, Spinner} from "@shopify/polaris";
 import FileInput from "../../components/form/FileInput";
 import {useState, useEffect} from "react";
 import {useRouter} from "next/router";
@@ -9,7 +9,8 @@ const Upload = () => {
     const productId = router.query.id;
 
     const [files, setFiles] = useState([]);
-    const [uploaded, setUploaded] = useState(false);
+    const [uploadedState, setUploadedState] = useState(null);
+    const [isLoading, setLoading] = useState(false);
     const [existingProduct, setExistingProduct] = useState(null);
 
     useEffect(() => {
@@ -29,10 +30,13 @@ const Upload = () => {
         }).catch(err => console.log(err));
     }
 
+    let interval = null;
     async function handleSubmit(e) {
         if (!files.length || !productId) {
             return;
         }
+
+        setLoading(true);
 
         const formData = new FormData();
         formData.append("file", files[0]);
@@ -57,22 +61,33 @@ const Upload = () => {
             }).then(response => response.text());
 
             setFiles([]);
-            setUploaded(true);
+            setUploadedState("success");
             setExistingProduct(null);
             fetchProduct();
+            setLoading(false);
         } catch (e) {
             console.error(e);
+            setUploadedState("error");
+            setLoading(false);
         }
+
+        if (interval) {
+            clearInterval(interval);
+        }
+        interval = setTimeout(() => {
+            setUploadedState(null);
+            interval = null;
+        }, 10000);
     }
 
     function reset() {
         setFiles([]);
-        setUploaded(false);
+        setUploadedState(null);
     }
 
     function onSelect(files) {
         setFiles(files);
-        setUploaded(false);
+        setUploadedState(null);
     }
 
     function renderExistingProduct() {
@@ -98,10 +113,23 @@ const Upload = () => {
         ));
     }
 
+    function renderTitleMetadata() {
+        if (!uploadedState) {
+            return null;
+        }
+
+        if (uploadedState === "success") {
+            return <Badge status="success">hochgeladen</Badge>;
+        }
+        if (uploadedState === "error") {
+            return <Badge status="error">Fehler aufgetreten</Badge>;
+        }
+    }
+
     return (
         <Page
             title="Download Content für Produkte"
-            titleMetadata={uploaded ? <Badge status="success">hochgeladen</Badge> : null}
+            titleMetadata={renderTitleMetadata()}
             primaryAction={{
                 content: "Speichern",
                 disabled: !files.length,
@@ -119,11 +147,15 @@ const Upload = () => {
                 <Layout.Section>
                     {renderExistingProduct()}
                     <Card sectioned title={"Upload Dateianhang"}>
-                        <Form onSubmit={handleSubmit.bind(this)}>
-                            <FormLayout>
-                                <FileInput files={files} onSelect={onSelect.bind(this)} />
-                            </FormLayout>
-                        </Form>
+                        {isLoading ? (
+                            <Spinner size="large" />
+                        ) : (
+                            <Form onSubmit={handleSubmit.bind(this)}>
+                                <FormLayout>
+                                    <FileInput files={files} onSelect={onSelect.bind(this)} />
+                                </FormLayout>
+                            </Form>
+                        )}
                     </Card>
                 </Layout.Section>
             </Layout>
