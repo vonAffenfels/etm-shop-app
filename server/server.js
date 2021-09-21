@@ -90,6 +90,7 @@ Shopify.Context.initialize({
 // Storing the currently active shops in memory will force them to re-login when your server restarts. You should
 // persist this object in your app.
 const ACTIVE_SHOPIFY_SHOPS = {};
+const ACTIVE_SHOPIFY_SHOPS_REDIRECTS = {};
 
 app.prepare().then(async () => {
     const server = new Koa();
@@ -100,9 +101,12 @@ app.prepare().then(async () => {
             async afterAuth(ctx) {
                 // Access token and shop available in ctx.state.shopify
                 console.log("afterAuth", ctx.state)
+                console.log("query", ctx.query)
+                console.log("req", ctx.req)
                 const {shop, accessToken, scope} = ctx.state.shopify;
                 const host = ctx.query.host;
                 ACTIVE_SHOPIFY_SHOPS[shop] = scope;
+                console.log(ACTIVE_SHOPIFY_SHOPS_REDIRECTS)
 
                 const response = await Shopify.Webhooks.Registry.register({
                     shop,
@@ -113,12 +117,8 @@ app.prepare().then(async () => {
                         delete ACTIVE_SHOPIFY_SHOPS[shop],
                 });
 
-                console.log("register response", response)
-
                 if (!response.success) {
-                    console.log(
-                        `Failed to register APP_UNINSTALLED webhook: ${response.result}`
-                    );
+                    console.log(`Failed to register APP_UNINSTALLED webhook: ${response.result}`);
                 }
 
                 // Redirect to app with shop parameter upon auth
@@ -236,11 +236,10 @@ app.prepare().then(async () => {
     router.get("/_next/webpack-hmr", handleRequest); // Webpack content is clear
     router.get("(.*)", async (ctx) => {
         const shop = ctx.query.shop;
-        console.log("router: \"(.*)\"", shop, ACTIVE_SHOPIFY_SHOPS[shop])
 
         // This shop hasn't been seen yet, go through OAuth to create a session
         if (ACTIVE_SHOPIFY_SHOPS[shop] === undefined) {
-            console.log("redirect to auth");
+            ACTIVE_SHOPIFY_SHOPS_REDIRECTS[shop] = ctx.req.url;
             ctx.redirect(`/auth?shop=${shop}`);
         } else {
             await handleRequest(ctx);
