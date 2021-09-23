@@ -1,10 +1,10 @@
-import {Form, FormLayout, Layout, Card, Page, Spinner, TextField, Button} from "@shopify/polaris";
+import {Form, FormLayout, Layout, Card, Page, Spinner, TextField, Button, OptionList} from "@shopify/polaris";
 import {useState} from "react";
 
 const Index = () => {
     const [isLoading, setLoading] = React.useState(null);
     const [text, setText] = React.useState("");
-    const [result, setResult] = React.useState(null);
+    const [result, setResult] = React.useState([]);
 
     // const result = await this.client.request(gql`${this.queries["getProduct"]}`, {query: ``});
     function onChange(value) {
@@ -20,8 +20,16 @@ const Index = () => {
         }).then(response => response.json()).then(data => {
             setLoading(false);
             console.log(data)
-            setResult(data);
+            if (data.productVariants && data.productVariants.edges) {
+                setResult(data.productVariants.edges);
+            } else {
+                setResult([]);
+            }
         }).catch(err => console.log(err));
+    }
+
+    function onSelected(_, __) {
+        console.log("onSelected", _, __)
     }
 
     return (
@@ -42,6 +50,19 @@ const Index = () => {
                             </Form>
                         )}
                     </Card>
+                    {result && result.length > 0 && (
+                        <Card sectioned title={"Suchergebnisse"}>
+                            <OptionList
+                                onChange={onSelected.bind(this)}
+                                options={result.map(node => {
+                                    return {
+                                        value: String(node.product.id).replace("gid://shopify/Product/", ""),
+                                        label: node.product.title
+                                    }
+                                })}
+                            />
+                        </Card>
+                    )}
                 </Layout.Section>
             </Layout>
         </Page>
