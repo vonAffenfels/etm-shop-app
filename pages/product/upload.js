@@ -75,11 +75,6 @@ const supplierOptions = [
     },
     {
         "value": "000014",
-        "short": "DIG",
-        "label": "digitaler Artikel"
-    },
-    {
-        "value": "000014",
         "short": "ETM",
         "label": "ETM Verlag"
     },
