@@ -56,7 +56,7 @@ const Index = () => {
                                 {result.map(entry => {
                                     const id = String(entry.node.product.id).replace("gid://shopify/Product/", "")
 
-                                    return <List.Item><Link url={"/product/upload/" + id}>{entry.node.product.title}</Link></List.Item>
+                                    return <List.Item><Link url={"/product/upload/?id=" + id}>{entry.node.product.title}</Link></List.Item>
                                 })}
                             </List>
                         </Card>
