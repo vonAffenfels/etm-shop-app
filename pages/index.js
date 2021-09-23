@@ -1,4 +1,4 @@
-import {Form, FormLayout, Layout, Card, Page, Spinner, TextField, Button, OptionList} from "@shopify/polaris";
+import {Form, FormLayout, Layout, Card, Page, Spinner, TextField, Button, List, Link} from "@shopify/polaris";
 import {useState} from "react";
 
 const Index = () => {
@@ -52,18 +52,13 @@ const Index = () => {
                     </Card>
                     {result && result.length > 0 && (
                         <Card sectioned title={"Suchergebnisse"}>
-                            <OptionList
-                                onChange={onSelected.bind(this)}
-                                options={result.map(entry => {
-                                    console.log("entry", entry)
+                            <List>
+                                {result.map(entry => {
                                     const id = String(entry.node.product.id).replace("gid://shopify/Product/", "")
-                                    return {
-                                        id: id,
-                                        value: id,
-                                        label: entry.node.product.title
-                                    }
+
+                                    return <List.Item><Link url={"/product/upload/" + id}>{entry.node.product.title}</Link></List.Item>
                                 })}
-                            />
+                            </List>
                         </Card>
                     )}
                 </Layout.Section>
