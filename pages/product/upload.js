@@ -127,6 +127,7 @@ const Upload = () => {
     function getTitle() {
         let retVal = "Produktpflege";
 
+        console.log("existingProduct", existingProduct)
         if (existingProduct) {
             retVal += " " + existingProduct.product.title;
         }
