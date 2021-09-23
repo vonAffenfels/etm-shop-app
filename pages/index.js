@@ -8,7 +8,6 @@ const Index = () => {
 
     // const result = await this.client.request(gql`${this.queries["getProduct"]}`, {query: ``});
     function onChange(value) {
-        console.log("onChange", value);
         setText(value);
     }
 
@@ -19,7 +18,6 @@ const Index = () => {
             method: "post",
         }).then(response => response.json()).then(data => {
             setLoading(false);
-            console.log(data)
             if (data.productVariants && data.productVariants.edges) {
                 setResult(data.productVariants.edges);
             } else {
@@ -28,13 +26,9 @@ const Index = () => {
         }).catch(err => console.log(err));
     }
 
-    function onSelected(_, __) {
-        console.log("onSelected", _, __)
-    }
-
     return (
         <Page
-            title="Download Content für Produkte"
+            title="Produktpflege"
         >
             <Layout>
                 <Layout.Section>
@@ -58,7 +52,6 @@ const Index = () => {
                                     let url = new URL(window.location.href);
                                     url.pathname = "/product/upload";
                                     url.searchParams.append("id", id);
-                                    console.log("location", window.location)
                                     return <List.Item><Link url={url.href}>{entry.node.product.title}</Link></List.Item>
                                 })}
                             </List>

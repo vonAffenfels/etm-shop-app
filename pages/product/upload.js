@@ -124,9 +124,19 @@ const Upload = () => {
         }
     }
 
+    function getTitle() {
+        let retVal = "Produktpflege";
+
+        if (existingProduct) {
+            retVal += " " + existingProduct.product.title;
+        }
+
+        return retVal;
+    }
+
     return (
         <Page
-            title="Download Content für Produkte"
+            title={getTitle()}
             titleMetadata={renderTitleMetadata()}
             primaryAction={{
                 content: "Speichern",
