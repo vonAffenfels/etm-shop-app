@@ -9,7 +9,7 @@ const updateProduct = async (client, id, metafields) => {
                         id
                         title
                         descriptionHtml
-                        metafields(first: 3, namespace: "Download") {
+                        metafields(first: 10) {
                             edges {
                                 node {
                                     id

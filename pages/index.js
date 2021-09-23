@@ -52,6 +52,7 @@ const Index = () => {
                                     let url = new URL(window.location.href);
                                     url.pathname = "/product/upload";
                                     url.searchParams.append("id", id);
+                                    console.log("url.href", url.href)
                                     return <List.Item><Link url={url.href}>{entry.node.product.title}</Link></List.Item>
                                 })}
                             </List>
