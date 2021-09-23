@@ -7,9 +7,9 @@ const Index = () => {
     const [result, setResult] = React.useState(null);
 
     // const result = await this.client.request(gql`${this.queries["getProduct"]}`, {query: ``});
-    function onChange(e) {
-        console.log("onChange", e.target.value);
-        setText(e.target.value);
+    function onChange(value) {
+        console.log("onChange", value);
+        setText(value);
     }
 
     function onClick(e) {

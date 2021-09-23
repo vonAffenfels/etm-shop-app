@@ -9,6 +9,7 @@ const getProductBySku = async (client, query) => {
                         node {
                             product {
                                 id
+                                title
                                 vendor
                             }
                         }
