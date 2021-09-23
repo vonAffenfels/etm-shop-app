@@ -226,6 +226,7 @@ const Upload = () => {
             const downloadFields = metafields.edges.map(edge => edge.node).filter(node => node.key === "downloaddate");
             if (downloadFields.length) {
                 const downloadField = downloadFields[0];
+                console.log("downloadField", downloadField)
                 setUploadDate({
                     start: downloadField.value,
                     end: downloadField.value
@@ -235,6 +236,7 @@ const Upload = () => {
             const supplierFields = metafields.edges.map(edge => edge.node).filter(node => node.key === "supplierid");
             if (supplierFields.length) {
                 const supplierField = supplierFields[0];
+                console.log("supplierField", supplierField)
                 supplierOptions.forEach((supplierOption) => {
                     if (supplierOption.value === supplierField) {
                         setSupplier(supplierOption);
@@ -256,6 +258,7 @@ const Upload = () => {
     }
 
     function onDateChange(date) {
+        console.log("onDateChange", date)
         setUploadDate(date);
         setTouched(true);
     }

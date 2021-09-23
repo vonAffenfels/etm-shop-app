@@ -4,7 +4,7 @@ const getProductBySku = async (client, query) => {
     const res = await client.query({
         query: gql`
             query($query:String!) {
-                productVariants(query:$query, first: 5) {
+                productVariants(query:$query, first: 15) {
                     edges {
                         node {
                             product {
