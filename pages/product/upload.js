@@ -128,7 +128,7 @@ const Upload = () => {
         let retVal = "Produktpflege";
 
         console.log("existingProduct", existingProduct)
-        if (existingProduct) {
+        if (existingProduct && existingProduct.product) {
             retVal += " " + existingProduct.product.title;
         }
 
