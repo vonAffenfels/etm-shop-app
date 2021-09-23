@@ -1,4 +1,4 @@
-import {Form, FormLayout, Layout, Card, TextContainer, Heading, Page, Badge, Spinner, DatePicker, Select} from "@shopify/polaris";
+import {Form, FormLayout, Layout, Card, TextContainer, TextStyle, Heading, Page, Badge, Spinner, DatePicker, Select} from "@shopify/polaris";
 import FileInput from "../../components/form/FileInput";
 import {useState, useEffect} from "react";
 import {useRouter} from "next/router";
@@ -283,6 +283,7 @@ const Upload = () => {
                             onChange={handleSupplierChange.bind(this)}
                             value={supplier}
                         />
+                        <TextStyle variation="subdued">no supplier given</TextStyle>
                     </Card>
                 </Layout.Section>
             </Layout>
