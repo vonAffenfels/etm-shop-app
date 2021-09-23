@@ -57,6 +57,7 @@ const Index = () => {
                                 options={result.map(node => {
                                     console.log("node", node)
                                     return {
+                                        id: String(node.product.id).replace("gid://shopify/Product/", ""),
                                         value: String(node.product.id).replace("gid://shopify/Product/", ""),
                                         label: node.product.title
                                     }
