@@ -1,4 +1,4 @@
-import {Form, FormLayout, Layout, Card, TextContainer, Heading, Page, Badge, Spinner} from "@shopify/polaris";
+import {Form, FormLayout, Layout, Card, TextContainer, Heading, Page, Badge, Spinner, DatePicker} from "@shopify/polaris";
 import FileInput from "../../components/form/FileInput";
 import {useState, useEffect} from "react";
 import {useRouter} from "next/router";
@@ -91,6 +91,10 @@ const Upload = () => {
         setUploadedState(null);
     }
 
+    function onDateChange(_, __, ___) {
+        console.log("onDateChange", _, __, ___)
+    }
+
     function renderExistingProduct() {
         if (!existingProduct || !existingProduct.product) {
             return null;
@@ -164,10 +168,18 @@ const Upload = () => {
                         {isLoading ? (
                             <Spinner size="large" />
                         ) : (
+                            <>
                                 <FileInput files={files} onSelect={onSelect.bind(this)} />
+                                <DatePicker
+                                    day={}
+                                    month={}
+                                    year={}
+                                    onChange={onDateChange.bind(this)}
+                                />
+                            </>
                         )}
                     </Card>
-                    <Card>
+                    <Card title={"Lieferant/Fremdartikelnummer"}>
 
                     </Card>
                 </Layout.Section>

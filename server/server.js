@@ -143,6 +143,8 @@ app.prepare().then(async () => {
             return;
         }
 
+        //TODO check ob releasedatum erreicht
+
         const downloadField = downloadFields[0];
         const fileName = String(downloadField.value);
         const fileSuffix = String(fileName.split("-").pop()).toLowerCase();
@@ -209,7 +211,7 @@ app.prepare().then(async () => {
         }
 
         if (body.uploaddate) {
-            
+
         }
 
         const res = await updateProduct(client, shopifyId, metafields);
