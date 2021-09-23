@@ -54,12 +54,13 @@ const Index = () => {
                         <Card sectioned title={"Suchergebnisse"}>
                             <OptionList
                                 onChange={onSelected.bind(this)}
-                                options={result.map(node => {
-                                    console.log("node", node)
+                                options={result.map(entry => {
+                                    console.log("entry", entry)
+                                    const id = String(entry.node.product.id).replace("gid://shopify/Product/", "")
                                     return {
-                                        id: String(node.product.id).replace("gid://shopify/Product/", ""),
-                                        value: String(node.product.id).replace("gid://shopify/Product/", ""),
-                                        label: node.product.title
+                                        id: id,
+                                        value: id,
+                                        label: entry.node.product.title
                                     }
                                 })}
                             />
