@@ -1,6 +1,6 @@
 import {Form, FormLayout, Layout, Card, TextContainer, TextStyle, Heading, Page, Badge, Spinner, DatePicker, Select} from "@shopify/polaris";
 import FileInput from "../../components/form/FileInput";
-import {useState, useEffect} from "react";
+import {useState, useEffect, useCallback} from "react";
 import {useRouter} from "next/router";
 
 const supplierOptions = [
@@ -104,12 +104,17 @@ const Upload = () => {
     const [uploadedState, setUploadedState] = useState(null);
     const [isLoading, setLoading] = useState(false);
     const [existingProduct, setExistingProduct] = useState(null);
+    const [{month, year}, setDate] = useState({month: new Date().getMonth(), year: new Date().getUTCFullYear()});
     const [uploadDate, setUploadDate] = useState(null);
-    const [supplier, setSupplier] = useState(null);
+    const [supplier, setSupplier] = useState({id: null, value: "Bitte wählen"});
 
     useEffect(() => {
         fetchProduct();
     }, []);
+
+    function handleMonthChange() {
+        useCallback((month, year) => setDate({month, year}), []);
+    }
 
     function fetchProduct() {
         if (typeof window === "undefined") {
@@ -184,11 +189,8 @@ const Upload = () => {
         setUploadedState(null);
     }
 
-    function onDateChange(_, __, ___) {
-        console.log("onDateChange", _, __, ___)
-    }
-
-    function handleSupplierChange(supplierInput) {
+    function handleSupplierChange(supplierInput, _) {
+        console.log("handleSupplierChange", supplierInput, _)
         setSupplier(supplierInput);
     }
 
@@ -265,16 +267,18 @@ const Upload = () => {
                         {isLoading ? (
                             <Spinner size="large" />
                         ) : (
-                            <>
-                                <FileInput files={files} onSelect={onSelect.bind(this)} />
-                                <DatePicker
-                                    day={1}
-                                    month={5}
-                                    year={2021}
-                                    onChange={onDateChange.bind(this)}
-                                />
-                            </>
+                            <FileInput files={files} onSelect={onSelect.bind(this)} />
                         )}
+                    </Card>
+                    <Card title={"Freigabedatum"}>
+                        <DatePicker
+                            allowRange={false}
+                            month={month}
+                            year={year}
+                            onMonthChange={handleMonthChange.bind(this)}
+                            onChange={setUploadDate.bind(this)}
+                            selected={uploadDate}
+                        />
                     </Card>
                     <Card title={"Lieferant/Fremdartikelnummer"}>
                         <Select
@@ -283,7 +287,9 @@ const Upload = () => {
                             onChange={handleSupplierChange.bind(this)}
                             value={supplier}
                         />
-                        <TextStyle variation="subdued">no supplier given</TextStyle>
+                        <TextContainer>
+                            <p><TextStyle variation="subdued">no supplier given</TextStyle></p>
+                        </TextContainer>
                     </Card>
                 </Layout.Section>
             </Layout>
