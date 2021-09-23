@@ -105,16 +105,15 @@ const Upload = () => {
     console.log("Upload", router.query)
     const productId = router.query.id;
 
+    const [touched, setTouched] = useState(false);
     const [files, setFiles] = useState([]);
     const [uploadedState, setUploadedState] = useState(null);
     const [isLoading, setLoading] = useState(false);
     const [existingProduct, setExistingProduct] = useState(null);
     const [{month, year}, setDate] = useState({month: new Date().getMonth(), year: new Date().getUTCFullYear()});
     const [uploadDate, setUploadDate] = useState(null);
-    const [supplier, setSupplier] = useState({value: null});
+    const [supplier, setSupplier] = useState({value: null, label: "", short: ""});
     const handleMonthChange = useCallback((month, year) => setDate({month, year}), []);
-
-    console.log("uploadDate", uploadDate)
 
     useEffect(() => {
         fetchProduct();
@@ -129,6 +128,7 @@ const Upload = () => {
             method: "post",
         }).then(response => response.json()).then(data => {
             setExistingProduct(data);
+            getInitialFormValues(data);
         }).catch(err => console.log(err));
     }
 
@@ -151,7 +151,37 @@ const Upload = () => {
                 if (metafields && metafields.edges && metafields.edges.length) {
                     const downloadFields = metafields.edges.map(edge => edge.node).filter(node => node.key === "filename").map(node => node.id);
                     if (downloadFields.length) {
-                        formData.append("downloads", downloadFields.join(","))
+                        formData.append("downloads", downloadFields.join(","));
+                    }
+                }
+            }
+        }
+
+        if (uploadDate && uploadDate.start) {
+            formData.append("downloaddate", uploadDate.start);
+
+            if (existingProduct && existingProduct.product) {
+                const metafields = existingProduct.product.metafields;
+
+                if (metafields && metafields.edges && metafields.edges.length) {
+                    const downloadFields = metafields.edges.map(edge => edge.node).filter(node => node.key === "downloaddate").map(node => node.id);
+                    if (downloadFields.length) {
+                        formData.append("downloaddateid", downloadFields.join(","));
+                    }
+                }
+            }
+        }
+
+        if (supplier && supplier.value) {
+            formData.append("supplierid", supplier.value);
+
+            if (existingProduct && existingProduct.product) {
+                const metafields = existingProduct.product.metafields;
+
+                if (metafields && metafields.edges && metafields.edges.length) {
+                    const supplierFields = metafields.edges.map(edge => edge.node).filter(node => node.key === "supplierid").map(node => node.id);
+                    if (supplierFields.length) {
+                        formData.append("suppliermetaid", supplierFields.join(","));
                     }
                 }
             }
@@ -168,10 +198,12 @@ const Upload = () => {
             setExistingProduct(null);
             fetchProduct();
             setLoading(false);
+            setTouched(false);
         } catch (e) {
             console.error(e);
             setUploadedState("error");
             setLoading(false);
+            setTouched(false);
         }
 
         if (interval) {
@@ -183,9 +215,39 @@ const Upload = () => {
         }, 10000);
     }
 
+    function getInitialFormValues(data) {
+        if (!data.product) {
+            return;
+        }
+
+        const metafields = existingProduct.product.metafields;
+
+        if (metafields && metafields.edges && metafields.edges.length) {
+            const downloadFields = metafields.edges.map(edge => edge.node).filter(node => node.key === "downloaddate");
+            if (downloadFields.length) {
+                const downloadField = downloadFields[0];
+                setUploadDate({
+                    start: downloadField.value,
+                    end: downloadField.value
+                });
+            }
+
+            const supplierFields = metafields.edges.map(edge => edge.node).filter(node => node.key === "supplierid");
+            if (supplierFields.length) {
+                const supplierField = supplierFields[0];
+                supplierOptions.forEach((supplierOption) => {
+                    if (supplierOption.value === supplierField) {
+                        setSupplier(supplierOption);
+                    }
+                });
+            }
+        }
+    }
+
     function reset() {
         setFiles([]);
         setUploadedState(null);
+        setTouched(false);
     }
 
     function onSelect(files) {
@@ -200,7 +262,6 @@ const Upload = () => {
                 newSupplier = supplierOption;
             }
         });
-        console.log("handleSupplierChange", supplierInput, _, newSupplier)
         setSupplier(newSupplier);
     }
 
@@ -245,7 +306,6 @@ const Upload = () => {
     function getTitle() {
         let retVal = "Produktpflege";
 
-        console.log("existingProduct", existingProduct)
         if (existingProduct && existingProduct.product) {
             retVal += ": " + existingProduct.product.title;
         }
@@ -259,13 +319,13 @@ const Upload = () => {
             titleMetadata={renderTitleMetadata()}
             primaryAction={{
                 content: "Speichern",
-                disabled: !files.length,
+                disabled: !touched,
                 onAction: handleSubmit.bind(this)
             }}
             secondaryActions={[
                 {
                     content: "Verwerfen",
-                    disabled: !files.length,
+                    disabled: !touched,
                     onAction: reset.bind(this)
                 }
             ]}
@@ -291,7 +351,6 @@ const Upload = () => {
                         />
                     </Card>
                     <Card sectioned title={"Lieferant/Fremdartikelnummer"}>
-                        {console.log("inline supplier", supplier)}
                         <Select
                             label="Lieferantennummer"
                             options={supplierOptions}
@@ -300,7 +359,10 @@ const Upload = () => {
                         />
                         <TextContainer>
                             {supplier.value && (
-                                <p><TextStyle variation="subdued">{supplier.value} {supplier.label} ({supplier.short})</TextStyle></p>
+                                <p>
+                                    <br/>
+                                    <TextStyle variation="subdued">{supplier.value} {supplier.label} ({supplier.short})</TextStyle>
+                                </p>
                             )}
                         </TextContainer>
                     </Card>

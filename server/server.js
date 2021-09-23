@@ -194,13 +194,6 @@ app.prepare().then(async () => {
                 value: slug,
                 valueType: "STRING"
             });
-            metafields.push({
-                description: "filename of the associated download attachment",
-                namespace: "Download",
-                key: "idhash",
-                value: Buffer.from(productId, "utf-8").toString("hex"),
-                valueType: "STRING"
-            });
 
             try {
                 await aws.upload(reader, "downloads/" + slug);
@@ -210,8 +203,40 @@ app.prepare().then(async () => {
             }
         }
 
-        if (body.uploaddate) {
+        if (body.downloaddate) {
+            if (body.downloaddateid) {
+                try {
+                    await removeMetafield(client, body.downloaddateid);
+                } catch (e) {
+                    console.log("error in removeMetafield", e.toString());
+                }
+            }
 
+            metafields.push({
+                description: "release date for download attachments",
+                namespace: "Download",
+                key: "downloaddate",
+                value: body.downloaddate,
+                valueType: "STRING"
+            });
+        }
+
+        if (body.supplierid) {
+            if (body.suppliermetaid) {
+                try {
+                    await removeMetafield(client, body.suppliermetaid);
+                } catch (e) {
+                    console.log("error in removeMetafield", e.toString());
+                }
+            }
+
+            metafields.push({
+                description: "supplier id for corresponding product",
+                namespace: "Download",
+                key: "supplierid",
+                value: body.supplierid,
+                valueType: "STRING"
+            });
         }
 
         const res = await updateProduct(client, shopifyId, metafields);
