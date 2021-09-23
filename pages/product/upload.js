@@ -268,9 +268,9 @@ const Upload = () => {
                             <>
                                 <FileInput files={files} onSelect={onSelect.bind(this)} />
                                 <DatePicker
-                                    day={}
-                                    month={}
-                                    year={}
+                                    day={1}
+                                    month={5}
+                                    year={2021}
                                     onChange={onDateChange.bind(this)}
                                 />
                             </>
