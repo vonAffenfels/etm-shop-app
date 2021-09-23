@@ -1,6 +1,6 @@
 import gql from "graphql-tag";
 
-const updateProduct = async (client, id, fileName) => {
+const updateProduct = async (client, id, metafields) => {
     const res = await client.query({
         query: gql`
             mutation productUpdate($input: ProductInput!) {
@@ -9,7 +9,7 @@ const updateProduct = async (client, id, fileName) => {
                         id
                         title
                         descriptionHtml
-                        metafields(first: 1, namespace: "Download") {
+                        metafields(first: 3, namespace: "Download") {
                             edges {
                                 node {
                                     id
@@ -32,15 +32,7 @@ const updateProduct = async (client, id, fileName) => {
         variables: {
             input: {
                 id: id,
-                metafields: [
-                    {
-                        description: "filename of the associated download attachment",
-                        namespace: "Download",
-                        key: "filename",
-                        value: fileName,
-                        valueType: "STRING"
-                    }
-                ]
+                metafields: metafields
             }
         }
     });

@@ -108,15 +108,16 @@ app.prepare().then(async () => {
         await Shopify.Utils.graphqlProxy(ctx.req, ctx.res);
     });
 
-    router.get("/product/download/:productId", async (ctx, next) => {
-        const {productId} = ctx.params;
+    router.get("/product/download/:productHash", async (ctx, next) => {
+        const {productHash} = ctx.params;
 
-        if (!productId) {
+        if (!productHash) {
             ctx.res.status = 400;
             ctx.body = "productId missing";
             return;
         }
 
+        const productId = Buffer.from(productHash, "hex").toString();
         const shopifyId = "gid://shopify/Product/" + productId;
         const res = await getProduct(client, shopifyId);
 
@@ -166,35 +167,52 @@ app.prepare().then(async () => {
             return;
         }
 
-        if (!file) {
-            ctx.res.status = 400;
-            ctx.body = "file missing";
-            return;
-        }
-
-        try {
-            const downloads = String(body.downloads).length ? body.downloads.split(",") : [];
-            if (downloads && downloads.length) {
-                for (let i = 0; i < downloads.length; i++) {
-                    await removeMetafield(client, downloads[i]);
-                }
-            }
-        } catch (e) {
-            console.log("error in removeMetafield", e.toString());
-        }
-
         const shopifyId = "gid://shopify/Product/" + productId;
-        const slug = speakingurl(file.name);
-        const reader = fs.createReadStream(file.path);
+        const metafields = [];
 
-        try {
-            await aws.upload(reader, "downloads/" + slug);
-        } catch (e) {
-            console.log(e);
-            ctx.body = e.toString();
+        if (file) {
+            try {
+                const downloads = String(body.downloads).length ? body.downloads.split(",") : [];
+                if (downloads && downloads.length) {
+                    for (let i = 0; i < downloads.length; i++) {
+                        await removeMetafield(client, downloads[i]);
+                    }
+                }
+            } catch (e) {
+                console.log("error in removeMetafield", e.toString());
+            }
+
+            const slug = speakingurl(file.name);
+            const reader = fs.createReadStream(file.path);
+
+            metafields.push({
+                description: "filename of the associated download attachment",
+                namespace: "Download",
+                key: "filename",
+                value: slug,
+                valueType: "STRING"
+            });
+            metafields.push({
+                description: "filename of the associated download attachment",
+                namespace: "Download",
+                key: "idhash",
+                value: Buffer.from(productId, "utf-8").toString("hex"),
+                valueType: "STRING"
+            });
+
+            try {
+                await aws.upload(reader, "downloads/" + slug);
+            } catch (e) {
+                console.log(e);
+                ctx.body = e.toString();
+            }
         }
 
-        const res = await updateProduct(client, shopifyId, slug);
+        if (body.uploaddate) {
+            
+        }
+
+        const res = await updateProduct(client, shopifyId, metafields);
         ctx.body = "ok";
     });
 
