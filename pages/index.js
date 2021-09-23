@@ -54,9 +54,12 @@ const Index = () => {
                         <Card sectioned title={"Suchergebnisse"}>
                             <List>
                                 {result.map(entry => {
-                                    const id = String(entry.node.product.id).replace("gid://shopify/Product/", "")
+                                    let id = String(entry.node.product.id).replace("gid://shopify/Product/", "")
+                                    let url = new URL(window.location.href);
+                                    url.pathname = "/product/upload";
+                                    url.searchParams.append("id", id);
                                     console.log("location", window.location)
-                                    return <List.Item><Link url={"/product/upload/?id=" + id}>{entry.node.product.title}</Link></List.Item>
+                                    return <List.Item><Link url={url.href}>{entry.node.product.title}</Link></List.Item>
                                 })}
                             </List>
                         </Card>
