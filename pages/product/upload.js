@@ -5,6 +5,10 @@ import {useRouter} from "next/router";
 
 const supplierOptions = [
     {
+        value: null,
+        label: "Bitte wählen"
+    },
+    {
         "value": "000001",
         "short": "CON",
         "label": "Conrad GmbH"
@@ -107,8 +111,10 @@ const Upload = () => {
     const [existingProduct, setExistingProduct] = useState(null);
     const [{month, year}, setDate] = useState({month: new Date().getMonth(), year: new Date().getUTCFullYear()});
     const [uploadDate, setUploadDate] = useState(null);
-    const [supplier, setSupplier] = useState({value: null, label: "Bitte wählen"});
+    const [supplier, setSupplier] = useState({value: null});
     const handleMonthChange = useCallback((month, year) => setDate({month, year}), []);
+
+    console.log("uploadDate", uploadDate)
 
     useEffect(() => {
         fetchProduct();
@@ -241,7 +247,7 @@ const Upload = () => {
 
         console.log("existingProduct", existingProduct)
         if (existingProduct && existingProduct.product) {
-            retVal += " " + existingProduct.product.title;
+            retVal += ": " + existingProduct.product.title;
         }
 
         return retVal;
