@@ -55,6 +55,7 @@ const Index = () => {
                             <OptionList
                                 onChange={onSelected.bind(this)}
                                 options={result.map(node => {
+                                    console.log("node", node)
                                     return {
                                         value: String(node.product.id).replace("gid://shopify/Product/", ""),
                                         label: node.product.title
