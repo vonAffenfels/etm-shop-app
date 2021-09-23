@@ -108,14 +108,11 @@ const Upload = () => {
     const [{month, year}, setDate] = useState({month: new Date().getMonth(), year: new Date().getUTCFullYear()});
     const [uploadDate, setUploadDate] = useState(null);
     const [supplier, setSupplier] = useState({value: null, label: "Bitte wählen"});
+    const handleMonthChange = useCallback((month, year) => setDate({month, year}), []);
 
     useEffect(() => {
         fetchProduct();
     }, []);
-
-    function handleMonthChange() {
-        useCallback((month, year) => setDate({month, year}), []);
-    }
 
     function fetchProduct() {
         if (typeof window === "undefined") {
@@ -277,7 +274,7 @@ const Upload = () => {
                             <FileInput files={files} onSelect={onSelect.bind(this)} />
                         )}
                     </Card>
-                    <Card title={"Freigabedatum"}>
+                    <Card sectioned title={"Freigabedatum"}>
                         <DatePicker
                             allowRange={false}
                             month={month}
@@ -287,7 +284,8 @@ const Upload = () => {
                             selected={uploadDate}
                         />
                     </Card>
-                    <Card title={"Lieferant/Fremdartikelnummer"}>
+                    <Card sectioned title={"Lieferant/Fremdartikelnummer"}>
+                        {console.log("inline supplier", supplier)}
                         <Select
                             label="Lieferantennummer"
                             options={supplierOptions}
