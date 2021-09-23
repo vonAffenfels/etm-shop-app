@@ -255,6 +255,11 @@ const Upload = () => {
         setUploadedState(null);
     }
 
+    function onDateChange(date) {
+        setUploadDate(date);
+        setTouched(true);
+    }
+
     function handleSupplierChange(supplierInput, _) {
         let newSupplier = null;
         supplierOptions.forEach((supplierOption) => {
@@ -263,6 +268,7 @@ const Upload = () => {
             }
         });
         setSupplier(newSupplier);
+        setTouched(true);
     }
 
     function renderExistingProduct() {
@@ -346,7 +352,7 @@ const Upload = () => {
                             month={month}
                             year={year}
                             onMonthChange={handleMonthChange.bind(this)}
-                            onChange={setUploadDate.bind(this)}
+                            onChange={onDateChange.bind(this)}
                             selected={uploadDate}
                         />
                     </Card>
