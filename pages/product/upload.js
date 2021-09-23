@@ -1,7 +1,100 @@
-import {Form, FormLayout, Layout, Card, TextContainer, Heading, Page, Badge, Spinner, DatePicker} from "@shopify/polaris";
+import {Form, FormLayout, Layout, Card, TextContainer, Heading, Page, Badge, Spinner, DatePicker, Select} from "@shopify/polaris";
 import FileInput from "../../components/form/FileInput";
 import {useState, useEffect} from "react";
 import {useRouter} from "next/router";
+
+const supplierOptions = [
+    {
+        "value": "000001",
+        "short": "CON",
+        "label": "Conrad GmbH"
+    },
+    {
+        "value": "000002",
+        "short": "FLI",
+        "label": "Fliegl Fahrzeugbau GmbH"
+    },
+    {
+        "value": "000003",
+        "short": "GAS",
+        "label": "MOGI-JG"
+    },
+    {
+        "value": "000004",
+        "short": "GMT",
+        "label": "GMTS Brinkmeier GmbH"
+    },
+    {
+        "value": "000005",
+        "short": "JOA",
+        "label": "JOAL-Der Spanien Shop"
+    },
+    {
+        "value": "000006",
+        "short": "JUM",
+        "label": "Jumbo-Fischer GmbH&Co. KG"
+    },
+    {
+        "value": "000007",
+        "short": "KOO",
+        "label": "KooKoo GmbH"
+    },
+    {
+        "value": "000008",
+        "short": "MOB",
+        "label": "Motorbuch Versand"
+    },
+    {
+        "value": "000009",
+        "short": "NZG",
+        "label": "NZG Modelle GmbH"
+    },
+    {
+        "value": "000010",
+        "short": "SCF",
+        "label": "Schilderfeuerwehr"
+    },
+    {
+        "value": "000011",
+        "short": "WIV",
+        "label": "Wieland Verlag GmbH"
+    },
+    {
+        "value": "000012",
+        "short": "STD",
+        "label": "StarDistribution"
+    },
+    {
+        "value": "000013",
+        "short": "MOP",
+        "label": "Motorpresse"
+    },
+    {
+        "value": "000014",
+        "short": "DIG",
+        "label": "digitaler Artikel"
+    },
+    {
+        "value": "000014",
+        "short": "ETM",
+        "label": "ETM Verlag"
+    },
+    {
+        "value": "000015",
+        "short": "WSI",
+        "label": "Vertriebsbüro Deutschland WSI Models B.V."
+    },
+    {
+        "value": "000016",
+        "short": "HER",
+        "label": "Herpa"
+    },
+    {
+        "value": "000017",
+        "short": "THO",
+        "label": "Thomin"
+    }
+];
 
 const Upload = () => {
     const router = useRouter();
@@ -95,6 +188,10 @@ const Upload = () => {
         console.log("onDateChange", _, __, ___)
     }
 
+    function handleSupplierChange(supplierInput) {
+        setSupplier(supplierInput);
+    }
+
     function renderExistingProduct() {
         if (!existingProduct || !existingProduct.product) {
             return null;
@@ -180,7 +277,12 @@ const Upload = () => {
                         )}
                     </Card>
                     <Card title={"Lieferant/Fremdartikelnummer"}>
-
+                        <Select
+                            label="Lieferantennummer"
+                            options={supplierOptions}
+                            onChange={handleSupplierChange.bind(this)}
+                            value={supplier}
+                        />
                     </Card>
                 </Layout.Section>
             </Layout>
