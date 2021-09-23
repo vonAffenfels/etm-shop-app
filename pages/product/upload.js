@@ -11,6 +11,8 @@ const Upload = () => {
     const [uploadedState, setUploadedState] = useState(null);
     const [isLoading, setLoading] = useState(false);
     const [existingProduct, setExistingProduct] = useState(null);
+    const [uploadDate, setUploadDate] = useState(null);
+    const [supplier, setSupplier] = useState(null);
 
     useEffect(() => {
         fetchProduct();
@@ -30,22 +32,25 @@ const Upload = () => {
 
     let interval = null;
     async function handleSubmit(e) {
-        if (!files.length || !productId) {
+        if (!productId) {
             return;
         }
 
         setLoading(true);
 
         const formData = new FormData();
-        formData.append("file", files[0]);
 
-        if (existingProduct && existingProduct.product) {
-            const metafields = existingProduct.product.metafields;
+        if (files.length) {
+            formData.append("file", files[0]);
 
-            if (metafields && metafields.edges && metafields.edges.length) {
-                const downloadFields = metafields.edges.map(edge => edge.node).filter(node => node.key === "filename").map(node => node.id);
-                if (downloadFields.length) {
-                    formData.append("downloads", downloadFields.join(","))
+            if (existingProduct && existingProduct.product) {
+                const metafields = existingProduct.product.metafields;
+
+                if (metafields && metafields.edges && metafields.edges.length) {
+                    const downloadFields = metafields.edges.map(edge => edge.node).filter(node => node.key === "filename").map(node => node.id);
+                    if (downloadFields.length) {
+                        formData.append("downloads", downloadFields.join(","))
+                    }
                 }
             }
         }
@@ -159,12 +164,11 @@ const Upload = () => {
                         {isLoading ? (
                             <Spinner size="large" />
                         ) : (
-                            <Form onSubmit={handleSubmit.bind(this)}>
-                                <FormLayout>
-                                    <FileInput files={files} onSelect={onSelect.bind(this)} />
-                                </FormLayout>
-                            </Form>
+                                <FileInput files={files} onSelect={onSelect.bind(this)} />
                         )}
+                    </Card>
+                    <Card>
+
                     </Card>
                 </Layout.Section>
             </Layout>
