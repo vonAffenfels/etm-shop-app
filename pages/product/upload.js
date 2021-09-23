@@ -1,11 +1,10 @@
-import {Form, FormLayout, Layout, Card, TextContainer, TextStyle, Heading, Page, Badge, Spinner} from "@shopify/polaris";
+import {Form, FormLayout, Layout, Card, TextContainer, Heading, Page, Badge, Spinner} from "@shopify/polaris";
 import FileInput from "../../components/form/FileInput";
 import {useState, useEffect} from "react";
 import {useRouter} from "next/router";
 
 const Upload = () => {
     const router = useRouter();
-    console.log(router.query)
     const productId = router.query.id;
 
     const [files, setFiles] = useState([]);
@@ -25,7 +24,6 @@ const Upload = () => {
         fetch("/product/" + productId, {
             method: "post",
         }).then(response => response.json()).then(data => {
-            console.log("data", data)
             setExistingProduct(data);
         }).catch(err => console.log(err));
     }
@@ -51,8 +49,6 @@ const Upload = () => {
                 }
             }
         }
-
-        console.log("formData", formData)
 
         try {
             const data = await fetch("/product/upload/" + productId, {
@@ -88,46 +84,6 @@ const Upload = () => {
     function onSelect(files) {
         setFiles(files);
         setUploadedState(null);
-    }
-
-    function fallbackCopyTextToClipboard(text) {
-        let textArea = document.createElement("textarea");
-        textArea.value = text;
-
-        // Avoid scrolling to bottom
-        textArea.style.top = "0";
-        textArea.style.left = "0";
-        textArea.style.position = "fixed";
-
-        document.body.appendChild(textArea);
-        textArea.focus();
-        textArea.select();
-
-        try {
-            let successful = document.execCommand('copy');
-            let msg = successful ? 'successful' : 'unsuccessful';
-            console.log('Fallback: Copying text command was ' + msg);
-        } catch (err) {
-            console.error('Fallback: Oops, unable to copy', err);
-        }
-
-        document.body.removeChild(textArea);
-    }
-
-    function copyTextToClipboard(text) {
-        if (typeof window === "undefined") {
-            return;
-        }
-
-        if (!navigator.clipboard) {
-            fallbackCopyTextToClipboard(text);
-            return;
-        }
-        navigator.clipboard.writeText(text).then(function() {
-            console.log('Async: Copying to clipboard was successful!');
-        }, function(err) {
-            console.error('Async: Could not copy text: ', err);
-        });
     }
 
     function renderExistingProduct() {

@@ -13,6 +13,7 @@ import Router from "koa-router";
 import KoaBody from "koa-body";
 import speakingurl from "speakingurl";
 import AWSService from "./aws";
+import getProductBySku from "./handlers/mutations/getProductBySku";
 
 dotenv.config();
 const port = parseInt(process.env.PORT, 10) || 8081;
@@ -195,6 +196,26 @@ app.prepare().then(async () => {
 
         const res = await updateProduct(client, shopifyId, slug);
         ctx.body = "ok";
+    });
+
+    router.post("/product/find/:sku", async (ctx, next) => {
+        const {sku} = ctx.params;
+
+        if (!sku) {
+            ctx.res.status = 400;
+            ctx.body = "sku missing";
+            return;
+        }
+
+        try {
+            const res = await getProductBySku(client, `sku:${sku}`);
+            ctx.body = res.data;
+        } catch (e) {
+            console.log(e);
+            ctx.body = {
+                empty: true
+            };
+        }
     });
 
     router.post("/product/:productId", async (ctx, next) => {
