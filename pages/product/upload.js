@@ -228,8 +228,8 @@ const Upload = () => {
                 const downloadField = downloadFields[0];
                 console.log("downloadField", downloadField)
                 setUploadDate({
-                    start: downloadField.value,
-                    end: downloadField.value
+                    start: new Date(downloadField.value),
+                    end: new Date(downloadField.value)
                 });
             }
 
