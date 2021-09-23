@@ -98,6 +98,7 @@ const supplierOptions = [
 
 const Upload = () => {
     const router = useRouter();
+    console.log("Upload", router.query)
     const productId = router.query.id;
 
     const [files, setFiles] = useState([]);
@@ -106,7 +107,7 @@ const Upload = () => {
     const [existingProduct, setExistingProduct] = useState(null);
     const [{month, year}, setDate] = useState({month: new Date().getMonth(), year: new Date().getUTCFullYear()});
     const [uploadDate, setUploadDate] = useState(null);
-    const [supplier, setSupplier] = useState({id: null, value: "Bitte wählen"});
+    const [supplier, setSupplier] = useState({value: null, label: "Bitte wählen"});
 
     useEffect(() => {
         fetchProduct();
@@ -190,8 +191,14 @@ const Upload = () => {
     }
 
     function handleSupplierChange(supplierInput, _) {
-        console.log("handleSupplierChange", supplierInput, _)
-        setSupplier(supplierInput);
+        let newSupplier = null;
+        supplierOptions.forEach((supplierOption) => {
+            if (supplierOption.value === supplierInput) {
+                newSupplier = supplierOption;
+            }
+        });
+        console.log("handleSupplierChange", supplierInput, _, newSupplier)
+        setSupplier(newSupplier);
     }
 
     function renderExistingProduct() {
@@ -285,10 +292,12 @@ const Upload = () => {
                             label="Lieferantennummer"
                             options={supplierOptions}
                             onChange={handleSupplierChange.bind(this)}
-                            value={supplier}
+                            value={supplier.value}
                         />
                         <TextContainer>
-                            <p><TextStyle variation="subdued">no supplier given</TextStyle></p>
+                            {supplier.value && (
+                                <p><TextStyle variation="subdued">{supplier.value} {supplier.label} ({supplier.short})</TextStyle></p>
+                            )}
                         </TextContainer>
                     </Card>
                 </Layout.Section>
