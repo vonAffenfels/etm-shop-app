@@ -110,7 +110,6 @@ app.prepare().then(async () => {
 
     router.get("/product/download/:productHash", async (ctx, next) => {
         const {productHash} = ctx.params;
-        console.log("headers", ctx.req.headers)
 
         if (!productHash) {
             ctx.res.status = 400;
@@ -120,6 +119,7 @@ app.prepare().then(async () => {
 
         const productId = Buffer.from(productHash, "hex").toString();
         const shopifyId = "gid://shopify/Product/" + productId;
+        console.log(productHash, productId, shopifyId)
         const res = await getProduct(client, shopifyId);
 
         if (!res.data || !res.data.product) {
@@ -144,13 +144,15 @@ app.prepare().then(async () => {
             return;
         }
 
-        const downloadDateFields = metafields.edges.map(edge => edge.node).filter(node => node.key === "downloaddate");
-
-        if (downloadDateFields.length) {
-
-        }
-
+        const host = ctx.req.headers["host"];
+        console.log("host", host)
         //TODO check ob releasedatum erreicht
+        if (host !== "etm-shop-app.herokuapp.com") {
+            const downloadDateFields = metafields.edges.map(edge => edge.node).filter(node => node.key === "downloaddate");
+            if (downloadDateFields.length) {
+
+            }
+        }
 
         const downloadField = downloadFields[0];
         const fileName = String(downloadField.value);
@@ -182,6 +184,7 @@ app.prepare().then(async () => {
 
         if (file) {
             try {
+                console.log(body.downloads, String(body.downloads), String(body.downloads).length)
                 const downloads = String(body.downloads).length ? body.downloads.split(",") : [];
                 if (downloads && downloads.length) {
                     for (let i = 0; i < downloads.length; i++) {
@@ -189,7 +192,7 @@ app.prepare().then(async () => {
                     }
                 }
             } catch (e) {
-                console.log("error in removeMetafield", e.toString());
+                console.log("error in removeMetafield file", e.toString());
             }
 
             const slug = speakingurl(file.name);
