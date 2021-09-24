@@ -243,6 +243,7 @@ const Upload = () => {
 
     function reset() {
         setFiles([]);
+        fetchProduct();
         setUploadedState(null);
         setTouched(false);
     }
