@@ -108,18 +108,17 @@ app.prepare().then(async () => {
         await Shopify.Utils.graphqlProxy(ctx.req, ctx.res);
     });
 
-    router.get("/product/download/:productHash", async (ctx, next) => {
-        const {productHash} = ctx.params;
+    router.get("/product/download/:productId", async (ctx, next) => {
+        const {productId} = ctx.params;
 
-        if (!productHash) {
+        if (!productId) {
             ctx.res.status = 400;
             ctx.body = "productId missing";
             return;
         }
 
-        const productId = Buffer.from(productHash, "hex").toString();
+        // const productId = Buffer.from(productHash, "hex").toString();
         const shopifyId = "gid://shopify/Product/" + productId;
-        console.log(productHash, productId, shopifyId)
         const res = await getProduct(client, shopifyId);
 
         if (!res.data || !res.data.product) {
