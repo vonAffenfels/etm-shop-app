@@ -178,6 +178,7 @@ app.prepare().then(async () => {
 
         const shopifyId = "gid://shopify/Product/" + productId;
         const metafields = [];
+        console.log("upload", shopifyId, !!file, body)
 
         if (file) {
             try {

@@ -183,6 +183,7 @@ const Upload = () => {
         }
 
         try {
+            console.log("formData", formData, formData.toString())
             const data = await fetch("/product/upload/" + productId, {
                 method: "post",
                 body: formData
@@ -251,6 +252,7 @@ const Upload = () => {
     function onSelect(files) {
         setFiles(files);
         setUploadedState(null);
+        setTouched(true);
     }
 
     function onDateChange(date) {
