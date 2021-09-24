@@ -110,6 +110,7 @@ app.prepare().then(async () => {
 
     router.get("/product/download/:productHash", async (ctx, next) => {
         const {productHash} = ctx.params;
+        console.log("headers", ctx.req.headers)
 
         if (!productHash) {
             ctx.res.status = 400;
@@ -141,6 +142,12 @@ app.prepare().then(async () => {
             ctx.res.status = 404;
             ctx.body = "no attached files found for product with id " + shopifyId;
             return;
+        }
+
+        const downloadDateFields = metafields.edges.map(edge => edge.node).filter(node => node.key === "downloaddate");
+
+        if (downloadDateFields.length) {
+
         }
 
         //TODO check ob releasedatum erreicht
