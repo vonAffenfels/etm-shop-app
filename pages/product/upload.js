@@ -97,7 +97,6 @@ const supplierOptions = [
 
 const Upload = () => {
     const router = useRouter();
-    console.log("Upload", router.query)
     const productId = router.query.id;
 
     const [touched, setTouched] = useState(false);
@@ -142,7 +141,6 @@ const Upload = () => {
 
             if (existingProduct && existingProduct.product) {
                 const metafields = existingProduct.product.metafields;
-                console.log("metafields", metafields)
 
                 if (metafields && metafields.edges && metafields.edges.length) {
                     const downloadFields = metafields.edges.map(edge => edge.node).filter(node => node.key === "filename").map(node => node.id);
@@ -153,11 +151,13 @@ const Upload = () => {
             }
         }
 
+        console.log(uploadDate)
         if (uploadDate && uploadDate.start) {
             formData.append("downloaddate", uploadDate.start);
 
             if (existingProduct && existingProduct.product) {
                 const metafields = existingProduct.product.metafields;
+                console.log("metafields", metafields)
 
                 if (metafields && metafields.edges && metafields.edges.length) {
                     const downloadFields = metafields.edges.map(edge => edge.node).filter(node => node.key === "downloaddate").map(node => node.id);
@@ -184,7 +184,7 @@ const Upload = () => {
         }
 
         try {
-            console.log("formData", formData, formData.toString())
+            console.log("formData", formData, Object.fromEntries(formData))
             const data = await fetch("/product/upload/" + productId, {
                 method: "post",
                 body: formData
