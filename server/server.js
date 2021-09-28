@@ -287,6 +287,8 @@ app.prepare().then(async () => {
                 })
             });
 
+            console.log(result)
+
             ctx.body = {
                 data: result.data
             };
@@ -308,6 +310,8 @@ app.prepare().then(async () => {
                     referer: "admin"
                 })
             });
+
+            console.log(result)
 
             ctx.body = {
                 data: result.data
