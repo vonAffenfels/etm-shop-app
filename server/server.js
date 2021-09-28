@@ -276,7 +276,7 @@ app.prepare().then(async () => {
     });
 
     router.post("/product/:productId/token/find", async (ctx, next) => {
-        const {productId} = ctx.req.params;
+        const {productId} = ctx.params;
 
         try {
             const result = await fetch(process.env.TOKEN_API + "/shopify-api/token/download/find", {
@@ -298,7 +298,7 @@ app.prepare().then(async () => {
     });
 
     router.post("/product/:productId/token/create", async (ctx, next) => {
-        const {productId} = ctx.req.params;
+        const {productId} = ctx.params;
 
         try {
             const result = await fetch(process.env.TOKEN_API + "/shopify-api/token/download/create", {
@@ -320,7 +320,7 @@ app.prepare().then(async () => {
     });
 
     router.post("/product/:productId/token/delete/:token", async (ctx, next) => {
-        const {productId, token} = ctx.req.params;
+        const {productId, token} = ctx.params;
 
         try {
             const result = await fetch(process.env.TOKEN_API + "/shopify-api/token/download/delete", {
