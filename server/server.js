@@ -281,7 +281,7 @@ app.prepare().then(async () => {
         try {
             const result = await fetch(process.env.TOKEN_API + "/shopify-api/token/download/find", {
                 method: "post",
-                data: JSON.stringify({
+                body: JSON.stringify({
                     product: "gid://shopify/Product/" + productId,
                     referer: "admin"
                 })
@@ -305,7 +305,7 @@ app.prepare().then(async () => {
         try {
             const result = await fetch(process.env.TOKEN_API + "/shopify-api/token/download/create", {
                 method: "post",
-                data: JSON.stringify({
+                body: JSON.stringify({
                     product: "gid://shopify/Product/" + productId,
                     referer: "admin"
                 })
@@ -329,7 +329,7 @@ app.prepare().then(async () => {
         try {
             const result = await fetch(process.env.TOKEN_API + "/shopify-api/token/download/delete", {
                 method: "post",
-                data: JSON.stringify({
+                body: JSON.stringify({
                     id: token
                 })
             });
