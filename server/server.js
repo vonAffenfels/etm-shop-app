@@ -143,16 +143,15 @@ app.prepare().then(async () => {
             return;
         }
 
-        const host = ctx.req.headers["host"];
-        const origin = ctx.req.headers["origin"];
-        const validateDate = ctx.req.headers["x-validate-date"];
-        console.log(ctx.req.headers)
-        console.log(JSON.stringify(metafields.edges, null, 4))
+        const userAgent = ctx.req.headers["user-agent"];
+        console.log("userAgent", userAgent)
         //TODO check ob releasedatum erreicht
-        const downloadDateFields = metafields.edges.map(edge => edge.node).filter(node => node.key === "downloaddate");
-        console.log("downloadDateFields", downloadDateFields)
-        if (downloadDateFields.length) {
+        if (userAgent === "euro-api") {
+            const downloadDateFields = metafields.edges.map(edge => edge.node).filter(node => node.key === "downloaddate");
+            console.log("downloadDateFields", downloadDateFields)
+            if (downloadDateFields.length) {
 
+            }
         }
 
         const downloadField = downloadFields[0];
@@ -224,6 +223,7 @@ app.prepare().then(async () => {
                 }
             }
 
+            console.log("setting downloaddate to", body.downloaddate)
             metafields.push({
                 description: "release date for download attachments",
                 namespace: "Download",
