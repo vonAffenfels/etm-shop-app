@@ -142,6 +142,7 @@ const Upload = () => {
 
             if (existingProduct && existingProduct.product) {
                 const metafields = existingProduct.product.metafields;
+                console.log("metafields", metafields)
 
                 if (metafields && metafields.edges && metafields.edges.length) {
                     const downloadFields = metafields.edges.map(edge => edge.node).filter(node => node.key === "filename").map(node => node.id);
