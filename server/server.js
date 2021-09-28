@@ -291,7 +291,7 @@ app.prepare().then(async () => {
             console.log(response)
 
             ctx.body = {
-                data: response
+                data: response.data
             };
         } catch (e) {
             ctx.body = {
@@ -315,7 +315,7 @@ app.prepare().then(async () => {
             console.log(response)
 
             ctx.body = {
-                data: response
+                data: response.data
             };
         } catch (e) {
             ctx.body = {
@@ -338,7 +338,7 @@ app.prepare().then(async () => {
             console.log(response)
 
             ctx.body = {
-                data: response
+                data: response.data
             };
         } catch (e) {
             ctx.body = {
