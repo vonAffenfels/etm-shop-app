@@ -148,6 +148,7 @@ app.prepare().then(async () => {
         //TODO check ob releasedatum erreicht
         if (host !== "etm-shop-app.herokuapp.com") {
             const downloadDateFields = metafields.edges.map(edge => edge.node).filter(node => node.key === "downloaddate");
+            console.log("downloadDateFields", downloadDateFields)
             if (downloadDateFields.length) {
 
             }
