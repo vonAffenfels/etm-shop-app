@@ -286,11 +286,12 @@ app.prepare().then(async () => {
                     referer: "admin"
                 })
             });
+            const response = await result.json();
 
-            console.log(result)
+            console.log(response)
 
             ctx.body = {
-                data: result.data
+                data: response
             };
         } catch (e) {
             ctx.body = {
@@ -310,11 +311,11 @@ app.prepare().then(async () => {
                     referer: "admin"
                 })
             });
-
-            console.log(result)
+            const response = await result.json();
+            console.log(response)
 
             ctx.body = {
-                data: result.data
+                data: response
             };
         } catch (e) {
             ctx.body = {
@@ -333,11 +334,11 @@ app.prepare().then(async () => {
                     id: token
                 })
             });
-
-            console.log(result)
+            const response = await result.json();
+            console.log(response)
 
             ctx.body = {
-                data: result.data
+                data: response
             };
         } catch (e) {
             ctx.body = {
