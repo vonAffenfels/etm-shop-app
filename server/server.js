@@ -278,48 +278,66 @@ app.prepare().then(async () => {
     router.post("/product/:productId/token/find", async (ctx, next) => {
         const {productId} = ctx.req.params;
 
-        const result = await fetch(process.env.TOKEN_API + "/shopify-api/token/download/find", {
-            method: "post",
-            data: JSON.stringify({
-                product: "gid://shopify/Product/" + productId,
-                referer: "admin"
-            })
-        });
+        try {
+            const result = await fetch(process.env.TOKEN_API + "/shopify-api/token/download/find", {
+                method: "post",
+                data: JSON.stringify({
+                    product: "gid://shopify/Product/" + productId,
+                    referer: "admin"
+                })
+            });
 
-        ctx.body = {
-            data: result.data
-        };
+            ctx.body = {
+                data: result.data
+            };
+        } catch (e) {
+            ctx.body = {
+                data: []
+            }
+        }
     });
 
     router.post("/product/:productId/token/create", async (ctx, next) => {
         const {productId} = ctx.req.params;
 
-        const result = await fetch(process.env.TOKEN_API + "/shopify-api/token/download/create", {
-            method: "post",
-            data: JSON.stringify({
-                product: "gid://shopify/Product/" + productId,
-                referer: "admin"
-            })
-        });
+        try {
+            const result = await fetch(process.env.TOKEN_API + "/shopify-api/token/download/create", {
+                method: "post",
+                data: JSON.stringify({
+                    product: "gid://shopify/Product/" + productId,
+                    referer: "admin"
+                })
+            });
 
-        ctx.body = {
-            data: result.data
-        };
+            ctx.body = {
+                data: result.data
+            };
+        } catch (e) {
+            ctx.body = {
+                error: e.toString()
+            }
+        }
     });
 
     router.post("/product/:productId/token/delete/:token", async (ctx, next) => {
         const {productId, token} = ctx.req.params;
 
-        const result = await fetch(process.env.TOKEN_API + "/shopify-api/token/download/delete", {
-            method: "post",
-            data: JSON.stringify({
-                id: token
-            })
-        });
+        try {
+            const result = await fetch(process.env.TOKEN_API + "/shopify-api/token/download/delete", {
+                method: "post",
+                data: JSON.stringify({
+                    id: token
+                })
+            });
 
-        ctx.body = {
-            data: result.data
-        };
+            ctx.body = {
+                data: result.data
+            };
+        } catch (e) {
+            ctx.body = {
+                error: e.toString()
+            }
+        }
     });
 
     router.post("/product/:productId", async (ctx, next) => {
