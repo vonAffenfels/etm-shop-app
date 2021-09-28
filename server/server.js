@@ -144,14 +144,14 @@ app.prepare().then(async () => {
         }
 
         const host = ctx.req.headers["host"];
+        const origin = ctx.req.headers["origin"];
         console.log("host", host)
+        console.log("origin", origin)
         //TODO check ob releasedatum erreicht
-        if (host !== "etm-shop-app.herokuapp.com") {
-            const downloadDateFields = metafields.edges.map(edge => edge.node).filter(node => node.key === "downloaddate");
-            console.log("downloadDateFields", downloadDateFields)
-            if (downloadDateFields.length) {
+        const downloadDateFields = metafields.edges.map(edge => edge.node).filter(node => node.key === "downloaddate");
+        console.log("downloadDateFields", downloadDateFields)
+        if (downloadDateFields.length) {
 
-            }
         }
 
         const downloadField = downloadFields[0];
