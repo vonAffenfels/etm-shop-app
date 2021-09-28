@@ -137,6 +137,9 @@ const Upload = () => {
             method: "post",
         }).then(response => response.json()).then(data => {
             console.log("fetchTokens result", data)
+            if (data.data) {
+                setTokens(data.data);
+            }
         }).catch(err => console.log(err));
     }
 
@@ -145,6 +148,7 @@ const Upload = () => {
             method: "post",
         }).then(response => response.json()).then(data => {
             console.log("createDownloadToken result", data)
+            fetchTokens();
         }).catch(err => console.log(err));
     }
 
@@ -153,6 +157,7 @@ const Upload = () => {
             method: "post",
         }).then(response => response.json()).then(data => {
             console.log("deleteDownloadToken result", data)
+            fetchTokens();
         }).catch(err => console.log(err));
     }
 
