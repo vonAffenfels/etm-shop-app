@@ -334,13 +334,13 @@ const Upload = () => {
                                                     Löschen
                                                 </Button>
                                             </p>
-                                            <Button primary onClick={createDownloadToken}>
-                                                Link erzeugen
-                                            </Button>
                                         </>
                                     ))}
                                 </>
                             )}
+                            <Button primary onClick={createDownloadToken}>
+                                Link erzeugen
+                            </Button>
                         </TextContainer>
                     </Card>
                 ))}
