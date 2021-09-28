@@ -1,4 +1,4 @@
-import {Form, FormLayout, Layout, Card, TextContainer, TextStyle, Heading, Page, Badge, Spinner, DatePicker, Select} from "@shopify/polaris";
+import {Form, FormLayout, Layout, Card, TextContainer, TextStyle, Heading, Page, Badge, Spinner, DatePicker, Select, Button} from "@shopify/polaris";
 import FileInput from "../../components/form/FileInput";
 import {useState, useEffect, useCallback} from "react";
 import {useRouter} from "next/router";
@@ -107,10 +107,12 @@ const Upload = () => {
     const [{month, year}, setDate] = useState({month: new Date().getMonth(), year: new Date().getUTCFullYear()});
     const [uploadDate, setUploadDate] = useState(null);
     const [supplier, setSupplier] = useState({value: null, label: "", short: ""});
+    const [tokens, setTokens] = useState([]);
     const handleMonthChange = useCallback((month, year) => setDate({month, year}), []);
 
     useEffect(() => {
         fetchProduct();
+        fetchTokens();
     }, []);
 
     function fetchProduct() {
@@ -123,6 +125,34 @@ const Upload = () => {
         }).then(response => response.json()).then(data => {
             setExistingProduct(data);
             getInitialFormValues(data);
+        }).catch(err => console.log(err));
+    }
+
+    function fetchTokens() {
+        if (typeof window === "undefined") {
+            return;
+        }
+
+        fetch("/product/" + productId + "/token/find", {
+            method: "post",
+        }).then(response => response.json()).then(data => {
+            console.log("fetchTokens result", data)
+        }).catch(err => console.log(err));
+    }
+
+    function createDownloadToken() {
+        fetch("/product/" + productId + "/token/create", {
+            method: "post",
+        }).then(response => response.json()).then(data => {
+            console.log("createDownloadToken result", data)
+        }).catch(err => console.log(err));
+    }
+
+    function deleteDownloadToken(id) {
+        fetch("/product/" + productId + "/token/delete/" + id, {
+            method: "post",
+        }).then(response => response.json()).then(data => {
+            console.log("deleteDownloadToken result", data)
         }).catch(err => console.log(err));
     }
 
@@ -184,7 +214,6 @@ const Upload = () => {
         }
 
         try {
-            console.log("formData", formData, Object.fromEntries(formData))
             const data = await fetch("/product/upload/" + productId, {
                 method: "post",
                 body: formData
@@ -286,16 +315,37 @@ const Upload = () => {
 
         const downloadFields = metafields.edges.map(edge => edge.node).filter(node => node.key === "filename");
         // https://etm-shop-app.herokuapp.com
-        return downloadFields.map((node, i) => (
-            <Card sectioned title={"Vorhandene Dateianhänge"}>
-                <TextContainer>
-                    <Heading>
-                        <a href={"/product/download/" + productId} download>{node.value}</a>
-                    </Heading>
-                    <p>Hochgeladen am {node.createdAt.substring(0, node.createdAt.indexOf("T"))}</p>
-                </TextContainer>
-            </Card>
-        ));
+        return (
+            <>
+                {downloadFields.map((node, i) => (
+                    <Card sectioned title={"Vorhandene Dateianhänge"}>
+                        <TextContainer>
+                            <Heading>
+                                <a href={"/product/download/" + productId} download>{node.value}</a>
+                            </Heading>
+                            <p>Hochgeladen am {node.createdAt.substring(0, node.createdAt.indexOf("T"))}</p>
+                            {tokens.length > 0 && (
+                                <>
+                                    {tokens.map((token, i) => (
+                                        <>
+                                            <p key={"token_" + i}>
+                                                {"https://www.eurotransport.de/shopify-api/token/download/" + token._id}
+                                                <Button plain destructive onClick={deleteDownloadToken.bind(this, token._id)}>
+                                                    Löschen
+                                                </Button>
+                                            </p>
+                                            <Button primary onClick={createDownloadToken}>
+                                                Link erzeugen
+                                            </Button>
+                                        </>
+                                    ))}
+                                </>
+                            )}
+                        </TextContainer>
+                    </Card>
+                ))}
+            </>
+        );
     }
 
     function renderTitleMetadata() {
@@ -345,7 +395,9 @@ const Upload = () => {
                         {isLoading ? (
                             <Spinner size="large" />
                         ) : (
-                            <FileInput files={files} onSelect={onSelect.bind(this)} />
+                            <>
+                                <FileInput files={files} onSelect={onSelect.bind(this)} />
+                            </>
                         )}
                     </Card>
                     <Card sectioned title={"Freigabedatum"}>

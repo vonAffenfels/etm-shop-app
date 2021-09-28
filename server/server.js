@@ -6,14 +6,14 @@ import dotenv from "dotenv";
 import "isomorphic-fetch";
 import createShopifyAuth, {verifyRequest} from "@shopify/koa-shopify-auth";
 import Shopify, {ApiVersion} from "@shopify/shopify-api";
-import {createClient, updateProduct, removeMetafield, getProduct} from "./handlers/index";
+import {createClient, updateProduct, removeMetafield, getProduct, getProductBySku} from "./handlers/index";
 import Koa from "koa";
 import next from "next";
 import Router from "koa-router";
 import KoaBody from "koa-body";
 import speakingurl from "speakingurl";
 import AWSService from "./aws";
-import getProductBySku from "./handlers/mutations/getProductBySku";
+import fetch from "node-fetch";
 
 dotenv.config();
 const port = parseInt(process.env.PORT, 10) || 8081;
@@ -273,6 +273,53 @@ app.prepare().then(async () => {
                 empty: true
             };
         }
+    });
+
+    router.post("/product/:productId/token/find", async (ctx, next) => {
+        const {productId} = ctx.req.params;
+
+        const result = await fetch(process.env.TOKEN_API + "/shopify-api/token/download/find", {
+            method: "post",
+            data: JSON.stringify({
+                product: "gid://shopify/Product/" + productId,
+                referer: "admin"
+            })
+        });
+
+        ctx.body = {
+            data: result.data
+        };
+    });
+
+    router.post("/product/:productId/token/create", async (ctx, next) => {
+        const {productId} = ctx.req.params;
+
+        const result = await fetch(process.env.TOKEN_API + "/shopify-api/token/download/create", {
+            method: "post",
+            data: JSON.stringify({
+                product: "gid://shopify/Product/" + productId,
+                referer: "admin"
+            })
+        });
+
+        ctx.body = {
+            data: result.data
+        };
+    });
+
+    router.post("/product/:productId/token/delete/:token", async (ctx, next) => {
+        const {productId, token} = ctx.req.params;
+
+        const result = await fetch(process.env.TOKEN_API + "/shopify-api/token/download/delete", {
+            method: "post",
+            data: JSON.stringify({
+                id: token
+            })
+        });
+
+        ctx.body = {
+            data: result.data
+        };
     });
 
     router.post("/product/:productId", async (ctx, next) => {
