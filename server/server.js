@@ -334,6 +334,8 @@ app.prepare().then(async () => {
                 })
             });
 
+            console.log(result)
+
             ctx.body = {
                 data: result.data
             };
