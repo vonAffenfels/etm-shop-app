@@ -146,9 +146,8 @@ app.prepare().then(async () => {
         const host = ctx.req.headers["host"];
         const origin = ctx.req.headers["origin"];
         const validateDate = ctx.req.headers["x-validate-date"];
-        console.log("host", host)
-        console.log("origin", origin)
-        console.log("validateDate", validateDate)
+        console.log(ctx.req.headers)
+        console.log(JSON.stringify(metafields.edges, null, 4))
         //TODO check ob releasedatum erreicht
         const downloadDateFields = metafields.edges.map(edge => edge.node).filter(node => node.key === "downloaddate");
         console.log("downloadDateFields", downloadDateFields)
