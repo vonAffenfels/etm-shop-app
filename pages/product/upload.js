@@ -337,7 +337,7 @@ const Upload = () => {
                                     {tokens.map((token, i) => (
                                         <>
                                             <p key={"token_" + i}>
-                                                <span style={{marginRight: "5px"}}>
+                                                <span style={{marginRight: "10px"}}>
                                                     {"https://www.eurotransport.de/shopify-api/token/download/" + token._id}
                                                 </span>
                                                 <Button plain destructive onClick={deleteDownloadToken.bind(this, token._id)}>
