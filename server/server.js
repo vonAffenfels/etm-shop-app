@@ -150,7 +150,8 @@ app.prepare().then(async () => {
             const downloadDateFields = metafields.edges.map(edge => edge.node).filter(node => node.key === "downloaddate");
             console.log("downloadDateFields", downloadDateFields)
             if (downloadDateFields.length) {
-
+                let dateTime = new Date(downloadDateFields[0].value).getTime();
+                console.log("date", dateTime, "now", (new Date().getTime()))
             }
         }
 
@@ -180,7 +181,6 @@ app.prepare().then(async () => {
 
         const shopifyId = "gid://shopify/Product/" + productId;
         const metafields = [];
-        console.log("upload", shopifyId, !!file, body)
 
         if (file) {
             try {
@@ -223,7 +223,6 @@ app.prepare().then(async () => {
                 }
             }
 
-            console.log("setting downloaddate to", body.downloaddate)
             metafields.push({
                 description: "release date for download attachments",
                 namespace: "Download",
@@ -251,7 +250,6 @@ app.prepare().then(async () => {
             });
         }
 
-        console.log("updateProduct")
         const res = await updateProduct(client, shopifyId, metafields);
         ctx.body = "ok";
     });
