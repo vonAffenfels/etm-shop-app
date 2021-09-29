@@ -159,8 +159,8 @@ const Upload = () => {
         }).catch(err => console.log(err));
     }
 
-    function onHintChange(value) {
-        console.log("onHintChange", value);
+    function onHintChange(value,_,__) {
+        console.log("onHintChange", value,_,__);
         setHintText(value);
     }
 
