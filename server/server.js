@@ -156,6 +156,10 @@ app.prepare().then(async () => {
             const downloadDateFields = metafields.edges.map(edge => edge.node).filter(node => node.key === "downloaddate");
             if (downloadDateFields.length) {
                 let dateTime = new Date(downloadDateFields[0].value).getTime();
+                console.log("dateTime", dateTime, typeof dateTime)
+                console.log("now", new Date().getTime(), typeof new Date().getTime())
+                console.log("bigger", (new Date().getTime() > dateTime))
+                console.log("smaller", (new Date().getTime() < dateTime))
 
                 if (new Date().getTime() > dateTime) {
                     return ctx.body = {
