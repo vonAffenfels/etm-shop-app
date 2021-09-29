@@ -407,7 +407,7 @@ const Upload = () => {
             <Layout>
                 <Layout.Section>
                     <Card sectioned title={"Hinweistext Verfügbarkeit"}>
-                        <TextField label={"Text"} valur={hintText} onChange={onHintChange.bind(this)} />
+                        <TextField label={"Text"} value={hintText} onChange={onHintChange.bind(this)} />
                     </Card>
                     {renderExistingProduct()}
                     <Card sectioned title={"Upload Dateianhang"}>
