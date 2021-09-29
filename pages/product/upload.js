@@ -183,13 +183,11 @@ const Upload = () => {
             }
         }
 
-        console.log(uploadDate)
         if (uploadDate && uploadDate.start) {
             formData.append("downloaddate", uploadDate.start);
 
             if (existingProduct && existingProduct.product) {
                 const metafields = existingProduct.product.metafields;
-                console.log("metafields", metafields)
 
                 if (metafields && metafields.edges && metafields.edges.length) {
                     const downloadFields = metafields.edges.map(edge => edge.node).filter(node => node.key === "downloaddate").map(node => node.id);
@@ -216,6 +214,7 @@ const Upload = () => {
         }
 
         try {
+            console.log(Object.fromEntries(formData))
             const data = await fetch("/product/upload/" + productId, {
                 method: "post",
                 body: formData
@@ -254,7 +253,6 @@ const Upload = () => {
             const downloadFields = metafields.edges.map(edge => edge.node).filter(node => node.key === "downloaddate");
             if (downloadFields.length) {
                 const downloadField = downloadFields[0];
-                console.log("downloadField", downloadField)
                 setUploadDate({
                     start: new Date(downloadField.value),
                     end: new Date(downloadField.value)
@@ -264,7 +262,6 @@ const Upload = () => {
             const supplierFields = metafields.edges.map(edge => edge.node).filter(node => node.key === "supplierid");
             if (supplierFields.length) {
                 const supplierField = supplierFields[0];
-                console.log("supplierField", supplierField)
                 supplierOptions.forEach((supplierOption) => {
                     if (supplierOption.value === supplierField) {
                         setSupplier(supplierOption);
@@ -288,7 +285,6 @@ const Upload = () => {
     }
 
     function onDateChange(date) {
-        console.log("onDateChange", date)
         setUploadDate(date);
         setTouched(true);
     }
@@ -315,7 +311,6 @@ const Upload = () => {
             return null;
         }
 
-        console.log("renderExistingProduct", metafields)
         const downloadFields = metafields.edges.map(edge => edge.node).filter(node => node.key === "filename");
         // https://etm-shop-app.herokuapp.com
         return (
