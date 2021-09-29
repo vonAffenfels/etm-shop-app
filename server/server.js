@@ -145,12 +145,17 @@ app.prepare().then(async () => {
 
         const userAgent = ctx.req.headers["user-agent"];
         console.log("userAgent", userAgent)
-        //TODO check ob releasedatum erreicht
         if (userAgent === "euro-api") {
             const downloadDateFields = metafields.edges.map(edge => edge.node).filter(node => node.key === "downloaddate");
             console.log("downloadDateFields", downloadDateFields)
             if (downloadDateFields.length) {
                 let dateTime = new Date(downloadDateFields[0].value).getTime();
+                console.log("dateTime", dateTime)
+                console.log("new Date", (new Date().getTime()))
+                console.log(new Date().getTime() < dateTime)
+                return ctx.body = {
+                    error: "releasedate not reached"
+                }
                 if (new Date().getTime() < dateTime) {
                     return ctx.body = {
                         error: "releasedate not reached"
