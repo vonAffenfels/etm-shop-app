@@ -284,11 +284,10 @@ app.prepare().then(async () => {
                 body: JSON.stringify({
                     product: "gid://shopify/Product/" + productId,
                     referer: "admin"
-                })
+                }),
+                headers: {"Content-Type": "application/json"}
             });
             const response = await result.json();
-
-            console.log(response)
 
             ctx.body = {
                 data: response.data
@@ -309,10 +308,10 @@ app.prepare().then(async () => {
                 body: JSON.stringify({
                     product: "gid://shopify/Product/" + productId,
                     referer: "admin"
-                })
+                }),
+                headers: {"Content-Type": "application/json"}
             });
             const response = await result.json();
-            console.log(response)
 
             ctx.body = {
                 data: response.data
@@ -332,10 +331,10 @@ app.prepare().then(async () => {
                 method: "post",
                 body: JSON.stringify({
                     id: token
-                })
+                }),
+                headers: {"Content-Type": "application/json"}
             });
             const response = await result.json();
-            console.log(response)
 
             ctx.body = {
                 data: response.data
