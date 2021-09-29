@@ -159,8 +159,7 @@ const Upload = () => {
         }).catch(err => console.log(err));
     }
 
-    function onHintChange(value,_,__) {
-        console.log("onHintChange", value,_,__);
+    function onHintChange(value) {
         setHintText(value);
         setTouched(true);
     }
