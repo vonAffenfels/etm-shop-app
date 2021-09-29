@@ -400,7 +400,7 @@ const Upload = () => {
                             </>
                         )}
                     </Card>
-                    <Card sectioned title={"Freigabedatum"}>
+                    <Card sectioned title={"Freigabedatum Download"}>
                         <DatePicker
                             allowRange={false}
                             month={month}

@@ -152,6 +152,8 @@ app.prepare().then(async () => {
         }
 
         const userAgent = ctx.req.headers["user-agent"];
+        console.log("useragent", userAgent)
+        console.log(JSON.stringify(metafields.edges, null, 3))
         if (userAgent === "euro-api") {
             const downloadDateFields = metafields.edges.map(edge => edge.node).filter(node => node.key === "downloaddate");
             if (downloadDateFields.length) {
