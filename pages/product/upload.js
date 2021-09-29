@@ -295,9 +295,8 @@ const Upload = () => {
 
     function handleSupplierChange(supplierInput, _) {
         let newSupplier = null;
-        console.log("handleSupplierChange", supplierInput, _)
 
-        if (!supplierInput) {
+        if (supplierInput === "Bitte wählen") {
             setSupplier({value: null, label: "", short: ""});
             return;
         }
