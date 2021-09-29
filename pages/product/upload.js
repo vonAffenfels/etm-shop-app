@@ -257,6 +257,8 @@ const Upload = () => {
                     start: new Date(downloadField.value),
                     end: new Date(downloadField.value)
                 });
+            } else {
+                setUploadDate(null);
             }
 
             const supplierFields = metafields.edges.map(edge => edge.node).filter(node => node.key === "supplierid");
@@ -267,6 +269,8 @@ const Upload = () => {
                         setSupplier(supplierOption);
                     }
                 });
+            } else {
+                setSupplier({value: null, label: "", short: ""});
             }
         }
     }
@@ -291,6 +295,12 @@ const Upload = () => {
 
     function handleSupplierChange(supplierInput, _) {
         let newSupplier = null;
+
+        if (!supplierInput) {
+            setSupplier({value: null, label: "", short: ""});
+            return;
+        }
+
         supplierOptions.forEach((supplierOption) => {
             if (supplierOption.value === supplierInput) {
                 newSupplier = supplierOption;
