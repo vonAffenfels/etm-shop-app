@@ -251,6 +251,7 @@ app.prepare().then(async () => {
             });
         }
 
+        console.log("updateProduct")
         const res = await updateProduct(client, shopifyId, metafields);
         ctx.body = "ok";
     });

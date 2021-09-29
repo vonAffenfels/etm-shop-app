@@ -1,6 +1,7 @@
 import gql from "graphql-tag";
 
 const updateProduct = async (client, id, metafields) => {
+    console.log(metafields)
     const res = await client.query({
         query: gql`
             mutation productUpdate($input: ProductInput!) {
