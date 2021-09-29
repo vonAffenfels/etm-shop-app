@@ -1,4 +1,4 @@
-import {Form, FormLayout, Layout, Card, TextContainer, TextStyle, Heading, Page, Badge, Spinner, DatePicker, Select, Button} from "@shopify/polaris";
+import {Layout, Card, TextContainer, TextStyle, TextField, Heading, Page, Badge, Spinner, DatePicker, Select, Button} from "@shopify/polaris";
 import FileInput from "../../components/form/FileInput";
 import {useState, useEffect, useCallback} from "react";
 import {useRouter} from "next/router";
@@ -108,6 +108,7 @@ const Upload = () => {
     const [uploadDate, setUploadDate] = useState(null);
     const [supplier, setSupplier] = useState({value: null, label: "", short: ""});
     const [tokens, setTokens] = useState([]);
+    const [hintText, setHintText] = useState("");
     const handleMonthChange = useCallback((month, year) => setDate({month, year}), []);
 
     useEffect(() => {
@@ -156,6 +157,11 @@ const Upload = () => {
         }).then(response => response.json()).then(data => {
             fetchTokens();
         }).catch(err => console.log(err));
+    }
+
+    function onHintChange(value) {
+        console.log("onHintChange", value);
+        setHintText(value);
     }
 
     let interval = null;
@@ -400,14 +406,15 @@ const Upload = () => {
         >
             <Layout>
                 <Layout.Section>
+                    <Card sectioned title={"Hinweistext Verfügbarkeit"}>
+                        <TextField label={"Text"} valur={hintText} onChange={onHintChange.bind(this)} />
+                    </Card>
                     {renderExistingProduct()}
                     <Card sectioned title={"Upload Dateianhang"}>
                         {isLoading ? (
                             <Spinner size="large" />
                         ) : (
-                            <>
-                                <FileInput files={files} onSelect={onSelect.bind(this)} />
-                            </>
+                            <FileInput files={files} onSelect={onSelect.bind(this)} />
                         )}
                     </Card>
                     <Card sectioned title={"Freigabedatum Download"}>
@@ -421,7 +428,6 @@ const Upload = () => {
                         />
                     </Card>
                     <Card sectioned title={"Lieferant/Fremdartikelnummer"}>
-                        {console.log("render supplier:", supplier)}
                         <Select
                             label="Lieferantennummer"
                             options={supplierOptions}
