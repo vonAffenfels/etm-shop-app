@@ -315,6 +315,7 @@ const Upload = () => {
             return null;
         }
 
+        console.log("renderExistingProduct", metafields)
         const downloadFields = metafields.edges.map(edge => edge.node).filter(node => node.key === "filename");
         // https://etm-shop-app.herokuapp.com
         return (
