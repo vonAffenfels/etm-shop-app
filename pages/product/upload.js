@@ -136,7 +136,6 @@ const Upload = () => {
         fetch("/product/" + productId + "/token/find", {
             method: "post",
         }).then(response => response.json()).then(data => {
-            console.log("fetchTokens result", data)
             if (data.data) {
                 setTokens(data.data);
             }
@@ -147,7 +146,6 @@ const Upload = () => {
         fetch("/product/" + productId + "/token/create", {
             method: "post",
         }).then(response => response.json()).then(data => {
-            console.log("createDownloadToken result", data)
             fetchTokens();
         }).catch(err => console.log(err));
     }
@@ -156,7 +154,6 @@ const Upload = () => {
         fetch("/product/" + productId + "/token/delete/" + id, {
             method: "post",
         }).then(response => response.json()).then(data => {
-            console.log("deleteDownloadToken result", data)
             fetchTokens();
         }).catch(err => console.log(err));
     }
@@ -334,7 +331,9 @@ const Upload = () => {
                                     {tokens.map((token, i) => (
                                         <>
                                             <p key={"token_" + i}>
-                                                {"https://www.eurotransport.de/shopify-api/token/download/" + token._id}
+                                                <span style={{marginRight: "5px"}}>
+                                                    {"https://www.eurotransport.de/shopify-api/token/download/" + token._id}
+                                                </span>
                                                 <Button plain destructive onClick={deleteDownloadToken.bind(this, token._id)}>
                                                     Löschen
                                                 </Button>
