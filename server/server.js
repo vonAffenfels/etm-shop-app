@@ -248,7 +248,6 @@ app.prepare().then(async () => {
 
         if (file) {
             try {
-                console.log(body.downloads, String(body.downloads), String(body.downloads).length)
                 const downloads = String(body.downloads).length ? body.downloads.split(",") : [];
                 if (downloads && downloads.length) {
                     for (let i = 0; i < downloads.length; i++) {
@@ -310,6 +309,24 @@ app.prepare().then(async () => {
                 namespace: "Download",
                 key: "supplierid",
                 value: body.supplierid,
+                valueType: "STRING"
+            });
+        }
+
+        if (body.hinttext) {
+            if (body.hinttextid) {
+                try {
+                    await removeMetafield(client, body.hinttextid);
+                } catch (e) {
+                    console.log("error in removeMetafield", e.toString());
+                }
+            }
+
+            metafields.push({
+                description: "hint text for display of availability",
+                namespace: "Additions",
+                key: "hinttext",
+                value: body.hinttext,
                 valueType: "STRING"
             });
         }

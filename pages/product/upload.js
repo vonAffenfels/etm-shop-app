@@ -189,6 +189,21 @@ const Upload = () => {
             }
         }
 
+        if (hintText) {
+            formData.append("hinttext", hintText);
+
+            if (existingProduct && existingProduct.product) {
+                const metafields = existingProduct.product.metafields;
+
+                if (metafields && metafields.edges && metafields.edges.length) {
+                    const hintFields = metafields.edges.map(edge => edge.node).filter(node => node.key === "hinttext").map(node => node.id);
+                    if (hintFields.length) {
+                        formData.append("hinttextid", hintFields.join(","));
+                    }
+                }
+            }
+        }
+
         if (uploadDate && uploadDate.start) {
             formData.append("downloaddate", uploadDate.start);
 
@@ -277,6 +292,14 @@ const Upload = () => {
                 });
             } else {
                 setSupplier({value: null, label: "", short: ""});
+            }
+
+            const hintFields = metafields.edges.map(edge => edge.node).filter(node => node.key === "hinttext");
+            if (hintFields.length) {
+                const hintField = hintFields[0];
+                setHintText(hintField.value);
+            } else {
+                setHintText("");
             }
         }
     }
