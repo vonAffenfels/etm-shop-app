@@ -108,6 +108,68 @@ app.prepare().then(async () => {
         await Shopify.Utils.graphqlProxy(ctx.req, ctx.res);
     });
 
+    router.get("/product/download/valid/:productId", async (ctx, next) => {
+        const {productId} = ctx.params;
+
+        if (!productId) {
+            ctx.res.status = 400;
+            ctx.body = {
+                error: "productId missing"
+            };
+            return;
+        }
+
+        // const productId = Buffer.from(productHash, "hex").toString();
+        const shopifyId = "gid://shopify/Product/" + productId;
+        const res = await getProduct(client, shopifyId);
+
+        if (!res.data || !res.data.product) {
+            ctx.res.status = 404;
+            ctx.body = {
+                error: "no product found for id " + shopifyId
+            };
+            return;
+        }
+
+        const metafields = res.data.product.metafields;
+
+        if (!metafields || !metafields.edges || !metafields.edges.length) {
+            ctx.res.status = 404;
+            ctx.body = {
+                error: "no attached files found for product with id " + shopifyId
+            };
+            return;
+        }
+
+        const downloadFields = metafields.edges.map(edge => edge.node).filter(node => node.key === "filename");
+
+        if (!downloadFields.length) {
+            ctx.res.status = 404;
+            ctx.body = {
+                error: "no attached files found for product with id " + shopifyId
+            };
+            return;
+        }
+
+        const userAgent = ctx.req.headers["user-agent"];
+        if (userAgent === "euro-api") {
+            const downloadDateFields = metafields.edges.map(edge => edge.node).filter(node => node.key === "downloaddate");
+            if (downloadDateFields.length) {
+                let dateTime = new Date(downloadDateFields[0].value).getTime();
+
+                if (new Date().getTime() < dateTime) {
+                    return ctx.body = {
+                        error: "releasedate not reached"
+                    }
+                }
+            }
+        }
+
+        return ctx.body = {
+            success: true
+        };
+    });
+
     router.get("/product/download/:productId", async (ctx, next) => {
         const {productId} = ctx.params;
 
@@ -144,10 +206,8 @@ app.prepare().then(async () => {
         }
 
         const userAgent = ctx.req.headers["user-agent"];
-        console.log("userAgent", userAgent)
         if (userAgent === "euro-api") {
             const downloadDateFields = metafields.edges.map(edge => edge.node).filter(node => node.key === "downloaddate");
-            console.log("downloadDateFields", downloadDateFields)
             if (downloadDateFields.length) {
                 let dateTime = new Date(downloadDateFields[0].value).getTime();
 
