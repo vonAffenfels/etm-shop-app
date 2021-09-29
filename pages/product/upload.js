@@ -295,6 +295,7 @@ const Upload = () => {
 
     function handleSupplierChange(supplierInput, _) {
         let newSupplier = null;
+        console.log("handleSupplierChange", supplierInput, _)
 
         if (!supplierInput) {
             setSupplier({value: null, label: "", short: ""});
@@ -421,6 +422,7 @@ const Upload = () => {
                         />
                     </Card>
                     <Card sectioned title={"Lieferant/Fremdartikelnummer"}>
+                        {console.log("render supplier:", supplier)}
                         <Select
                             label="Lieferantennummer"
                             options={supplierOptions}
