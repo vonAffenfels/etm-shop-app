@@ -150,12 +150,7 @@ app.prepare().then(async () => {
             console.log("downloadDateFields", downloadDateFields)
             if (downloadDateFields.length) {
                 let dateTime = new Date(downloadDateFields[0].value).getTime();
-                console.log("dateTime", dateTime)
-                console.log("new Date", (new Date().getTime()))
-                console.log(new Date().getTime() < dateTime)
-                return ctx.body = {
-                    error: "releasedate not reached"
-                }
+
                 if (new Date().getTime() < dateTime) {
                     return ctx.body = {
                         error: "releasedate not reached"
