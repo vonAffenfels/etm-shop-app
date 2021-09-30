@@ -152,12 +152,18 @@ app.prepare().then(async () => {
         }
 
         const userAgent = ctx.req.headers["user-agent"];
+        const isSubscriber = String(ctx.req.headers["e-valid-abo"]) == "1";
         if (userAgent === "euro-api") {
             const downloadDateFields = metafields.edges.map(edge => edge.node).filter(node => node.key === "downloaddate");
             if (downloadDateFields.length) {
                 let dateTime = new Date(downloadDateFields[0].value).getTime();
+                let compareTime = new Date();
 
-                if (new Date().getTime() < dateTime) {
+                if (isSubscriber) {
+                    compareTime.setDate(compareTime.getDate() - 2);
+                }
+
+                if (compareTime.getTime() < dateTime) {
                     return ctx.body = {
                         error: "releasedate not reached"
                     }
@@ -206,12 +212,18 @@ app.prepare().then(async () => {
         }
 
         const userAgent = ctx.req.headers["user-agent"];
+        const isSubscriber = String(ctx.req.headers["e-valid-abo"]) == "1";
         if (userAgent === "euro-api") {
             const downloadDateFields = metafields.edges.map(edge => edge.node).filter(node => node.key === "downloaddate");
             if (downloadDateFields.length) {
                 let dateTime = new Date(downloadDateFields[0].value).getTime();
+                let compareTime = new Date();
 
-                if (new Date().getTime() < dateTime) {
+                if (isSubscriber) {
+                    compareTime.setDate(compareTime.getDate() - 2);
+                }
+
+                if (compareTime.getTime() < dateTime) {
                     return ctx.body = {
                         error: "releasedate not reached"
                     }

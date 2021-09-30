@@ -440,7 +440,7 @@ const Upload = () => {
                             <FileInput files={files} onSelect={onSelect.bind(this)} />
                         )}
                     </Card>
-                    <Card sectioned title={"Freigabedatum Download"}>
+                    <Card sectioned title={"Freigabedatum Download (Abonnenten werden 2 Tage früher freigeschalten)"}>
                         <DatePicker
                             allowRange={false}
                             month={month}
