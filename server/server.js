@@ -108,6 +108,19 @@ app.prepare().then(async () => {
         await Shopify.Utils.graphqlProxy(ctx.req, ctx.res);
     });
 
+    router.post("/metafield/remove/:id", async (ctx, next) => {
+        const {id} = ctx.params;
+
+        if (!id) {
+            ctx.res.status = 404;
+            ctx.body = {
+                error: "id not found"
+            };
+        }
+
+        await removeMetafield(client, id);
+    });
+
     router.get("/product/download/valid/:productId", async (ctx, next) => {
         const {productId} = ctx.params;
 
@@ -267,7 +280,7 @@ app.prepare().then(async () => {
                     }
                 }
             } catch (e) {
-                console.log("error in removeMetafield file", e.toString());
+                console.log("error in removeMetafield file", e.toString(), body.downloads, String(body.downloads).length);
             }
 
             const slug = speakingurl(file.name);

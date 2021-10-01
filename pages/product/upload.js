@@ -159,6 +159,14 @@ const Upload = () => {
         }).catch(err => console.log(err));
     }
 
+    function deleteDownloadAttachment(id) {
+        fetch("/metafield/remove/" + id, {
+            method: "post",
+        }).then(response => response.json()).then(data => {
+            fetchTokens();
+        }).catch(err => console.log(err));
+    }
+
     function onHintChange(value) {
         setHintText(value);
         setTouched(true);
@@ -356,9 +364,13 @@ const Upload = () => {
             <>
                 {downloadFields.map((node, i) => (
                     <Card sectioned title={"Vorhandene Dateianhänge"}>
+                        {console.log("node", node)}
                         <TextContainer>
                             <Heading>
-                                <a href={"/product/download/" + productId} download>{node.value}</a>
+                                <a href={"/product/download/" + productId} download style={{marginRight: "10px"}}>{node.value}</a>
+                                <Button plain destructive onClick={deleteDownloadAttachment.bind(this, node.id)}>
+                                    Löschen
+                                </Button>
                             </Heading>
                             <p>Hochgeladen am {node.createdAt.substring(0, node.createdAt.indexOf("T"))}</p>
                             {tokens.length > 0 && (
