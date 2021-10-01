@@ -160,9 +160,10 @@ const Upload = () => {
     }
 
     function deleteDownloadAttachment(id) {
-        fetch("/metafield/remove/" + id, {
+        fetch("/metafield/remove/" + id.replace("gid://shopify/Metafield/", ""), {
             method: "post",
         }).then(response => response.json()).then(data => {
+            fetchProduct();
             fetchTokens();
         }).catch(err => console.log(err));
     }

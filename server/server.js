@@ -118,7 +118,7 @@ app.prepare().then(async () => {
             };
         }
 
-        await removeMetafield(client, id);
+        await removeMetafield(client, "gid://shopify/Metafield/" + id);
     });
 
     router.get("/product/download/valid/:productId", async (ctx, next) => {
