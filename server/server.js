@@ -118,6 +118,8 @@ app.prepare().then(async () => {
             };
         }
 
+        console.log("removing", "gid://shopify/Metafield/" + id)
+
         await removeMetafield(client, "gid://shopify/Metafield/" + id);
     });
 
