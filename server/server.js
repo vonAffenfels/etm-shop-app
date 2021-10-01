@@ -118,9 +118,12 @@ app.prepare().then(async () => {
             };
         }
 
-        console.log("removing", "gid://shopify/Metafield/" + id)
-
         await removeMetafield(client, "gid://shopify/Metafield/" + id);
+
+        ctx.res.status = 200;
+        ctx.body = {
+            success: true
+        };
     });
 
     router.get("/product/download/valid/:productId", async (ctx, next) => {
@@ -275,14 +278,14 @@ app.prepare().then(async () => {
 
         if (file) {
             try {
-                const downloads = String(body.downloads).length ? body.downloads.split(",") : [];
+                const downloads = (String(body.downloads).length && String(body.downloads) !== "undefined") ? body.downloads.split(",") : [];
                 if (downloads && downloads.length) {
                     for (let i = 0; i < downloads.length; i++) {
                         await removeMetafield(client, downloads[i]);
                     }
                 }
             } catch (e) {
-                console.log("error in removeMetafield file", e.toString(), body.downloads, String(body.downloads).length);
+                console.log("error in removeMetafield file", e.toString());
             }
 
             const slug = speakingurl(file.name);
