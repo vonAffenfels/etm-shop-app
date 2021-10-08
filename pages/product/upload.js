@@ -304,6 +304,8 @@ const Upload = () => {
 
         if (mappedFields["hidden"]) {
             setHidden(mappedFields["hidden"] == "1" ? true : false);
+        } else {
+            setHidden(false);
         }
     }
 
