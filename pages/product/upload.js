@@ -399,7 +399,7 @@ const Upload = () => {
         }
 
         if (uploadedState === "success") {
-            return <Badge status="success">hochgeladen</Badge>;
+            return <Badge status="success">gespeichert</Badge>;
         }
         if (uploadedState === "error") {
             return <Badge status="error">Fehler aufgetreten</Badge>;
