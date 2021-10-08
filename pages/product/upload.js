@@ -171,6 +171,7 @@ const Upload = () => {
 
     function onHiddenChange(checked) {
         setHidden(checked);
+        setTouched(true);
     }
 
     function onHintChange(value) {
