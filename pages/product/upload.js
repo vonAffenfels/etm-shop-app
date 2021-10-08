@@ -442,7 +442,7 @@ const Upload = () => {
                             disabled={isLoading}
                             onChange={onHiddenChange.bind(this)}
                         />
-                        {existingProduct && <a target="_blank" href={existingProduct.shopUrl}></a>}
+                        {existingProduct && <a target="_blank" href={existingProduct.shopUrl}>Detailseite öffnen</a>}
                     </Card>
                     <Card sectioned title={"Hinweistext Verfügbarkeit"}>
                         <TextField disabled={isLoading} value={hintText} onChange={onHintChange.bind(this)} />
