@@ -1,4 +1,4 @@
-import {Layout, Card, TextContainer, TextStyle, TextField, Heading, Page, Badge, Spinner, DatePicker, Select, Button} from "@shopify/polaris";
+import {Layout, Card, TextContainer, TextStyle, TextField, Heading, Page, Badge, Spinner, DatePicker, Select, Button, Checkbox} from "@shopify/polaris";
 import FileInput from "../../components/form/FileInput";
 import {useState, useEffect, useCallback} from "react";
 import {useRouter} from "next/router";
@@ -109,6 +109,7 @@ const Upload = () => {
     const [supplier, setSupplier] = useState({value: null, label: "", short: ""});
     const [tokens, setTokens] = useState([]);
     const [hintText, setHintText] = useState("");
+    const [hidden, setHidden] = useState(false);
     const handleMonthChange = useCallback((month, year) => setDate({month, year}), []);
 
     useEffect(() => {
@@ -166,6 +167,10 @@ const Upload = () => {
             fetchProduct();
             fetchTokens();
         }).catch(err => console.log(err));
+    }
+
+    function onHiddenChange(_, __, ___) {
+        console.log("onHiddenChange", _, __, ___)
     }
 
     function onHintChange(value) {
@@ -365,7 +370,6 @@ const Upload = () => {
             <>
                 {downloadFields.map((node, i) => (
                     <Card sectioned title={"Vorhandene Dateianhänge"}>
-                        {console.log("node", node)}
                         <TextContainer>
                             <Heading>
                                 <a href={"/product/download/" + productId} download style={{marginRight: "10px"}}>{node.value}</a>
@@ -442,6 +446,13 @@ const Upload = () => {
         >
             <Layout>
                 <Layout.Section>
+                    <Card sectioned title={"Sichtbarkeit"}>
+                        <Checkbox
+                            label="Produkt verstecken"
+                            checked={hidden}
+                            onChange={onHiddenChange.bind(this)}
+                        />
+                    </Card>
                     <Card sectioned title={"Hinweistext Verfügbarkeit"}>
                         <TextField value={hintText} onChange={onHintChange.bind(this)} />
                     </Card>
