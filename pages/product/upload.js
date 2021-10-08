@@ -416,6 +416,7 @@ const Upload = () => {
         return retVal;
     }
 
+    console.log(existingProduct)
     return (
         <Page
             title={getTitle()}

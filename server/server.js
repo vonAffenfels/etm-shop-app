@@ -487,16 +487,7 @@ app.prepare().then(async () => {
 
         try {
             const res = await getProduct(client, shopifyId);
-            const result = await fetch(process.env.TOKEN_API + "/shopify-api/detail-link/", {
-                method: "post",
-                body: JSON.stringify({
-                    id: productId,
-                    title: res.data?.product?.title
-                }),
-                headers: {"Content-Type": "application/json"}
-            });
-            res.data.shopUrl = await result.text();
-
+            res.data.shopUrl = process.env.TOKEN_API + "/" + speakingurl("shop-" + res.data?.product?.title) + "/" + productId;
             ctx.body = res.data;
         } catch (e) {
             console.log(e);
