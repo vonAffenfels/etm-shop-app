@@ -361,6 +361,24 @@ app.prepare().then(async () => {
             });
         }
 
+        if (body.hidden === "0" || body.hidden === "1") {
+            if (body.hiddenid) {
+                try {
+                    await removeMetafield(client, body.hiddenid);
+                } catch (e) {
+                    console.log("error in removeMetafield", e.toString());
+                }
+            }
+
+            metafields.push({
+                description: "0 indicates normal state, 1 hides it",
+                namespace: "Additions",
+                key: "hidden",
+                value: body.hidden,
+                valueType: "STRING"
+            });
+        }
+
         const res = await updateProduct(client, shopifyId, metafields);
         ctx.body = "ok";
     });

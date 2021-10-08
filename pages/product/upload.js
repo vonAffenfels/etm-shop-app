@@ -169,8 +169,8 @@ const Upload = () => {
         }).catch(err => console.log(err));
     }
 
-    function onHiddenChange(_, __, ___) {
-        console.log("onHiddenChange", _, __, ___)
+    function onHiddenChange(checked) {
+        setHidden(checked);
     }
 
     function onHintChange(value) {
@@ -180,71 +180,54 @@ const Upload = () => {
 
     let interval = null;
     async function handleSubmit(e) {
-        if (!productId) {
+        if (!productId || !existingProduct || !existingProduct.product) {
             return;
         }
 
         setLoading(true);
 
-        const formData = new FormData();
+        let formData = new FormData();
+        let metafields = existingProduct.product.metafields;
+        let mappedFields = {};
+
+        if (metafields && metafields.edges && metafields.edges.length) {
+            metafields.edges.map(edge => edge.node).forEach(node => {
+                mappedFields[node.key] = node.id;
+            });
+        }
 
         if (files.length) {
             formData.append("file", files[0]);
-
-            if (existingProduct && existingProduct.product) {
-                const metafields = existingProduct.product.metafields;
-
-                if (metafields && metafields.edges && metafields.edges.length) {
-                    const downloadFields = metafields.edges.map(edge => edge.node).filter(node => node.key === "filename").map(node => node.id);
-                    if (downloadFields.length) {
-                        formData.append("downloads", downloadFields.join(","));
-                    }
-                }
+            if (mappedFields["filename"]) {
+                formData.append("downloads", mappedFields["filename"].join(","));
             }
         }
 
         if (hintText) {
             formData.append("hinttext", hintText);
-
-            if (existingProduct && existingProduct.product) {
-                const metafields = existingProduct.product.metafields;
-
-                if (metafields && metafields.edges && metafields.edges.length) {
-                    const hintFields = metafields.edges.map(edge => edge.node).filter(node => node.key === "hinttext").map(node => node.id);
-                    if (hintFields.length) {
-                        formData.append("hinttextid", hintFields.join(","));
-                    }
-                }
+            if (mappedFields["hinttext"]) {
+                formData.append("hinttextid", mappedFields["hinttext"].join(","));
             }
         }
 
         if (uploadDate && uploadDate.start) {
             formData.append("downloaddate", uploadDate.start);
-
-            if (existingProduct && existingProduct.product) {
-                const metafields = existingProduct.product.metafields;
-
-                if (metafields && metafields.edges && metafields.edges.length) {
-                    const downloadFields = metafields.edges.map(edge => edge.node).filter(node => node.key === "downloaddate").map(node => node.id);
-                    if (downloadFields.length) {
-                        formData.append("downloaddateid", downloadFields.join(","));
-                    }
-                }
+            if (mappedFields["downloaddate"]) {
+                formData.append("downloaddateid", mappedFields["downloaddate"].join(","));
             }
         }
 
         if (supplier && supplier.value) {
             formData.append("supplierid", supplier.value);
+            if (mappedFields["supplierid"]) {
+                formData.append("suppliermetaid", mappedFields["supplierid"].join(","));
+            }
+        }
 
-            if (existingProduct && existingProduct.product) {
-                const metafields = existingProduct.product.metafields;
-
-                if (metafields && metafields.edges && metafields.edges.length) {
-                    const supplierFields = metafields.edges.map(edge => edge.node).filter(node => node.key === "supplierid").map(node => node.id);
-                    if (supplierFields.length) {
-                        formData.append("suppliermetaid", supplierFields.join(","));
-                    }
-                }
+        if (supplier && supplier.value) {
+            formData.append("hidden", hidden ? "1" : "0");
+            if (mappedFields["hidden"]) {
+                formData.append("hiddenid", mappedFields["hidden"].join(","));
             }
         }
 
@@ -282,39 +265,42 @@ const Upload = () => {
             return;
         }
 
-        const metafields = data.product.metafields;
+        let metafields = data.product.metafields;
+        let mappedFields = {};
 
         if (metafields && metafields.edges && metafields.edges.length) {
-            const downloadFields = metafields.edges.map(edge => edge.node).filter(node => node.key === "downloaddate");
-            if (downloadFields.length) {
-                const downloadField = downloadFields[0];
-                setUploadDate({
-                    start: new Date(downloadField.value),
-                    end: new Date(downloadField.value)
-                });
-            } else {
-                setUploadDate(null);
-            }
+            metafields.edges.map(edge => edge.node).forEach(node => {
+                mappedFields[node.key] = node.value;
+            });
+        }
 
-            const supplierFields = metafields.edges.map(edge => edge.node).filter(node => node.key === "supplierid");
-            if (supplierFields.length) {
-                const supplierField = supplierFields[0];
-                supplierOptions.forEach((supplierOption) => {
-                    if (supplierOption.value === supplierField) {
-                        setSupplier(supplierOption);
-                    }
-                });
-            } else {
-                setSupplier({value: null, label: "", short: ""});
-            }
+        if (mappedFields["downloaddate"]) {
+            setUploadDate({
+                start: new Date(mappedFields["downloaddate"]),
+                end: new Date(mappedFields["downloaddate"])
+            });
+        } else {
+            setUploadDate(null);
+        }
 
-            const hintFields = metafields.edges.map(edge => edge.node).filter(node => node.key === "hinttext");
-            if (hintFields.length) {
-                const hintField = hintFields[0];
-                setHintText(hintField.value);
-            } else {
-                setHintText("");
-            }
+        if (mappedFields["supplierid"]) {
+            supplierOptions.forEach((supplierOption) => {
+                if (supplierOption.value === mappedFields["supplierid"]) {
+                    setSupplier(supplierOption);
+                }
+            });
+        } else {
+            setSupplier({value: null, label: "", short: ""});
+        }
+
+        if (mappedFields["hinttext"]) {
+            setHintText(mappedFields["hinttext"]);
+        } else {
+            setHintText("");
+        }
+
+        if (mappedFields["hidden"]) {
+            setHidden(mappedFields["hidden"] == "1" ? true : false);
         }
     }
 
