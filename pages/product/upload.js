@@ -202,35 +202,35 @@ const Upload = () => {
         if (files.length) {
             formData.append("file", files[0]);
             if (mappedFields["filename"]) {
-                formData.append("downloads", String(mappedFields["filename"]).join(","));
+                formData.append("downloads", String(mappedFields["filename"]));
             }
         }
 
         if (hintText) {
             formData.append("hinttext", hintText);
             if (mappedFields["hinttext"]) {
-                formData.append("hinttextid", String(mappedFields["hinttext"]).join(","));
+                formData.append("hinttextid", String(mappedFields["hinttext"]));
             }
         }
 
         if (uploadDate && uploadDate.start) {
             formData.append("downloaddate", uploadDate.start);
             if (mappedFields["downloaddate"]) {
-                formData.append("downloaddateid", String(mappedFields["downloaddate"]).join(","));
+                formData.append("downloaddateid", String(mappedFields["downloaddate"]));
             }
         }
 
         if (supplier && supplier.value) {
             formData.append("supplierid", supplier.value);
             if (mappedFields["supplierid"]) {
-                formData.append("suppliermetaid", String(mappedFields["supplierid"]).join(","));
+                formData.append("suppliermetaid", String(mappedFields["supplierid"]));
             }
         }
 
         if (supplier && supplier.value) {
             formData.append("hidden", hidden ? "1" : "0");
             if (mappedFields["hidden"]) {
-                formData.append("hiddenid", String(mappedFields["hidden"]).join(","));
+                formData.append("hiddenid", String(mappedFields["hidden"]));
             }
         }
 
