@@ -197,38 +197,40 @@ const Upload = () => {
             });
         }
 
+        console.log("mappedFields", mappedFields)
+
         if (files.length) {
             formData.append("file", files[0]);
             if (mappedFields["filename"]) {
-                formData.append("downloads", mappedFields["filename"].join(","));
+                formData.append("downloads", String(mappedFields["filename"]).join(","));
             }
         }
 
         if (hintText) {
             formData.append("hinttext", hintText);
             if (mappedFields["hinttext"]) {
-                formData.append("hinttextid", mappedFields["hinttext"].join(","));
+                formData.append("hinttextid", String(mappedFields["hinttext"]).join(","));
             }
         }
 
         if (uploadDate && uploadDate.start) {
             formData.append("downloaddate", uploadDate.start);
             if (mappedFields["downloaddate"]) {
-                formData.append("downloaddateid", mappedFields["downloaddate"].join(","));
+                formData.append("downloaddateid", String(mappedFields["downloaddate"]).join(","));
             }
         }
 
         if (supplier && supplier.value) {
             formData.append("supplierid", supplier.value);
             if (mappedFields["supplierid"]) {
-                formData.append("suppliermetaid", mappedFields["supplierid"].join(","));
+                formData.append("suppliermetaid", String(mappedFields["supplierid"]).join(","));
             }
         }
 
         if (supplier && supplier.value) {
             formData.append("hidden", hidden ? "1" : "0");
             if (mappedFields["hidden"]) {
-                formData.append("hiddenid", mappedFields["hidden"].join(","));
+                formData.append("hiddenid", String(mappedFields["hidden"]).join(","));
             }
         }
 
@@ -437,11 +439,12 @@ const Upload = () => {
                         <Checkbox
                             label="Produkt verstecken"
                             checked={hidden}
+                            disabled={isLoading}
                             onChange={onHiddenChange.bind(this)}
                         />
                     </Card>
                     <Card sectioned title={"Hinweistext Verfügbarkeit"}>
-                        <TextField value={hintText} onChange={onHintChange.bind(this)} />
+                        <TextField disabled={isLoading} value={hintText} onChange={onHintChange.bind(this)} />
                     </Card>
                     {renderExistingProduct()}
                     <Card sectioned title={"Upload Dateianhang"}>
@@ -459,6 +462,7 @@ const Upload = () => {
                             onMonthChange={handleMonthChange.bind(this)}
                             onChange={onDateChange.bind(this)}
                             selected={uploadDate}
+                            disabled={isLoading}
                         />
                     </Card>
                     <Card sectioned title={"Lieferant/Fremdartikelnummer"}>
@@ -467,6 +471,7 @@ const Upload = () => {
                             options={supplierOptions}
                             onChange={handleSupplierChange.bind(this)}
                             value={supplier.value}
+                            disabled={isLoading}
                         />
                         <TextContainer>
                             {supplier.value && (
