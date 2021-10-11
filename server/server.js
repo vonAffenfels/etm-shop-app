@@ -417,6 +417,24 @@ app.prepare().then(async () => {
             });
         }
 
+        if (body.project) {
+            if (body.projectid) {
+                try {
+                    await removeMetafield(client, body.projectid);
+                } catch (e) {
+                    console.log("error in removeMetafield", e.toString());
+                }
+            }
+
+            metafields.push({
+                description: "Projekt, relevant fuer Abo Zuordnung",
+                namespace: "Subscriptions",
+                key: "project",
+                value: body.project,
+                valueType: "STRING"
+            });
+        }
+
         const res = await updateProduct(client, shopifyId, metafields);
         ctx.body = "ok";
     });

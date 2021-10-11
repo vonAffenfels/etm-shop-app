@@ -101,7 +101,16 @@ const subscriptionRelationOptions = [
     {value: "20", label: "Digital"},
     {value: "50", label: "firmenauto Basis-Flat"},
     {value: "51", label: "Flatrate"},
-]
+];
+const subscriptionProjects = [
+    {value: null, label: "Bitte wählen"},
+    {value: "00091180", label: "ff"},
+    {value: "00004453", label: "la"},
+    {value: "00006035", label: "ta"},
+    {value: "00080318", label: "fa"},
+    {value: "00099118", label: "europrofi"},
+    {value: "00098031", label: "faprofi"},
+];
 
 const Upload = () => {
     const router = useRouter();
@@ -120,6 +129,7 @@ const Upload = () => {
     const [hidden, setHidden] = useState(false);
     const [bqNumber, setBqNumber] = useState("");
     const [relation, setRelation] = useState({value: null, label: ""});
+    const [project, setProject] = useState({value: null, label: ""});
     const handleMonthChange = useCallback((month, year) => setDate({month, year}), []);
 
     useEffect(() => {
@@ -185,8 +195,6 @@ const Upload = () => {
     }
 
     function onRelationChange(relationInput) {
-        let newRelation = null;
-
         if (relationInput === "Bitte wählen") {
             setRelation({value: null, label: ""});
             return;
@@ -194,11 +202,24 @@ const Upload = () => {
 
         subscriptionRelationOptions.forEach((relationOption) => {
             if (relationOption.value === relationInput) {
-                newRelation = relationOption;
+                setRelation(relationOption);
+                setTouched(true);
             }
         });
-        setRelation(newRelation);
-        setTouched(true);
+    }
+
+    function onProjectChange(projectInput) {
+        if (projectInput === "Bitte wählen") {
+            setProject({value: null, label: ""});
+            return;
+        }
+
+        subscriptionProjects.forEach((projectOption) => {
+            if (projectOption.value === projectInput) {
+                setProject(projectOption);
+                setTouched(true);
+            }
+        });
     }
 
     function onHiddenChange(checked) {
@@ -266,15 +287,22 @@ const Upload = () => {
 
         if (bqNumber) {
             formData.append("bqnumber", supplier.value);
-            if (mappedFields["bqnumberid"]) {
+            if (mappedFields["bqnumber"]) {
                 formData.append("bqnumberid", String(mappedFields["bqnumber"]));
             }
         }
 
         if (relation && relation.value) {
-            formData.append("bqrelation", supplier.relation);
-            if (mappedFields["bqrelationid"]) {
+            formData.append("bqrelation", relation.value);
+            if (mappedFields["bqrelation"]) {
                 formData.append("bqrelationid", String(mappedFields["bqrelation"]));
+            }
+        }
+
+        if (project && project.value) {
+            formData.append("project", project.value);
+            if (mappedFields["project"]) {
+                formData.append("projectid", String(mappedFields["project"]));
             }
         }
 
@@ -534,6 +562,24 @@ const Upload = () => {
                                     <p>
                                         <br/>
                                         <TextStyle variation="subdued">{relation.value} {relation.label}</TextStyle>
+                                    </p>
+                                )}
+                            </TextContainer>
+                        </p>
+                        <p>
+                            <br/>
+                            <Select
+                                options={subscriptionProjects}
+                                label={"Projekt"}
+                                disabled={isLoading}
+                                value={project.value}
+                                onChange={onProjectChange.bind(this)}
+                            />
+                            <TextContainer>
+                                {project.value && (
+                                    <p>
+                                        <br/>
+                                        <TextStyle variation="subdued">{project.value} {project.label}</TextStyle>
                                     </p>
                                 )}
                             </TextContainer>
