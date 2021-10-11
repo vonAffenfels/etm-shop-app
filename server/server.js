@@ -381,6 +381,42 @@ app.prepare().then(async () => {
             });
         }
 
+        if (body.bqnumber) {
+            if (body.bqnumberid) {
+                try {
+                    await removeMetafield(client, body.bqnumberid);
+                } catch (e) {
+                    console.log("error in removeMetafield", e.toString());
+                }
+            }
+
+            metafields.push({
+                description: "Bezugsquelle, relevant fuer Abos",
+                namespace: "Subscriptions",
+                key: "bqnumber",
+                value: body.bqnumber,
+                valueType: "STRING"
+            });
+        }
+
+        if (body.bqrelation) {
+            if (body.bqrelationid) {
+                try {
+                    await removeMetafield(client, body.bqrelationid);
+                } catch (e) {
+                    console.log("error in removeMetafield", e.toString());
+                }
+            }
+
+            metafields.push({
+                description: "Bezugstyp, relevant fuer Abo Zuordnung",
+                namespace: "Subscriptions",
+                key: "bqrelation",
+                value: body.bqrelation,
+                valueType: "STRING"
+            });
+        }
+
         const res = await updateProduct(client, shopifyId, metafields);
         ctx.body = "ok";
     });

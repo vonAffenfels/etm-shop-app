@@ -179,6 +179,11 @@ const Upload = () => {
         }).catch(err => console.log(err));
     }
 
+    function onBqNumberChange(input) {
+        setBqNumber(input);
+        setTouched(true);
+    }
+
     function onRelationChange(relationInput) {
         let newRelation = null;
 
@@ -257,6 +262,20 @@ const Upload = () => {
         formData.append("hidden", hidden ? "1" : "0");
         if (mappedFields["hidden"]) {
             formData.append("hiddenid", String(mappedFields["hidden"]));
+        }
+
+        if (bqNumber) {
+            formData.append("bqnumber", supplier.value);
+            if (mappedFields["bqnumberid"]) {
+                formData.append("bqnumberid", String(mappedFields["bqnumber"]));
+            }
+        }
+
+        if (relation && relation.value) {
+            formData.append("bqrelation", supplier.relation);
+            if (mappedFields["bqrelationid"]) {
+                formData.append("bqrelationid", String(mappedFields["bqrelation"]));
+            }
         }
 
         try {
@@ -484,14 +503,14 @@ const Upload = () => {
                         <TextField disabled={isLoading} value={hintText} onChange={onHintChange.bind(this)} />
                     </Card>
                     <Card sectioned title={"Abonnement"}>
-                        <TextField label={"Bezugsquelle"} disabled={isLoading} value={bqNumber} onChange={setBqNumber} />
+                        <TextField label={"Bezugsquelle"} disabled={isLoading} value={bqNumber} onChange={onBqNumberChange} />
                         <p>
                             <br/>
                             <Select
                                 options={subscriptionRelationOptions}
                                 label={"Bezugstyp"}
                                 disabled={isLoading}
-                                value={relation}
+                                value={relation.value}
                                 onChange={onRelationChange.bind(this)}
                             />
                             <TextContainer>
