@@ -235,7 +235,8 @@ const Upload = () => {
         }
 
         try {
-            console.log(Object.fromEntries(formData))
+            console.log("FORMDATA:::");
+            console.log(Object.fromEntries(formData));
             const data = await fetch("/product/upload/" + productId, {
                 method: "post",
                 body: formData

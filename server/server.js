@@ -267,6 +267,8 @@ app.prepare().then(async () => {
         const body = ctx.request.body;
         const file = ctx.request.files?.file;
 
+        console.log("body", JSON.stringify(body, null, 3))
+
         if (!productId) {
             ctx.res.status = 400;
             ctx.body = "productId missing";
