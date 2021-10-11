@@ -227,11 +227,9 @@ const Upload = () => {
             }
         }
 
-        if (supplier && supplier.value) {
-            formData.append("hidden", hidden ? "1" : "0");
-            if (mappedFields["hidden"]) {
-                formData.append("hiddenid", String(mappedFields["hidden"]));
-            }
+        formData.append("hidden", hidden ? "1" : "0");
+        if (mappedFields["hidden"]) {
+            formData.append("hiddenid", String(mappedFields["hidden"]));
         }
 
         try {
