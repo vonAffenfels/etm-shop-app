@@ -352,6 +352,22 @@ const Upload = () => {
         } else {
             setHidden(false);
         }
+
+        if (mappedFields["bqnumber"]) {
+            setBqNumber(mappedFields["bqnumber"]);
+        } else {
+            setBqNumber("");
+        }
+
+        if (mappedFields["bqrelation"]) {
+            subscriptionRelationOptions.forEach((relationOption) => {
+                if (relationOption.value === mappedFields["bqrelation"]) {
+                    setRelation(relationOption);
+                }
+            });
+        } else {
+            setRelation({value: null, label: ""});
+        }
     }
 
     function reset() {
