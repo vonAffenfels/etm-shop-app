@@ -456,6 +456,10 @@ const Upload = () => {
                     <Card sectioned title={"Hinweistext Verfügbarkeit"}>
                         <TextField disabled={isLoading} value={hintText} onChange={onHintChange.bind(this)} />
                     </Card>
+                    <Card sectioned title={"Abonnement"}>
+                        <TextField label={"Bezugsquelle"} disabled={isLoading} value={hintText} onChange={onHintChange.bind(this)} />
+                        <TextField label={"Bezugstyp"} disabled={isLoading} value={hintText} onChange={onHintChange.bind(this)} />
+                    </Card>
                     {renderExistingProduct()}
                     <Card sectioned title={"Upload Dateianhang"}>
                         {isLoading ? (

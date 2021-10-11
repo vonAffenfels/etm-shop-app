@@ -7,7 +7,7 @@ const getProduct = async (client, id) => {
                 product(id:$id) {
                     title
                     description
-                    metafields(first: 5) {
+                    metafields(first: 10) {
                         edges {
                             node {
                                 id
