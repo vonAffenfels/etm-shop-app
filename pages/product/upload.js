@@ -94,6 +94,14 @@ const supplierOptions = [
         "label": "Thomin"
     }
 ];
+const subscriptionRelationOptions = [
+    {value: null, label: "Bitte wählen"},
+    {value: "01", label: "Print"},
+    {value: "15", label: "Kombi"},
+    {value: "20", label: "Digital"},
+    {value: "50", label: "firmenauto Basis-Flat"},
+    {value: "51", label: "Flatrate"},
+]
 
 const Upload = () => {
     const router = useRouter();
@@ -110,6 +118,8 @@ const Upload = () => {
     const [tokens, setTokens] = useState([]);
     const [hintText, setHintText] = useState("");
     const [hidden, setHidden] = useState(false);
+    const [bqNumber, setBqNumber] = useState("");
+    const [relation, setRelation] = useState({value: null, label: ""});
     const handleMonthChange = useCallback((month, year) => setDate({month, year}), []);
 
     useEffect(() => {
@@ -167,6 +177,23 @@ const Upload = () => {
             fetchProduct();
             fetchTokens();
         }).catch(err => console.log(err));
+    }
+
+    function onRelationChange(relationInput) {
+        let newRelation = null;
+
+        if (relationInput === "Bitte wählen") {
+            setRelation({value: null, label: ""});
+            return;
+        }
+
+        subscriptionRelationOptions.forEach((relationOption) => {
+            if (relationOption.value === relationInput) {
+                newRelation = relationOption;
+            }
+        });
+        setRelation(newRelation);
+        setTouched(true);
     }
 
     function onHiddenChange(checked) {
@@ -326,7 +353,7 @@ const Upload = () => {
         setTouched(true);
     }
 
-    function handleSupplierChange(supplierInput, _) {
+    function handleSupplierChange(supplierInput) {
         let newSupplier = null;
 
         if (supplierInput === "Bitte wählen") {
@@ -457,8 +484,25 @@ const Upload = () => {
                         <TextField disabled={isLoading} value={hintText} onChange={onHintChange.bind(this)} />
                     </Card>
                     <Card sectioned title={"Abonnement"}>
-                        <TextField label={"Bezugsquelle"} disabled={isLoading} value={hintText} onChange={onHintChange.bind(this)} />
-                        <TextField label={"Bezugstyp"} disabled={isLoading} value={hintText} onChange={onHintChange.bind(this)} />
+                        <TextField label={"Bezugsquelle"} disabled={isLoading} value={bqNumber} onChange={setBqNumber} />
+                        <p>
+                            <br/>
+                            <Select
+                                options={subscriptionRelationOptions}
+                                label={"Bezugstyp"}
+                                disabled={isLoading}
+                                value={relation}
+                                onChange={onRelationChange.bind(this)}
+                            />
+                            <TextContainer>
+                                {relation.value && (
+                                    <p>
+                                        <br/>
+                                        <TextStyle variation="subdued">{relation.value} {relation.label}</TextStyle>
+                                    </p>
+                                )}
+                            </TextContainer>
+                        </p>
                     </Card>
                     {renderExistingProduct()}
                     <Card sectioned title={"Upload Dateianhang"}>
