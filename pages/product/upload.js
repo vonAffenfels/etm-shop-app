@@ -104,12 +104,17 @@ const subscriptionRelationOptions = [
 ];
 const subscriptionProjects = [
     {value: null, label: "Bitte wählen"},
-    {value: "00091180", label: "ff"},
-    {value: "00004453", label: "la"},
-    {value: "00006035", label: "ta"},
-    {value: "00080318", label: "fa"},
-    {value: "00099118", label: "europrofi"},
-    {value: "00098031", label: "faprofi"},
+    {value: "0004453", label: "0004453"},
+    {value: "00004453", label: "00004453"},
+    {value: "00006035", label: "00006035"},
+    {value: "00080318", label: "00080318"},
+    {value: "81531", label: "81531"},
+    {value: "00084844", label: "00084844"},
+    {value: "00091180", label: "00091180"},
+    {value: "00098031", label: "00098031"},
+    {value: "00099118", label: "00099118"},
+    {value: "TRA00006035", label: "TRA00006035"},
+    {value: "GAIP2017", label: "GAIP2017"},
 ];
 
 const Upload = () => {
@@ -395,6 +400,16 @@ const Upload = () => {
             });
         } else {
             setRelation({value: null, label: ""});
+        }
+
+        if (mappedFields["project"]) {
+            subscriptionProjects.forEach((projectOption) => {
+                if (projectOption.value === mappedFields["project"]) {
+                    setProject(projectOption);
+                }
+            });
+        } else {
+            setProject({value: null, label: ""});
         }
     }
 
