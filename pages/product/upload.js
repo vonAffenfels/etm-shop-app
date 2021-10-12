@@ -585,7 +585,7 @@ const Upload = () => {
                             <br/>
                             <Select
                                 options={subscriptionProjects}
-                                label={"Projekt"}
+                                label={"MPN / Projekt"}
                                 disabled={isLoading}
                                 value={project.value}
                                 onChange={onProjectChange.bind(this)}
