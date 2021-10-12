@@ -576,7 +576,7 @@ const Upload = () => {
                                 {relation.value && (
                                     <p>
                                         <br/>
-                                        <TextStyle variation="subdued">{relation.value} {relation.label}</TextStyle>
+                                        <TextStyle variation="subdued">entspricht {relation.value}</TextStyle>
                                     </p>
                                 )}
                             </TextContainer>
@@ -590,14 +590,6 @@ const Upload = () => {
                                 value={project.value}
                                 onChange={onProjectChange.bind(this)}
                             />
-                            <TextContainer>
-                                {project.value && (
-                                    <p>
-                                        <br/>
-                                        <TextStyle variation="subdued">{project.value} {project.label}</TextStyle>
-                                    </p>
-                                )}
-                            </TextContainer>
                         </p>
                     </Card>
                     {renderExistingProduct()}
