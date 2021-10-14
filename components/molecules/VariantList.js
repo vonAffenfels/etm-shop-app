@@ -1,4 +1,4 @@
-import {ResourceList} from "@shopify/polaris";
+import {ResourceList, TextStyle} from "@shopify/polaris";
 import React, {useState, useEffect, useCallback} from "react";
 
 const VariantList = ({existingProduct}) => {
