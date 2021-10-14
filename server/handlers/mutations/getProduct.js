@@ -23,6 +23,9 @@ const getProduct = async (client, id) => {
                         edges {
                             node {
                                 id
+                                price
+                                sku
+                                title
                                 metafields(first: 2) {
                                     edges {
                                         node {
