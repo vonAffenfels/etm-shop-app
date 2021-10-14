@@ -11,6 +11,7 @@ const VariantItem = ({item}) => {
     const [subSkuInput, setSubSkuInput] = useState("");
 
     function onPriceChange(input) {
+        console.log("onPriceChange", input)
         setPriceInput(input);
     }
 
@@ -27,7 +28,8 @@ const VariantItem = ({item}) => {
     }
 
     return (
-        <ResourceList.Item id={id} media={<img src={image.transformedSrc} alt={sku} />}>
+        <>
+            <img src={image.transformedSrc} alt={sku} />
             <div style={{display: "inline-block", width: "50%"}}>
                 <h3>
                     <TextStyle variation="strong">{sku}</TextStyle>
@@ -46,12 +48,12 @@ const VariantItem = ({item}) => {
                 />
             </div>
             <div style={{display: "inline-block", width: "50%"}}>
-                <ButtonGroup connectedTop={true}>
+                <ButtonGroup>
                     <Button onClick={reset.bind(this)}>Verwerfen</Button>
                     <Button primary onClick={save.bind(this)}>Speichern</Button>
                 </ButtonGroup>
             </div>
-        </ResourceList.Item>
+        </>
     );
 };
 
