@@ -150,6 +150,7 @@ const Upload = () => {
         fetch("/product/" + productId, {
             method: "post",
         }).then(response => response.json()).then(data => {
+            console.log(data)
             setExistingProduct(data);
             getInitialFormValues(data);
         }).catch(err => console.log(err));

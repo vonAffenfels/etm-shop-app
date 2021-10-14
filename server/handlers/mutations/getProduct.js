@@ -19,6 +19,19 @@ const getProduct = async (client, id) => {
                             }
                         }
                     }
+                    variants(first: 25) {
+                        edges {
+                            node {
+                                id
+                                metafields(first: 2) {
+                                    id
+                                    key
+                                    namespace
+                                    value
+                                }
+                            }
+                        }
+                    }
                 }
             }
         `,
