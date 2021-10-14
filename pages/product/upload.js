@@ -291,7 +291,7 @@ const Upload = () => {
         }
 
         if (bqNumber) {
-            formData.append("bqnumber", supplier.value);
+            formData.append("bqnumber", bqNumber);
             if (mappedFields["bqnumber"]) {
                 formData.append("bqnumberid", String(mappedFields["bqnumber"]));
             }
