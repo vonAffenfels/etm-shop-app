@@ -27,7 +27,7 @@ const getProduct = async (client, id) => {
                                 sku
                                 title
                                 image {
-                                    transformedSrc(maxHeight: 100, maxWidth: 100, preferredContentType: WEBP)
+                                    transformedSrc(maxHeight: 50, maxWidth: 50, preferredContentType: WEBP)
                                 }
                                 metafields(first: 2) {
                                     edges {

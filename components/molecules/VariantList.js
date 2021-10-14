@@ -1,5 +1,6 @@
-import {ResourceList, TextStyle} from "@shopify/polaris";
+import {ResourceList, TextStyle, ButtonGroup, Button, TextField} from "@shopify/polaris";
 import React, {useState, useEffect, useCallback} from "react";
+import VariantItem from "./VariantItem";
 
 const VariantList = ({existingProduct}) => {
     console.log("VariantList", existingProduct);
@@ -19,19 +20,7 @@ const VariantList = ({existingProduct}) => {
             showHeader
             resourceName={{singular: "Variante", plural: "Varianten"}}
             items={variants.edges}
-            renderItem={(item) => {
-                const {node: {id, image, metafields, price, sku, title}} = item;
-                console.log("id, image, metafields, price, sku, title", id, image, metafields, price, sku, title);
-                const media = <img src={image.transformedSrc} alt={title} />;
-
-                return (
-                    <ResourceList.Item id={id} media={media}>
-                        <h3>
-                            <TextStyle variation="strong">{title}</TextStyle>
-                        </h3>
-                    </ResourceList.Item>
-                )
-            }}
+            renderItem={(item) => <VariantItem item={item} />}
         />
     );
 };
