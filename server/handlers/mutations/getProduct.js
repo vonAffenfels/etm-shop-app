@@ -24,10 +24,14 @@ const getProduct = async (client, id) => {
                             node {
                                 id
                                 metafields(first: 2) {
-                                    id
-                                    key
-                                    namespace
-                                    value
+                                    edges {
+                                        node {
+                                            id
+                                            key
+                                            namespace
+                                            value
+                                        }
+                                    }
                                 }
                             }
                         }
