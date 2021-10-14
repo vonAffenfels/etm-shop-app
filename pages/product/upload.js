@@ -1,7 +1,8 @@
 import {Layout, Card, TextContainer, TextStyle, TextField, Heading, Page, Badge, Spinner, DatePicker, Select, Button, Checkbox} from "@shopify/polaris";
-import FileInput from "../../components/form/FileInput";
 import {useState, useEffect, useCallback} from "react";
 import {useRouter} from "next/router";
+import FileInput from "../../components/form/FileInput";
+import VariantList from "../../components/molecules/VariantList";
 
 const supplierOptions = [
     {
@@ -150,7 +151,6 @@ const Upload = () => {
         fetch("/product/" + productId, {
             method: "post",
         }).then(response => response.json()).then(data => {
-            console.log(data)
             setExistingProduct(data);
             getInitialFormValues(data);
         }).catch(err => console.log(err));
@@ -592,6 +592,9 @@ const Upload = () => {
                                 onChange={onProjectChange.bind(this)}
                             />
                         </p>
+                    </Card>
+                    <Card sectioned title={"Varianten"}>
+                        <VariantList existingProduct={existingProduct} />
                     </Card>
                     {renderExistingProduct()}
                     <Card sectioned title={"Upload Dateianhang"}>
