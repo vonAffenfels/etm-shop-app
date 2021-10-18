@@ -17,10 +17,10 @@ const VariantList = ({existingProduct}) => {
     const [updating, setUpdating] = useState(false);
 
     function update() {
-        setUpdating(true);
-        setTimeout(() => {
-            setUpdating(false);
-        }, 100);
+        // setUpdating(true);
+        // setTimeout(() => {
+        //     setUpdating(false);
+        // }, 100);
     }
 
     return (
