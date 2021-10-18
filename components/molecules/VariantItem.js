@@ -74,6 +74,8 @@ const VariantItem = ({item}) => {
         }
     }
 
+    console.log("display priceInput", priceInput)
+
     return (
         <ResourceList.Item id={id} media={<img src={image.transformedSrc} alt={sku} />}>
             <div>
