@@ -14,12 +14,21 @@ const VariantList = ({existingProduct}) => {
         return null;
     }
 
+    const [updating, setUpdating] = useState(false);
+
+    function update() {
+        setUpdating(true);
+        setTimeout(() => {
+            setUpdating(false);
+        }, 500);
+    }
+
     return (
         <ResourceList
             showHeader
             resourceName={{singular: "Variante", plural: "Varianten"}}
             items={variants.edges}
-            renderItem={(item) => <VariantItem item={item} />}
+            renderItem={(item) => <VariantItem item={item} update={update.bind(this)} />}
         />
     );
 };
