@@ -14,15 +14,6 @@ const VariantList = ({existingProduct}) => {
         return null;
     }
 
-    const [updating, setUpdating] = useState(false);
-
-    function update() {
-        // setUpdating(true);
-        // setTimeout(() => {
-        //     setUpdating(false);
-        // }, 100);
-    }
-
     return (
         <div className="Polaris-ResourceList__ResourceListWrapper">
             <div className="Polaris-ResourceList__HeaderOuterWrapper">

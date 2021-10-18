@@ -79,7 +79,7 @@ const VariantItem = ({item, update}) => {
     console.log("display priceInput", priceInput)
 
     return (
-        <div>
+        <ResourceList.Item id={id} media={<img src={image.transformedSrc} alt={sku} />}>
             <div>
                 <h3>
                     <TextStyle variation="strong">{title} ({sku})</TextStyle>
@@ -109,7 +109,7 @@ const VariantItem = ({item, update}) => {
                     <Button primary onClick={save.bind(this)}>Speichern</Button>
                 </ButtonGroup>
             </div>
-        </div>
+        </ResourceList.Item>
     );
 };
 
