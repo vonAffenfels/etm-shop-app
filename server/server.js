@@ -264,16 +264,16 @@ app.prepare().then(async () => {
 
     router.post("/product/variant/save/:productVariantId", async (ctx, next) => {
         const {productVariantId} = ctx.params;
+        console.log("body", ctx.req.body)
+        const shopifyId = "gid://shopify/ProductVariant/" + productVariantId;
 
         try {
 
 
-            ctx.body = {
-                data: response.data
-            };
         } catch (e) {
+            console.log(e);
             ctx.body = {
-                data: []
+                error: e.toString()
             }
         }
     });

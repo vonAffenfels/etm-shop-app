@@ -49,7 +49,17 @@ const VariantItem = ({item}) => {
             subPrice: subPrice,
             subSku: subSku
         };
-        console.log("save", subSkuMetafield, subPriceMetafield);
+
+        if (subPriceMetafield) {
+            data.subPriceId = subPriceMetafield.node.id;
+        }
+
+        if (subSkuMetafield) {
+            data.subSkuId = subSkuMetafield.node.id;
+        }
+
+        console.log("data", data)
+
         try {
             fetch("/product/variant/save/" + id.replace("gid://shopify/ProductVariant/", ""), {
                 method: "post",
