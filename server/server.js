@@ -265,9 +265,7 @@ app.prepare().then(async () => {
     router.post("/product/variant/save/:productVariantId", KoaBody(), async (ctx, next) => {
         const {productVariantId} = ctx.params;
         console.log("body", ctx.request.body)
-        console.log("body", ctx.req.body)
-        console.log("data", ctx.request.data)
-        console.log("data", ctx.req.data)
+
         const shopifyId = "gid://shopify/ProductVariant/" + productVariantId;
         const {subPrice, subSku, subPriceId, subSkuId} = ctx.request.body;
 
@@ -298,6 +296,9 @@ app.prepare().then(async () => {
                     valueType: "STRING"
                 });
             }
+
+            console.log("save", shopifyId)
+            console.log(metafields)
 
             await updateProductVariant(client, shopifyId, metafields);
             ctx.body = {success: true};
