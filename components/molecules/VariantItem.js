@@ -4,16 +4,11 @@ import React, {useState, useEffect, useCallback} from "react";
 const VariantItem = ({item}) => {
     console.log("VariantItem", item);
     const {node: {id, image, metafields, price, sku, title}} = item;
-    console.log("id, image, metafields, price, sku, title", id, image, metafields, price, sku, title);
-    let subSku = "";
-    let subSkuMetafield;
-    let subPrice = "";
-    let subPriceMetafield;
 
     const [loading, setLoading] = useState(false);
-    const [priceInput, setPriceInput] = useState(subPrice);
+    const [priceInput, setPriceInput] = useState("");
     const [priceInputMetafield, setPriceInputMetafield] = useState(null);
-    const [subSkuInput, setSubSkuInput] = useState(subSku);
+    const [subSkuInput, setSubSkuInput] = useState("");
     const [subSkuMetafieldInput, setSubSkuInputMetafield] = useState(null);
 
     useEffect(() => {
@@ -24,14 +19,12 @@ const VariantItem = ({item}) => {
         if (metafields && metafields.edges) {
             metafields.edges.forEach(edge => {
                 if (edge.node.key === "realSku") {
-                    subSku = edge.node.value;
                     setSubSkuInputMetafield(edge);
-                    setSubSkuInput(subSku);
+                    setSubSkuInput(edge.node.value);
                 }
                 if (edge.node.key === "subscriberPrice") {
-                    subPrice = edge.node.value;
                     setPriceInputMetafield(edge);
-                    setPriceInput(subPrice);
+                    setPriceInput(edge.node.value);
                 }
             });
         }
