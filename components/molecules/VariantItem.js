@@ -78,37 +78,50 @@ const VariantItem = ({item}) => {
     console.log("display priceInput", priceInput)
 
     return (
-        <ResourceList.Item id={id} media={<img src={image.transformedSrc} alt={sku} />}>
-            <div>
-                <h3>
-                    <TextStyle variation="strong">{title} ({sku})</TextStyle>
-                </h3>
+        <li className="Polaris-ResourceItem__ListItem">
+            <div className="Polaris-ResourceItem__ItemWrapper">
+                <div className="Polaris-ResourceItem__Container">
+                    <div className="Polaris-ResourceItem__Owned">
+                        <div className="Polaris-ResourceItem__Media">
+                            <img src={image.transformedSrc} alt={sku} />
+                        </div>
+                    </div>
 
-                {/*<label htmlFor="subPrice">Abonnenten Preis</label>*/}
-                {/*<input type="number" name="subPrice" value={priceInput} onChange={onPriceChange.bind(this)} />*/}
+                    <div className="Polaris-ResourceItem__Content">
+                        <div>
+                            <h3>
+                                <TextStyle variation="strong">{title} ({sku})</TextStyle>
+                            </h3>
 
-                {/*<label htmlFor="subSku">Original Artikelnummer</label>*/}
-                {/*<input type="number" name="subSku" value={subSkuInput} onChange={onSubSkuChange.bind(this)} />*/}
-                <TextField
-                    label="Abonnenten Preis"
-                    disabled={loading}
-                    value={priceInput}
-                    onChange={onPriceChange.bind(this)}
-                />
-                <TextField
-                    label="Original Artikelnummer"
-                    disabled={loading}
-                    value={subSkuInput}
-                    onChange={onSubSkuChange.bind(this)}
-                />
+                            {/*<label htmlFor="subPrice">Abonnenten Preis</label>*/}
+                            {/*<input type="number" name="subPrice" value={priceInput} onChange={onPriceChange.bind(this)} />*/}
+
+                            {/*<label htmlFor="subSku">Original Artikelnummer</label>*/}
+                            {/*<input type="number" name="subSku" value={subSkuInput} onChange={onSubSkuChange.bind(this)} />*/}
+                            <TextField
+                                label="Abonnenten Preis"
+                                disabled={loading}
+                                value={priceInput}
+                                onChange={onPriceChange.bind(this)}
+                            />
+                            <TextField
+                                label="Original Artikelnummer"
+                                disabled={loading}
+                                value={subSkuInput}
+                                onChange={onSubSkuChange.bind(this)}
+                            />
+                        </div>
+                        <div style={{marginTop: "10px"}}>
+                            <ButtonGroup>
+                                {/*<Button onClick={reset.bind(this)}>Verwerfen</Button>*/}
+                                <Button primary onClick={save.bind(this)}>Speichern</Button>
+                            </ButtonGroup>
+                        </div>
+                    </div>
+
+                </div>
             </div>
-            <div style={{marginTop: "10px"}}>
-                <ButtonGroup>
-                    {/*<Button onClick={reset.bind(this)}>Verwerfen</Button>*/}
-                    <Button primary onClick={save.bind(this)}>Speichern</Button>
-                </ButtonGroup>
-            </div>
-        </ResourceList.Item>
+        </li>
     );
 };
 
