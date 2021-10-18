@@ -1,7 +1,7 @@
 import {ResourceList, TextStyle, ButtonGroup, Button, TextField} from "@shopify/polaris";
 import React, {useState, useEffect, useCallback} from "react";
 
-const VariantItem = ({item, update}) => {
+const VariantItem = ({item}) => {
     console.log("VariantItem", item);
     const {node: {id, image, metafields, price, sku, title}} = item;
 
@@ -34,7 +34,6 @@ const VariantItem = ({item, update}) => {
     function onPriceChange(input) {
         console.log("onPriceChange", input)
         setPriceInput(input);
-        update();
     }
 
     function onSubSkuChange(input) {
