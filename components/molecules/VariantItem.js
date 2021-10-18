@@ -12,6 +12,7 @@ const VariantItem = ({item, update}) => {
     const [subSkuMetafieldInput, setSubSkuInputMetafield] = useState(null);
 
     useEffect(() => {
+        console.log("useEffect")
         if (typeof window === "undefined") {
             return;
         }
