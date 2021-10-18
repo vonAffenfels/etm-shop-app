@@ -29,7 +29,7 @@ const VariantList = ({existingProduct}) => {
                 </div>
             </div>
             <ul className="Polaris-ResourceList">
-                {variants.edges.map((item) => <VariantItem item={item} update={update.bind(this)} />)}
+                {variants.edges.map((item) => <VariantItem item={item} />)}
             </ul>
         </div>
     );
