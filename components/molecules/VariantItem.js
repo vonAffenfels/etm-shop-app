@@ -12,7 +12,9 @@ const VariantItem = ({item}) => {
 
     const [loading, setLoading] = useState(false);
     const [priceInput, setPriceInput] = useState(subPrice);
+    const [priceInputMetafield, setPriceInputMetafield] = useState(null);
     const [subSkuInput, setSubSkuInput] = useState(subSku);
+    const [subSkuMetafieldInput, setSubSkuInputMetafield] = useState(null);
 
     useEffect(() => {
         if (typeof window === "undefined") {
@@ -23,12 +25,12 @@ const VariantItem = ({item}) => {
             metafields.edges.forEach(edge => {
                 if (edge.node.key === "realSku") {
                     subSku = edge.node.value;
-                    subSkuMetafield = edge;
+                    setSubSkuInputMetafield(edge);
                     setSubSkuInput(subSku);
                 }
                 if (edge.node.key === "subscriberPrice") {
                     subPrice = edge.node.value;
-                    subPriceMetafield = edge;
+                    setPriceInputMetafield(edge);
                     setPriceInput(subPrice);
                 }
             });
@@ -60,12 +62,12 @@ const VariantItem = ({item}) => {
             subSku: subSkuInput
         };
 
-        if (subPriceMetafield) {
-            data.subPriceId = subPriceMetafield.node.id;
+        if (priceInputMetafield) {
+            data.subPriceId = priceInputMetafield.node.id;
         }
 
-        if (subSkuMetafield) {
-            data.subSkuId = subSkuMetafield.node.id;
+        if (subSkuMetafieldInput) {
+            data.subSkuId = subSkuMetafieldInput.node.id;
         }
 
         console.log("data", data)
