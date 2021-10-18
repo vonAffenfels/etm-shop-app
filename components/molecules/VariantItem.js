@@ -6,15 +6,19 @@ const VariantItem = ({item}) => {
     const {node: {id, image, metafields, price, sku, title}} = item;
     console.log("id, image, metafields, price, sku, title", id, image, metafields, price, sku, title);
     let subSku = "";
+    let subSkuMetafield;
     let subPrice = price;
+    let subPriceMetafield;
 
     if (metafields && metafields.edges) {
         metafields.edges.forEach(edge => {
             if (edge.node.key === "realSku") {
                 subSku = edge.node.value;
+                subSkuMetafield = edge;
             }
             if (edge.node.key === "subscriberPrice") {
                 subPrice = edge.node.value;
+                subPriceMetafield = edge;
             }
         });
     }
@@ -37,7 +41,25 @@ const VariantItem = ({item}) => {
     }
 
     function save() {
-        console.log("save");
+        if (typeof window === "undefined") {
+            return;
+        }
+
+        let data = {
+            subPrice: subPrice,
+            subSku: subSku
+        };
+        console.log("save", subSkuMetafield, subPriceMetafield);
+        try {
+            fetch("/product/variant/save/" + id.replace("gid://shopify/ProductVariant/", ""), {
+                method: "post",
+                data: JSON.stringify(data)
+            }).then(res => {
+
+            });
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     return (
@@ -59,7 +81,7 @@ const VariantItem = ({item}) => {
                     onChange={onSubSkuChange.bind(this)}
                 />
             </div>
-            <div>
+            <div style={{marginTop: "10px"}}>
                 <ButtonGroup>
                     <Button onClick={reset.bind(this)}>Verwerfen</Button>
                     <Button primary onClick={save.bind(this)}>Speichern</Button>

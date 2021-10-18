@@ -262,6 +262,22 @@ app.prepare().then(async () => {
         ctx.body = await aws.download("downloads/" + fileName);
     });
 
+    router.post("/product/variant/save/:productVariantId", async (ctx, next) => {
+        const {productVariantId} = ctx.params;
+
+        try {
+
+
+            ctx.body = {
+                data: response.data
+            };
+        } catch (e) {
+            ctx.body = {
+                data: []
+            }
+        }
+    });
+
     router.post("/product/upload/:productId", KoaBody({multipart: true, keepExtensions: true}), async (ctx, next) => {
         const {productId} = ctx.params;
         const body = ctx.request.body;
