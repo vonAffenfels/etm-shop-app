@@ -7,7 +7,7 @@ const VariantItem = ({item}) => {
     console.log("id, image, metafields, price, sku, title", id, image, metafields, price, sku, title);
     let subSku = "";
     let subSkuMetafield;
-    let subPrice = price;
+    let subPrice = "";
     let subPriceMetafield;
 
     if (metafields && metafields.edges) {
@@ -38,6 +38,8 @@ const VariantItem = ({item}) => {
 
     function reset() {
         console.log("reset");
+        setPriceInput(subPrice);
+        setSubSkuInput(subSku);
     }
 
     function save() {
@@ -67,8 +69,8 @@ const VariantItem = ({item}) => {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify(data)
-            }).then(res => {
-
+            }).then(res => res.json()).then(res => {
+                console.log("save", res);
             });
         } catch (e) {
             console.log(e);

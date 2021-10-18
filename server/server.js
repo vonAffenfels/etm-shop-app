@@ -6,7 +6,7 @@ import dotenv from "dotenv";
 import "isomorphic-fetch";
 import createShopifyAuth, {verifyRequest} from "@shopify/koa-shopify-auth";
 import Shopify, {ApiVersion} from "@shopify/shopify-api";
-import {createClient, updateProduct, removeMetafield, getProduct, getProductBySku} from "./handlers/index";
+import {createClient, updateProduct, updateProductVariant, removeMetafield, getProduct, getProductBySku} from "./handlers/index";
 import Koa from "koa";
 import next from "next";
 import Router from "koa-router";
@@ -269,9 +269,38 @@ app.prepare().then(async () => {
         console.log("data", ctx.request.data)
         console.log("data", ctx.req.data)
         const shopifyId = "gid://shopify/ProductVariant/" + productVariantId;
+        const {subPrice, subSku, subPriceId, subSkuId} = ctx.request.body;
 
         try {
+            if (subPriceId) {
+                await removeMetafield(client, subPriceId);
+            }
+            if (subSkuId) {
+                await removeMetafield(client, subSkuId);
+            }
 
+            const metafields = [];
+            if (subPrice) {
+                metafields.push({
+                    description: "special subscriber price",
+                    namespace: "subscription",
+                    key: "subscriberPrice",
+                    value: parseFloat(String(subPrice).replace(",", ".")).toFixed(2),
+                    valueType: "STRING"
+                });
+            }
+            if (subSku) {
+                metafields.push({
+                    description: "real sku of the sub. bonus",
+                    namespace: "subscription",
+                    key: "realSku",
+                    value: String(subSku),
+                    valueType: "STRING"
+                });
+            }
+
+            await updateProductVariant(client, shopifyId, metafields);
+            ctx.body = {success: true};
 
         } catch (e) {
             console.log(e);
