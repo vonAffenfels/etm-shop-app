@@ -66,7 +66,7 @@ const VariantItem = ({item}) => {
                 headers: {
                     "Content-Type": "application/json"
                 },
-                data: JSON.stringify(data)
+                body: JSON.stringify(data)
             }).then(res => {
 
             });
