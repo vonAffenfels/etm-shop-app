@@ -39,12 +39,6 @@ const VariantItem = ({item}) => {
         setSubSkuInput(input);
     }
 
-    function reset() {
-        console.log("reset");
-        setPriceInput(subPrice);
-        setSubSkuInput(subSku);
-    }
-
     function save() {
         if (typeof window === "undefined") {
             return;
@@ -101,7 +95,7 @@ const VariantItem = ({item}) => {
             </div>
             <div style={{marginTop: "10px"}}>
                 <ButtonGroup>
-                    <Button onClick={reset.bind(this)}>Verwerfen</Button>
+                    {/*<Button onClick={reset.bind(this)}>Verwerfen</Button>*/}
                     <Button primary onClick={save.bind(this)}>Speichern</Button>
                 </ButtonGroup>
             </div>
