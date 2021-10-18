@@ -63,6 +63,9 @@ const VariantItem = ({item}) => {
         try {
             fetch("/product/variant/save/" + id.replace("gid://shopify/ProductVariant/", ""), {
                 method: "post",
+                headers: {
+                    "Content-Type": "application/json"
+                },
                 data: JSON.stringify(data)
             }).then(res => {
 
