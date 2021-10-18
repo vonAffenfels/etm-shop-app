@@ -264,7 +264,7 @@ app.prepare().then(async () => {
 
     router.post("/product/variant/save/:productVariantId", async (ctx, next) => {
         const {productVariantId} = ctx.params;
-        console.log("body", ctx.req.body)
+        console.log("body", ctx.request.body)
         const shopifyId = "gid://shopify/ProductVariant/" + productVariantId;
 
         try {
