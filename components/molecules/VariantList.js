@@ -18,6 +18,7 @@ const VariantList = ({existingProduct}) => {
 
     function update() {
         setUpdating(true);
+        setUpdating(false);
         // setTimeout(() => {
         //     setUpdating(false);
         // }, 500);
