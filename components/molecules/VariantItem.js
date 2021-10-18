@@ -84,18 +84,13 @@ const VariantItem = ({item, update}) => {
                 <h3>
                     <TextStyle variation="strong">{title} ({sku})</TextStyle>
                 </h3>
-                <TextField
-                    label="Abonnenten Preis"
-                    disabled={loading}
-                    value={priceInput}
-                    onChange={onPriceChange.bind(this)}
-                />
-                <TextField
-                    label="Original Artikelnummer"
-                    disabled={loading}
-                    value={subSkuInput}
-                    onChange={onSubSkuChange.bind(this)}
-                />
+
+                <label htmlFor="subPrice">Abonnenten Preis</label>
+                <input type="number" name="subPrice" value={priceInput} onChange={onPriceChange.bind(this)} />
+
+                <label htmlFor="subSku">Original Artikelnummer</label>
+                <input type="number" name="subSku" value={subSkuInput} onChange={onSubSkuChange.bind(this)} />
+
             </div>
             <div style={{marginTop: "10px"}}>
                 <ButtonGroup>
