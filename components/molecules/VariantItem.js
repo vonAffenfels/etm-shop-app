@@ -83,7 +83,7 @@ const VariantItem = ({item}) => {
                 <div className="Polaris-ResourceItem__Container">
                     <div className="Polaris-ResourceItem__Owned">
                         <div className="Polaris-ResourceItem__Media">
-                            <img src={image.transformedSrc} alt={sku} />
+                            {image && <img src={image.transformedSrc} alt={sku} />}
                         </div>
                     </div>
 
