@@ -587,6 +587,14 @@ const Upload = () => {
                                 value={project.value}
                                 onChange={onProjectChange.bind(this)}
                             />
+                            <TextContainer>
+                                {project.value && (
+                                    <p>
+                                        <br/>
+                                        <TextStyle variation="subdued">entspricht {project.value}</TextStyle>
+                                    </p>
+                                )}
+                            </TextContainer>
                         </p>
                     </Card>
                     <Card sectioned title={"Varianten"}>
