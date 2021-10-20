@@ -105,17 +105,13 @@ const subscriptionRelationOptions = [
 ];
 const subscriptionProjects = [
     {value: null, label: "Bitte wählen"},
-    {value: "0004453", label: "0004453"},
-    {value: "00004453", label: "00004453"},
-    {value: "00006035", label: "00006035"},
-    {value: "00080318", label: "00080318"},
-    {value: "81531", label: "81531"},
-    {value: "00084844", label: "00084844"},
-    {value: "00091180", label: "00091180"},
-    {value: "00098031", label: "00098031"},
-    {value: "00099118", label: "00099118"},
-    {value: "TRA00006035", label: "TRA00006035"},
-    {value: "GAIP2017", label: "GAIP2017"},
+    {value: "00004453", label: "lastauto omnibus PLUS"},
+    {value: "00006035", label: "trans aktuell"},
+    {value: "00080318", label: "FIRMENAUTO"},
+    {value: "00084844", label: "WERKSTATT aktuell"},
+    {value: "00091180", label: "FERNFAHRER"},
+    {value: "00098031", label: "firmenauto Flatrate"},
+    {value: "00099118", label: "eurotransport Flatrate"},
 ];
 
 const Upload = () => {
