@@ -613,6 +613,10 @@ app.prepare().then(async () => {
     router.get("(.*)", async (ctx) => {
         const shop = ctx.query.shop;
 
+        console.log(ctx.req.method)
+        console.log(ctx.req.url)
+        console.log(ctx.request.url)
+
         // This shop hasn't been seen yet, go through OAuth to create a session
         if (ACTIVE_SHOPIFY_SHOPS[shop] === undefined) {
             ACTIVE_SHOPIFY_SHOPS_REDIRECTS[shop] = ctx.req.url;
