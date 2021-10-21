@@ -33,6 +33,7 @@
         "dotenv": "^8.2.0",
         "graphql": "^14.5.8",
         "graphql-request": "^3.5.0",
+        "heroku-keep-awake": "^1.1.2",
         "isomorphic-fetch": "^3.0.0",
         "koa": "^2.13.1",
         "koa-body": "^4.2.0",

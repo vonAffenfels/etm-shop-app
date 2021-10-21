@@ -14,6 +14,7 @@ import KoaBody from "koa-body";
 import speakingurl from "speakingurl";
 import AWSService from "./aws";
 import fetch from "node-fetch";
+import {wakeDyno} from "heroku-keep-awake";
 
 dotenv.config();
 const port = parseInt(process.env.PORT, 10) || 8081;
@@ -94,6 +95,11 @@ app.prepare().then(async () => {
         ctx.respond = false;
         ctx.res.statusCode = 200;
     };
+
+    router.get("/ping", async (ctx) => {
+        ctx.res.status = 200;
+        ctx.body = "ok";
+    });
 
     router.post("/webhooks", async (ctx) => {
         try {
@@ -620,5 +626,14 @@ app.prepare().then(async () => {
     server.use(router.routes());
     server.listen(port, () => {
         console.log(`> Ready on http://localhost:${port}`);
+
+        wakeDyno(process.env.host + "/ping", {
+            interval: 29,
+            logging: false,
+            stopTimes: {
+                start: "20:00",
+                end: "06:00"
+            }
+        });
     });
 });
