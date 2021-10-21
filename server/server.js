@@ -631,7 +631,7 @@ app.prepare().then(async () => {
     server.listen(port, () => {
         console.log(`> Ready on http://localhost:${port}`);
 
-        wakeDyno(process.env.host + "/ping", {
+        wakeDyno(process.env.host + "/ping?shop=eurotransport.myshopify.com", {
             interval: 29,
             logging: false,
             stopTimes: {
