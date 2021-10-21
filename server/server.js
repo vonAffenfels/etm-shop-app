@@ -613,10 +613,6 @@ app.prepare().then(async () => {
     router.get("(.*)", async (ctx) => {
         const shop = ctx.query.shop;
 
-        console.log(ctx.req.method)
-        console.log(ctx.req.url)
-        console.log(ctx.request.url)
-
         // This shop hasn't been seen yet, go through OAuth to create a session
         if (ACTIVE_SHOPIFY_SHOPS[shop] === undefined) {
             ACTIVE_SHOPIFY_SHOPS_REDIRECTS[shop] = ctx.req.url;
@@ -631,7 +627,7 @@ app.prepare().then(async () => {
     server.listen(port, () => {
         console.log(`> Ready on http://localhost:${port}`);
 
-        wakeDyno(process.env.host + "/ping?shop=eurotransport.myshopify.com", {
+        wakeDyno(process.env.HOST + "/ping?shop=eurotransport.myshopify.com", {
             interval: 29,
             logging: false,
             stopTimes: {
