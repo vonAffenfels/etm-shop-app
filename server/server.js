@@ -276,6 +276,7 @@ app.prepare().then(async () => {
         const {subPrice, subSku, subPriceId, subSkuId} = ctx.request.body;
 
         try {
+            //TODO just update but dont remove them
             if (subPriceId) {
                 await removeMetafield(client, subPriceId);
             }
@@ -302,9 +303,6 @@ app.prepare().then(async () => {
                     valueType: "STRING"
                 });
             }
-
-            console.log("save", shopifyId)
-            console.log(metafields)
 
             await updateProductVariant(client, shopifyId, metafields);
             ctx.body = {success: true};
@@ -597,6 +595,7 @@ app.prepare().then(async () => {
         const shopifyId = "gid://shopify/Product/" + productId;
 
         try {
+            console.log("FETCH PRODUCT", shopifyId)
             const res = await getProduct(client, shopifyId);
             res.data.shopUrl = process.env.TOKEN_API + "/" + speakingurl("shop-" + res.data?.product?.title) + "/" + productId;
             ctx.body = res.data;
