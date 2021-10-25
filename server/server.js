@@ -597,7 +597,7 @@ app.prepare().then(async () => {
         try {
             console.log("FETCH PRODUCT", shopifyId)
             const res = await getProduct(client, shopifyId);
-            res.data.shopUrl = process.env.TOKEN_API + "/" + speakingurl("shop-" + res.data?.product?.title) + "/" + productId;
+            res.data.shopUrl = process.env.TOKEN_API + "/" + speakingurl("shop-" + res.data?.product?.title) + "/" + productId + "/";
             ctx.body = res.data;
         } catch (e) {
             console.log(e);
