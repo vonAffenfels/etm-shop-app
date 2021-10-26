@@ -345,6 +345,7 @@ const Upload = () => {
 
         let metafields = data.product.metafields;
         let mappedFields = {};
+        console.log("data.product", data.product)
 
         if (metafields && metafields.edges && metafields.edges.length) {
             metafields.edges.map(edge => edge.node).forEach(node => {
