@@ -1,4 +1,18 @@
-import {Layout, Card, TextContainer, TextStyle, TextField, Heading, Page, Badge, Spinner, DatePicker, Select, Button, Checkbox} from "@shopify/polaris";
+import {
+    Layout,
+    Card,
+    TextContainer,
+    TextStyle,
+    TextField,
+    Heading,
+    Page,
+    Badge,
+    Spinner,
+    DatePicker,
+    Select,
+    Button,
+    Checkbox
+} from "@shopify/polaris";
 import {useState, useEffect, useCallback} from "react";
 import {useRouter} from "next/router";
 import FileInput from "../../components/form/FileInput";
@@ -235,6 +249,7 @@ const Upload = () => {
     }
 
     let interval = null;
+
     async function handleSubmit(e) {
         if (!productId || !existingProduct || !existingProduct.product) {
             return;
@@ -266,10 +281,12 @@ const Upload = () => {
             formData.append("hinttextid", String(mappedFields["hinttext"]));
         }
 
-        formData.append("downloaddate", uploadDate.start);
-        if (mappedFields["downloaddate"]) {
-            formData.append("downloaddateid", String(mappedFields["downloaddate"]));
+        if (uploadDate) {
+            formData.append("downloaddate", uploadDate.start);
+            if (mappedFields["downloaddate"]) {
+                formData.append("downloaddateid", String(mappedFields["downloaddate"]));
             }
+        }
 
         formData.append("supplierid", supplier.value);
         if (mappedFields["supplierid"]) {
@@ -453,7 +470,8 @@ const Upload = () => {
                     <Card sectioned title={"Vorhandene Dateianhänge"}>
                         <TextContainer>
                             <Heading>
-                                <a href={"/product/download/" + productId} download style={{marginRight: "10px"}}>{node.value}</a>
+                                <a href={"/product/download/" + productId} download
+                                   style={{marginRight: "10px"}}>{node.value}</a>
                                 <Button plain destructive onClick={deleteDownloadAttachment.bind(this, node.id)}>
                                     Löschen
                                 </Button>
@@ -467,7 +485,8 @@ const Upload = () => {
                                                 <span style={{marginRight: "10px"}}>
                                                     {"https://www.eurotransport.de/shopify-api/token/download/" + token._id}
                                                 </span>
-                                                <Button plain destructive onClick={deleteDownloadToken.bind(this, token._id)}>
+                                                <Button plain destructive
+                                                        onClick={deleteDownloadToken.bind(this, token._id)}>
                                                     Löschen
                                                 </Button>
                                             </p>
@@ -539,16 +558,18 @@ const Upload = () => {
                             {existingProduct && (
                                 <p>
                                     <br/>
-                                    <TextStyle variation="subdued"><a target="_blank" href={existingProduct.shopUrl}>Detailseite öffnen</a></TextStyle>
+                                    <TextStyle variation="subdued"><a target="_blank" href={existingProduct.shopUrl}>Detailseite
+                                        öffnen</a></TextStyle>
                                 </p>
                             )}
                         </TextContainer>
                     </Card>
                     <Card sectioned title={"Hinweistext Verfügbarkeit"}>
-                        <TextField disabled={isLoading} value={hintText} onChange={onHintChange.bind(this)} />
+                        <TextField disabled={isLoading} value={hintText} onChange={onHintChange.bind(this)}/>
                     </Card>
                     <Card sectioned title={"Abonnement"}>
-                        <TextField label={"Bezugsquelle"} disabled={isLoading} value={bqNumber} onChange={onBqNumberChange} />
+                        <TextField label={"Bezugsquelle"} disabled={isLoading} value={bqNumber}
+                                   onChange={onBqNumberChange}/>
                         <p>
                             <br/>
                             <Select
@@ -587,14 +608,14 @@ const Upload = () => {
                         </p>
                     </Card>
                     <Card sectioned title={"Varianten"}>
-                        <VariantList existingProduct={existingProduct} />
+                        <VariantList existingProduct={existingProduct}/>
                     </Card>
                     {renderExistingProduct()}
                     <Card sectioned title={"Upload Dateianhang"}>
                         {isLoading ? (
-                            <Spinner size="large" />
+                            <Spinner size="large"/>
                         ) : (
-                            <FileInput files={files} onSelect={onSelect.bind(this)} />
+                            <FileInput files={files} onSelect={onSelect.bind(this)}/>
                         )}
                     </Card>
                     <Card sectioned title={"Freigabedatum Download (Abonnenten werden 2 Tage früher freigeschalten)"}>
@@ -620,7 +641,8 @@ const Upload = () => {
                             {supplier.value && (
                                 <p>
                                     <br/>
-                                    <TextStyle variation="subdued">{supplier.value} {supplier.label} ({supplier.short})</TextStyle>
+                                    <TextStyle
+                                        variation="subdued">{supplier.value} {supplier.label} ({supplier.short})</TextStyle>
                                 </p>
                             )}
                         </TextContainer>
