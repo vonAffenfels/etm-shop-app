@@ -261,25 +261,19 @@ const Upload = () => {
             }
         }
 
-        if (hintText) {
-            formData.append("hinttext", hintText);
-            if (mappedFields["hinttext"]) {
-                formData.append("hinttextid", String(mappedFields["hinttext"]));
-            }
+        formData.append("hinttext", hintText);
+        if (mappedFields["hinttext"]) {
+            formData.append("hinttextid", String(mappedFields["hinttext"]));
         }
 
-        if (uploadDate && uploadDate.start) {
-            formData.append("downloaddate", uploadDate.start);
-            if (mappedFields["downloaddate"]) {
-                formData.append("downloaddateid", String(mappedFields["downloaddate"]));
+        formData.append("downloaddate", uploadDate.start);
+        if (mappedFields["downloaddate"]) {
+            formData.append("downloaddateid", String(mappedFields["downloaddate"]));
             }
-        }
 
-        if (supplier && supplier.value) {
-            formData.append("supplierid", supplier.value);
-            if (mappedFields["supplierid"]) {
-                formData.append("suppliermetaid", String(mappedFields["supplierid"]));
-            }
+        formData.append("supplierid", supplier.value);
+        if (mappedFields["supplierid"]) {
+            formData.append("suppliermetaid", String(mappedFields["supplierid"]));
         }
 
         formData.append("hidden", hidden ? "1" : "0");
@@ -287,25 +281,19 @@ const Upload = () => {
             formData.append("hiddenid", String(mappedFields["hidden"]));
         }
 
-        if (bqNumber) {
-            formData.append("bqnumber", bqNumber);
-            if (mappedFields["bqnumber"]) {
-                formData.append("bqnumberid", String(mappedFields["bqnumber"]));
-            }
+        formData.append("bqnumber", bqNumber);
+        if (mappedFields["bqnumber"]) {
+            formData.append("bqnumberid", String(mappedFields["bqnumber"]));
         }
 
-        if (relation && relation.value) {
-            formData.append("bqrelation", relation.value);
-            if (mappedFields["bqrelation"]) {
-                formData.append("bqrelationid", String(mappedFields["bqrelation"]));
-            }
+        formData.append("bqrelation", relation.value);
+        if (mappedFields["bqrelation"]) {
+            formData.append("bqrelationid", String(mappedFields["bqrelation"]));
         }
 
-        if (project && project.value) {
-            formData.append("project", project.value);
-            if (mappedFields["project"]) {
-                formData.append("projectid", String(mappedFields["project"]));
-            }
+        formData.append("project", project.value);
+        if (mappedFields["project"]) {
+            formData.append("projectid", String(mappedFields["project"]));
         }
 
         try {

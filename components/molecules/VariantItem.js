@@ -1,4 +1,4 @@
-import {ResourceList, TextStyle, ButtonGroup, Button, TextField} from "@shopify/polaris";
+import {ResourceList, TextStyle, ButtonGroup, Button, TextField, Badge} from "@shopify/polaris";
 import React, {useState, useEffect, useCallback} from "react";
 
 const VariantItem = ({item}) => {
@@ -6,13 +6,13 @@ const VariantItem = ({item}) => {
     const {node: {id, image, metafields, price, sku, title}} = item;
 
     const [loading, setLoading] = useState(false);
+    const [success, setSuccess] = useState(null);
     const [priceInput, setPriceInput] = useState("");
     const [priceInputMetafield, setPriceInputMetafield] = useState(null);
     const [subSkuInput, setSubSkuInput] = useState("");
     const [subSkuMetafieldInput, setSubSkuInputMetafield] = useState(null);
 
     useEffect(() => {
-        console.log("useEffect")
         if (typeof window === "undefined") {
             return;
         }
@@ -32,11 +32,12 @@ const VariantItem = ({item}) => {
     }, []);
 
     function onPriceChange(input) {
-        console.log("onPriceChange", input)
+        setSuccess(null);
         setPriceInput(input);
     }
 
     function onSubSkuChange(input) {
+        setSuccess(null);
         setSubSkuInput(input);
     }
 
@@ -69,6 +70,9 @@ const VariantItem = ({item}) => {
                 body: JSON.stringify(data)
             }).then(res => res.json()).then(res => {
                 console.log("save", res);
+                setSuccess(true);
+            }).catch(err => {
+                setSuccess(false);
             });
         } catch (e) {
             console.log(e);
@@ -91,6 +95,11 @@ const VariantItem = ({item}) => {
                         <div>
                             <h3>
                                 <TextStyle variation="strong">{title} ({sku})</TextStyle>
+                                {success !== null && (
+                                    <Badge status={success ? "success" : "error"}>
+                                        {success ? "gespeichert" : "Fehler aufgetreten"}
+                                    </Badge>
+                                )}
                             </h3>
 
                             {/*<label htmlFor="subPrice">Abonnenten Preis</label>*/}

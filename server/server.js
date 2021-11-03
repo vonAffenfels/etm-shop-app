@@ -276,32 +276,32 @@ app.prepare().then(async () => {
         const {subPrice, subSku, subPriceId, subSkuId} = ctx.request.body;
 
         try {
-            //TODO just update but dont remove them
-            if (subPriceId) {
-                await removeMetafield(client, subPriceId);
-            }
-            if (subSkuId) {
-                await removeMetafield(client, subSkuId);
-            }
-
-            const metafields = [];
+            let metafields = [];
             if (subPrice) {
-                metafields.push({
+                let metafield = {
                     description: "special subscriber price",
                     namespace: "subscription",
                     key: "subscriberPrice",
                     value: parseFloat(String(subPrice).replace(",", ".")).toFixed(2),
                     valueType: "STRING"
-                });
+                };
+                if (subPriceId) {
+                    metafield.id = subPriceId;
+                }
+                metafields.push(metafield);
             }
             if (subSku) {
-                metafields.push({
+                let metafield = {
                     description: "real sku of the sub. bonus",
                     namespace: "subscription",
                     key: "realSku",
                     value: String(subSku),
                     valueType: "STRING"
-                });
+                };
+                if (subSkuId) {
+                    metafield.id = subSkuId;
+                }
+                metafields.push(metafield);
             }
 
             await updateProductVariant(client, shopifyId, metafields);
@@ -332,27 +332,20 @@ app.prepare().then(async () => {
         const metafields = [];
 
         if (file) {
-            try {
-                const downloads = (String(body.downloads).length && String(body.downloads) !== "undefined") ? body.downloads.split(",") : [];
-                if (downloads && downloads.length) {
-                    for (let i = 0; i < downloads.length; i++) {
-                        await removeMetafield(client, downloads[i]);
-                    }
-                }
-            } catch (e) {
-                console.log("error in removeMetafield file", e.toString());
-            }
-
             const slug = speakingurl(file.name);
             const reader = fs.createReadStream(file.path);
 
-            metafields.push({
+            let metafield = {
                 description: "filename of the associated download attachment",
                 namespace: "Download",
                 key: "filename",
                 value: slug,
                 valueType: "STRING"
-            });
+            };
+            if (body.downloads) {
+                metafield.id = body.downloads;
+            }
+            metafields.push(metafield);
 
             try {
                 await aws.upload(reader, "downloads/" + slug);
@@ -363,129 +356,101 @@ app.prepare().then(async () => {
         }
 
         if (body.downloaddate) {
-            if (body.downloaddateid) {
-                try {
-                    await removeMetafield(client, body.downloaddateid);
-                } catch (e) {
-                    console.log("error in removeMetafield", e.toString());
-                }
-            }
-
-            metafields.push({
+            let metafield = {
                 description: "release date for download attachments",
                 namespace: "Download",
                 key: "downloaddate",
                 value: body.downloaddate,
                 valueType: "STRING"
-            });
+            };
+            if (body.downloaddateid) {
+                metafield.id = body.downloaddateid;
+            }
+            metafields.push(metafield);
         }
 
         if (body.supplierid) {
-            if (body.suppliermetaid) {
-                try {
-                    await removeMetafield(client, body.suppliermetaid);
-                } catch (e) {
-                    console.log("error in removeMetafield", e.toString());
-                }
-            }
-
-            metafields.push({
+            let metafield = {
                 description: "supplier id for corresponding product",
                 namespace: "Download",
                 key: "supplierid",
                 value: body.supplierid,
                 valueType: "STRING"
-            });
+            };
+            if (body.suppliermetaid) {
+                metafield.id = body.suppliermetaid;
+            }
+            metafields.push(metafield);
         }
 
         if (body.hinttext) {
-            if (body.hinttextid) {
-                try {
-                    await removeMetafield(client, body.hinttextid);
-                } catch (e) {
-                    console.log("error in removeMetafield", e.toString());
-                }
-            }
-
-            metafields.push({
+            let metafield = {
                 description: "hint text for display of availability",
                 namespace: "Additions",
                 key: "hinttext",
                 value: body.hinttext,
                 valueType: "STRING"
-            });
+            };
+            if (body.hinttextid) {
+                metafield.id = body.hinttextid;
+            }
+            metafields.push(metafield);
         }
 
         if (body.hidden === "0" || body.hidden === "1") {
-            if (body.hiddenid) {
-                try {
-                    await removeMetafield(client, body.hiddenid);
-                } catch (e) {
-                    console.log("error in removeMetafield", e.toString());
-                }
-            }
-
-            metafields.push({
+            let metafield = {
                 description: "0 indicates normal state, 1 hides it",
                 namespace: "Additions",
                 key: "hidden",
                 value: body.hidden,
                 valueType: "STRING"
-            });
+            };
+            if (body.hiddenid) {
+                metafield.id = body.hiddenid;
+            }
+            metafields.push(metafield);
         }
 
         if (body.bqnumber) {
-            if (body.bqnumberid) {
-                try {
-                    await removeMetafield(client, body.bqnumberid);
-                } catch (e) {
-                    console.log("error in removeMetafield", e.toString());
-                }
-            }
-
-            metafields.push({
+            let metafield = {
                 description: "Bezugsquelle, relevant fuer Abos",
                 namespace: "Subscriptions",
                 key: "bqnumber",
                 value: body.bqnumber,
                 valueType: "STRING"
-            });
+            };
+            if (body.bqnumberid) {
+                metafield.id = body.bqnumberid;
+            }
+            metafields.push(metafield);
         }
 
         if (body.bqrelation) {
-            if (body.bqrelationid) {
-                try {
-                    await removeMetafield(client, body.bqrelationid);
-                } catch (e) {
-                    console.log("error in removeMetafield", e.toString());
-                }
-            }
-
-            metafields.push({
+            let metafield = {
                 description: "Bezugstyp, relevant fuer Abo Zuordnung",
                 namespace: "Subscriptions",
                 key: "bqrelation",
                 value: body.bqrelation,
                 valueType: "STRING"
-            });
+            };
+            if (body.bqrelationid) {
+                metafield.id = body.bqrelationid;
+            }
+            metafields.push(metafield);
         }
 
         if (body.project) {
-            if (body.projectid) {
-                try {
-                    await removeMetafield(client, body.projectid);
-                } catch (e) {
-                    console.log("error in removeMetafield", e.toString());
-                }
-            }
-
-            metafields.push({
+            let metafield = {
                 description: "Projekt, relevant fuer Abo Zuordnung",
                 namespace: "Subscriptions",
                 key: "project",
                 value: body.project,
                 valueType: "STRING"
-            });
+            };
+            if (body.projectid) {
+                metafield.id = body.projectid;
+            }
+            metafields.push(metafield);
         }
 
         const res = await updateProduct(client, shopifyId, metafields);
