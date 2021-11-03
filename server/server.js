@@ -289,7 +289,10 @@ app.prepare().then(async () => {
                     metafield.id = subPriceId;
                 }
                 metafields.push(metafield);
+            } else if (subPriceId) {
+                await removeMetafield(client, subPriceId);
             }
+
             if (subSku) {
                 let metafield = {
                     description: "real sku of the sub. bonus",
@@ -302,9 +305,13 @@ app.prepare().then(async () => {
                     metafield.id = subSkuId;
                 }
                 metafields.push(metafield);
+            } else if (subSkuId) {
+                await removeMetafield(client, subPriceId)
             }
 
-            await updateProductVariant(client, shopifyId, metafields);
+            if (metafields.length) {
+                await updateProductVariant(client, shopifyId, metafields);
+            }
             ctx.body = {success: true};
 
         } catch (e) {
@@ -353,6 +360,8 @@ app.prepare().then(async () => {
                 console.log(e);
                 ctx.body = e.toString();
             }
+        } else if (body.downloads) {
+            await removeMetafield(client, body.downloads);
         }
 
         if (body.downloaddate) {
@@ -367,9 +376,11 @@ app.prepare().then(async () => {
                 metafield.id = body.downloaddateid;
             }
             metafields.push(metafield);
+        } else if (body.downloaddateid) {
+            await removeMetafield(client, body.downloaddateid);
         }
 
-        if (body.supplierid) {
+        if (body.supplierid && body.supplierid !== "null") {
             let metafield = {
                 description: "supplier id for corresponding product",
                 namespace: "Download",
@@ -381,6 +392,8 @@ app.prepare().then(async () => {
                 metafield.id = body.suppliermetaid;
             }
             metafields.push(metafield);
+        } else if (body.suppliermetaid) {
+            await removeMetafield(client, body.suppliermetaid);
         }
 
         if (body.hinttext) {
@@ -395,6 +408,8 @@ app.prepare().then(async () => {
                 metafield.id = body.hinttextid;
             }
             metafields.push(metafield);
+        } else if (body.hinttextid) {
+            await removeMetafield(client, body.hinttextid);
         }
 
         if (body.hidden === "0" || body.hidden === "1") {
@@ -423,9 +438,11 @@ app.prepare().then(async () => {
                 metafield.id = body.bqnumberid;
             }
             metafields.push(metafield);
+        } else if (body.bqnumberid) {
+            await removeMetafield(client, body.bqnumberid);
         }
 
-        if (body.bqrelation) {
+        if (body.bqrelation && body.bqrelation !== "null") {
             let metafield = {
                 description: "Bezugstyp, relevant fuer Abo Zuordnung",
                 namespace: "Subscriptions",
@@ -437,9 +454,11 @@ app.prepare().then(async () => {
                 metafield.id = body.bqrelationid;
             }
             metafields.push(metafield);
+        } else if (body.bqrelationid) {
+            await removeMetafield(client, body.bqrelationid);
         }
 
-        if (body.project) {
+        if (body.project && body.project !== "null") {
             let metafield = {
                 description: "Projekt, relevant fuer Abo Zuordnung",
                 namespace: "Subscriptions",
@@ -451,9 +470,13 @@ app.prepare().then(async () => {
                 metafield.id = body.projectid;
             }
             metafields.push(metafield);
+        } else if (body.projectid) {
+            await removeMetafield(client, body.projectid);
         }
 
-        const res = await updateProduct(client, shopifyId, metafields);
+        if (metafields.length) {
+            const res = await updateProduct(client, shopifyId, metafields);
+        }
         ctx.body = "ok";
     });
 
