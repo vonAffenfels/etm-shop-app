@@ -203,6 +203,8 @@ app.prepare().then(async () => {
     router.get("/product/download/:productId", async (ctx, next) => {
         const {productId} = ctx.params;
 
+        console.log("/product/download called for", productId);
+
         if (!productId) {
             ctx.res.status = 400;
             ctx.body = "productId missing";
@@ -212,10 +214,12 @@ app.prepare().then(async () => {
         // const productId = Buffer.from(productHash, "hex").toString();
         const shopifyId = "gid://shopify/Product/" + productId;
         const res = await getProduct(client, shopifyId);
+        console.log("gotProduct", !!res)
 
         if (!res.data || !res.data.product) {
             ctx.res.status = 404;
             ctx.body = "no product found for id " + shopifyId;
+            console.log("no product found for id " + shopifyId)
             return;
         }
 
@@ -224,6 +228,7 @@ app.prepare().then(async () => {
         if (!metafields || !metafields.edges || !metafields.edges.length) {
             ctx.res.status = 404;
             ctx.body = "no attached files found for product with id " + shopifyId;
+            console.log("no attached files found for product with id " + shopifyId)
             return;
         }
 
@@ -232,11 +237,13 @@ app.prepare().then(async () => {
         if (!downloadFields.length) {
             ctx.res.status = 404;
             ctx.body = "no attached files found for product with id " + shopifyId;
+            console.log("no attached files found for product with id " + shopifyId)
             return;
         }
 
         const userAgent = ctx.req.headers["user-agent"];
         const isSubscriber = String(ctx.req.headers["e-valid-abo"]) == "1";
+        console.log("userAgent", userAgent, "isSubscriber", isSubscriber);
         if (userAgent === "euro-api") {
             const downloadDateFields = metafields.edges.map(edge => edge.node).filter(node => node.key === "downloaddate");
             if (downloadDateFields.length) {
@@ -265,6 +272,7 @@ app.prepare().then(async () => {
         } else if (fileSuffix === "pdf") {
             ctx.set("Content-type", "application/" + fileSuffix);
         }
+        console.log("aws download path", "downloads/" + fileName)
         ctx.body = await aws.download("downloads/" + fileName);
     });
 

@@ -65,6 +65,7 @@ module.exports = class AWSService {
         return new Promise((resolve, reject) => {
             this.s3.getObject(params, function (err, data) {
                 if (err) {
+                    console.log("download", err)
                     reject(err);
                 } else {
                     resolve(data.Body);
