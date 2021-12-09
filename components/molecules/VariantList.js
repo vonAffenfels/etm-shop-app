@@ -3,7 +3,6 @@ import React, {useState, useEffect, useCallback} from "react";
 import VariantItem from "./VariantItem";
 
 const VariantList = ({existingProduct}) => {
-    console.log("VariantList")
     if (!existingProduct || !existingProduct.product) {
         return null;
     }

@@ -7,7 +7,7 @@ const updateProductVariant = async (client, id, metafields) => {
                 productVariantUpdate(input: $input) {
                     productVariant {
                         id
-                        metafields(first: 2) {
+                        metafields(first: 3) {
                             edges {
                                 node {
                                     id

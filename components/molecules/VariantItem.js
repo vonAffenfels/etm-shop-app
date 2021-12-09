@@ -7,8 +7,13 @@ const VariantItem = ({item}) => {
 
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(null);
+
     const [priceInput, setPriceInput] = useState("");
     const [priceInputMetafield, setPriceInputMetafield] = useState(null);
+
+    const [alertInventoryCount, setAlertInventoryCount] = useState(0);
+    const [alertInventoryCountMetafield, setAlertInventoryCountMetafield] = useState(null);
+
     const [subSkuInput, setSubSkuInput] = useState("");
     const [subSkuMetafieldInput, setSubSkuInputMetafield] = useState(null);
 
@@ -27,6 +32,10 @@ const VariantItem = ({item}) => {
                     setPriceInputMetafield(edge);
                     setPriceInput(edge.node.value);
                 }
+                if (edge.node.key === "alertInventoryCount") {
+                    setAlertInventoryCountMetafield(edge);
+                    setAlertInventoryCount(edge.node.value);
+                }
             });
         }
     }, []);
@@ -41,6 +50,12 @@ const VariantItem = ({item}) => {
         setSubSkuInput(input);
     }
 
+    function onAlertInventoryCountChange(input) {
+        console.log("onAlertInventoryCountChange", input);
+        setSuccess(null);
+        setAlertInventoryCount(input);
+    }
+
     function save() {
         if (typeof window === "undefined") {
             return;
@@ -48,7 +63,8 @@ const VariantItem = ({item}) => {
 
         let data = {
             subPrice: priceInput,
-            subSku: subSkuInput
+            subSku: subSkuInput,
+            alertInventoryCount: alertInventoryCount
         };
 
         if (priceInputMetafield) {
@@ -59,7 +75,9 @@ const VariantItem = ({item}) => {
             data.subSkuId = subSkuMetafieldInput.node.id;
         }
 
-        console.log("data", data)
+        if (alertInventoryCountMetafield) {
+            data.alertInventoryCountId = alertInventoryCountMetafield.node.id;
+        }
 
         try {
             fetch("/product/variant/save/" + id.replace("gid://shopify/ProductVariant/", ""), {
@@ -69,7 +87,6 @@ const VariantItem = ({item}) => {
                 },
                 body: JSON.stringify(data)
             }).then(res => res.json()).then(res => {
-                console.log("save", res);
                 setSuccess(true);
             }).catch(err => {
                 setSuccess(false);
@@ -78,8 +95,6 @@ const VariantItem = ({item}) => {
             console.log(e);
         }
     }
-
-    console.log("display priceInput", priceInput)
 
     return (
         <li className="Polaris-ResourceItem__ListItem">
@@ -118,6 +133,15 @@ const VariantItem = ({item}) => {
                                 disabled={loading}
                                 value={subSkuInput}
                                 onChange={onSubSkuChange.bind(this)}
+                            />
+                            <TextField
+                                label="Benachrichtigen, falls Bestand auf X fällt (0 bzw. Leerlassen zum Deaktivieren):"
+                                disabled={loading}
+                                value={alertInventoryCount}
+                                inputMode="numeric"
+                                type="number"
+                                autoComplete="off"
+                                onChange={onAlertInventoryCountChange.bind(this)}
                             />
                         </div>
                         <div style={{marginTop: "10px"}}>

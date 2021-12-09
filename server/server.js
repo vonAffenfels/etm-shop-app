@@ -272,7 +272,6 @@ app.prepare().then(async () => {
         } else if (fileSuffix === "pdf") {
             ctx.set("Content-type", "application/" + fileSuffix);
         }
-        console.log("aws download path", "downloads/" + fileName)
         ctx.body = await aws.download("downloads/" + fileName);
     });
 
@@ -281,7 +280,7 @@ app.prepare().then(async () => {
         console.log("body", ctx.request.body)
 
         const shopifyId = "gid://shopify/ProductVariant/" + productVariantId;
-        const {subPrice, subSku, subPriceId, subSkuId} = ctx.request.body;
+        const {subPrice, subSku, subPriceId, subSkuId, alertInventoryCount, alertInventoryCountId} = ctx.request.body;
 
         try {
             let metafields = [];
@@ -315,6 +314,22 @@ app.prepare().then(async () => {
                 metafields.push(metafield);
             } else if (subSkuId) {
                 await removeMetafield(client, subPriceId)
+            }
+
+            if (parseInt(alertInventoryCount)) {
+                let metafield = {
+                    description: "real sku of the sub. bonus",
+                    namespace: "subscription",
+                    key: "alertInventoryCount",
+                    value: parseInt(alertInventoryCount),
+                    valueType: "INTEGER"
+                };
+                if (alertInventoryCountId) {
+                    metafield.id = alertInventoryCountId;
+                }
+                metafields.push(metafield);
+            } else if (alertInventoryCountId) {
+                await removeMetafield(client, alertInventoryCountId)
             }
 
             if (metafields.length) {
