@@ -110,6 +110,7 @@ const VariantItem = ({item}) => {
                         <div>
                             <h3>
                                 <TextStyle variation="strong">{title} ({sku})</TextStyle>
+                                <span style={{paddingLeft: "7px"}}></span>
                                 {success !== null && (
                                     <Badge status={success ? "success" : "error"}>
                                         {success ? "gespeichert" : "Fehler aufgetreten"}
@@ -141,6 +142,7 @@ const VariantItem = ({item}) => {
                                 inputMode="numeric"
                                 type="number"
                                 autoComplete="off"
+                                min={0}
                                 onChange={onAlertInventoryCountChange.bind(this)}
                             />
                         </div>
