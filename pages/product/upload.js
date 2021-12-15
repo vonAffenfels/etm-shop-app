@@ -143,6 +143,7 @@ const Upload = () => {
     const [tokens, setTokens] = useState([]);
     const [hintText, setHintText] = useState("");
     const [hidden, setHidden] = useState(false);
+    const [hiddenZenit, setHiddenZenit] = useState(false);
     const [bqNumber, setBqNumber] = useState("");
     const [relation, setRelation] = useState({value: null, label: ""});
     const [project, setProject] = useState({value: null, label: ""});
@@ -243,6 +244,11 @@ const Upload = () => {
         setTouched(true);
     }
 
+    function onHiddenZenitChange(checked) {
+        setHiddenZenit(checked);
+        setTouched(true);
+    }
+
     function onHintChange(value) {
         setHintText(value);
         setTouched(true);
@@ -296,6 +302,11 @@ const Upload = () => {
         formData.append("hidden", hidden ? "1" : "0");
         if (mappedFields["hidden"]) {
             formData.append("hiddenid", String(mappedFields["hidden"]));
+        }
+
+        formData.append("hiddenzenit", hiddenZenit ? "1" : "0");
+        if (mappedFields["hiddenzenit"]) {
+            formData.append("hiddenzenitid", String(mappedFields["hiddenzenit"]));
         }
 
         formData.append("bqnumber", bqNumber);
@@ -387,6 +398,12 @@ const Upload = () => {
             setHidden(mappedFields["hidden"] == "1" ? true : false);
         } else {
             setHidden(false);
+        }
+
+        if (mappedFields["hiddenzenit"]) {
+            setHiddenZenit(mappedFields["hiddenzenit"] == "1" ? true : false);
+        } else {
+            setHiddenZenit(false);
         }
 
         if (mappedFields["bqnumber"]) {
@@ -563,6 +580,12 @@ const Upload = () => {
                                 </p>
                             )}
                         </TextContainer>
+                        <Checkbox
+                            label="Bei Kauf nicht an Zenit übertragen"
+                            checked={hiddenZenit}
+                            disabled={isLoading}
+                            onChange={onHiddenZenitChange.bind(this)}
+                        />
                     </Card>
                     <Card sectioned title={"Hinweistext Verfügbarkeit"}>
                         <TextField disabled={isLoading} value={hintText} onChange={onHintChange.bind(this)}/>

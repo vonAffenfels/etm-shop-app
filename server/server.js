@@ -449,6 +449,20 @@ app.prepare().then(async () => {
             metafields.push(metafield);
         }
 
+        if (body.hiddenzenit === "0" || body.hiddenzenit === "1") {
+            let metafield = {
+                description: "0 indicates normal state, 1 hides it",
+                namespace: "Additions",
+                key: "hiddenZenit",
+                value: body.hiddenzenit,
+                valueType: "STRING"
+            };
+            if (body.hiddenzenitid) {
+                metafield.id = body.hiddenzenitid;
+            }
+            metafields.push(metafield);
+        }
+
         if (body.bqnumber) {
             let metafield = {
                 description: "Bezugsquelle, relevant fuer Abos",
