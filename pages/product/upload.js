@@ -566,6 +566,12 @@ const Upload = () => {
                 <Layout.Section>
                     <Card sectioned title={"Sichtbarkeit"}>
                         <Checkbox
+                            label="Bei Kauf nicht an Zenit übertragen"
+                            checked={hiddenZenit}
+                            disabled={isLoading}
+                            onChange={onHiddenZenitChange.bind(this)}
+                        />
+                        <Checkbox
                             label="Produkt verstecken"
                             checked={hidden}
                             disabled={isLoading}
@@ -580,12 +586,6 @@ const Upload = () => {
                                 </p>
                             )}
                         </TextContainer>
-                        <Checkbox
-                            label="Bei Kauf nicht an Zenit übertragen"
-                            checked={hiddenZenit}
-                            disabled={isLoading}
-                            onChange={onHiddenZenitChange.bind(this)}
-                        />
                     </Card>
                     <Card sectioned title={"Hinweistext Verfügbarkeit"}>
                         <TextField disabled={isLoading} value={hintText} onChange={onHintChange.bind(this)}/>
