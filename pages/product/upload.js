@@ -571,7 +571,7 @@ const Upload = () => {
                             disabled={isLoading}
                             onChange={onHiddenZenitChange.bind(this)}
                         />
-                        <br>
+                        <br/>
                         <Checkbox
                             label="Produkt verstecken"
                             checked={hidden}
