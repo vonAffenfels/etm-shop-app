@@ -43,7 +43,11 @@ const updateProductVariant = async (client, id, metafields) => {
         return res;
     } catch (e) {
         console.error("updateProductVariant");
-        console.error(e);
+        if (e.graphQLErrors) {
+            console.error(JSON.stringify(graphQLErrors, null, 3));
+        } else {
+            console.error(e);
+        }
     }
 };
 
