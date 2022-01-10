@@ -318,7 +318,7 @@ app.prepare().then(async () => {
 
             if (parseInt(alertInventoryCount)) {
                 let metafield = {
-                    description: "real sku of the sub. bonus",
+                    description: "start email notification at this inventory count",
                     namespace: "subscription",
                     key: "alertInventoryCount",
                     value: parseInt(alertInventoryCount),
@@ -333,6 +333,7 @@ app.prepare().then(async () => {
             }
 
             if (metafields.length) {
+                console.log(metafields)
                 await updateProductVariant(client, shopifyId, metafields);
             }
             ctx.body = {success: true};
