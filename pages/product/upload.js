@@ -305,8 +305,8 @@ const Upload = () => {
         }
 
         formData.append("hiddenzenit", hiddenZenit ? "1" : "0");
-        if (mappedFields["hiddenzenit"]) {
-            formData.append("hiddenzenitid", String(mappedFields["hiddenzenit"]));
+        if (mappedFields["hiddenZenit"]) {
+            formData.append("hiddenzenitid", String(mappedFields["hiddenZenit"]));
         }
 
         formData.append("bqnumber", bqNumber);
