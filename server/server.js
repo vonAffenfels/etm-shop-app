@@ -512,6 +512,7 @@ app.prepare().then(async () => {
         }
 
         if (metafields.length) {
+            console.log(metafields)
             const res = await updateProduct(client, shopifyId, metafields);
         }
         ctx.body = "ok";
