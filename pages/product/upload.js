@@ -522,6 +522,7 @@ const Upload = () => {
     }
 
     function renderTitleMetadata() {
+        console.log("renderTitleMetadata", supplier);
         if (!uploadedState) {
             return null;
         }
