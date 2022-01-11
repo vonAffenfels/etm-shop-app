@@ -529,7 +529,11 @@ const Upload = () => {
             return (
                 <Stack>
                     <Badge status="warning">Lieferant fehlt</Badge>
-                    Das Produkt kann nicht mit Zenit synchronisiert werden
+                    <TextContainer>
+                        <p>
+                            <TextStyle variation="subdued">Das Produkt kann nicht mit Zenit synchronisiert werden</TextStyle>
+                        </p>
+                    </TextContainer>
                 </Stack>
             );
         }
