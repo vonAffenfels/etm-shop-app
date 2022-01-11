@@ -1,6 +1,8 @@
 import {
+    Frame,
     Layout,
     Card,
+    Stack,
     TextContainer,
     TextStyle,
     TextField,
@@ -521,8 +523,21 @@ const Upload = () => {
         );
     }
 
+    function renderSupplierNote() {
+        console.log("renderSupplierNote", supplier);
+        if (!supplier || !supplier.value) {
+            return (
+                <Stack>
+                    <Badge status="warning">Lieferant fehlt</Badge>
+                    Das Produkt kann nicht mit Zenit synchronisiert werden
+                </Stack>
+            );
+        }
+
+        return null;
+    }
+
     function renderTitleMetadata() {
-        console.log("renderTitleMetadata", supplier);
         if (!uploadedState) {
             return null;
         }
@@ -547,134 +562,137 @@ const Upload = () => {
 
     console.log(existingProduct)
     return (
-        <Page
-            title={getTitle()}
-            titleMetadata={renderTitleMetadata()}
-            primaryAction={{
-                content: "Speichern",
-                disabled: !touched,
-                onAction: handleSubmit.bind(this)
-            }}
-            secondaryActions={[
-                {
-                    content: "Verwerfen",
+        <Frame>
+            {renderSupplierNote()}
+            <Page
+                title={getTitle()}
+                titleMetadata={renderTitleMetadata()}
+                primaryAction={{
+                    content: "Speichern",
                     disabled: !touched,
-                    onAction: reset.bind(this)
-                }
-            ]}
-        >
-            <Layout>
-                <Layout.Section>
-                    <Card sectioned title={"Sichtbarkeit"}>
-                        <Checkbox
-                            label="Bei Kauf nicht an Zenit übertragen"
-                            checked={hiddenZenit}
-                            disabled={isLoading}
-                            onChange={onHiddenZenitChange.bind(this)}
-                        />
-                        <br/>
-                        <Checkbox
-                            label="Produkt verstecken"
-                            checked={hidden}
-                            disabled={isLoading}
-                            onChange={onHiddenChange.bind(this)}
-                        />
-                        <TextContainer>
-                            {existingProduct && (
-                                <p>
-                                    <br/>
-                                    <TextStyle variation="subdued"><a target="_blank" href={existingProduct.shopUrl}>Detailseite
-                                        öffnen</a></TextStyle>
-                                </p>
-                            )}
-                        </TextContainer>
-                    </Card>
-                    <Card sectioned title={"Hinweistext Verfügbarkeit"}>
-                        <TextField disabled={isLoading} value={hintText} onChange={onHintChange.bind(this)}/>
-                    </Card>
-                    <Card sectioned title={"Abonnement"}>
-                        <TextField label={"Bezugsquelle"} disabled={isLoading} value={bqNumber}
-                                   onChange={onBqNumberChange}/>
-                        <p>
-                            <br/>
-                            <Select
-                                options={subscriptionRelationOptions}
-                                label={"Bezugstyp"}
+                    onAction: handleSubmit.bind(this)
+                }}
+                secondaryActions={[
+                    {
+                        content: "Verwerfen",
+                        disabled: !touched,
+                        onAction: reset.bind(this)
+                    }
+                ]}
+            >
+                <Layout>
+                    <Layout.Section>
+                        <Card sectioned title={"Sichtbarkeit"}>
+                            <Checkbox
+                                label="Bei Kauf nicht an Zenit übertragen"
+                                checked={hiddenZenit}
                                 disabled={isLoading}
-                                value={relation.value}
-                                onChange={onRelationChange.bind(this)}
+                                onChange={onHiddenZenitChange.bind(this)}
+                            />
+                            <br/>
+                            <Checkbox
+                                label="Produkt verstecken"
+                                checked={hidden}
+                                disabled={isLoading}
+                                onChange={onHiddenChange.bind(this)}
                             />
                             <TextContainer>
-                                {relation.value && (
+                                {existingProduct && (
                                     <p>
                                         <br/>
-                                        <TextStyle variation="subdued">entspricht {relation.value}</TextStyle>
+                                        <TextStyle variation="subdued"><a target="_blank" href={existingProduct.shopUrl}>Detailseite
+                                            öffnen</a></TextStyle>
                                     </p>
                                 )}
                             </TextContainer>
-                        </p>
-                        <p>
-                            <br/>
-                            <Select
-                                options={subscriptionProjects}
-                                label={"MPN / Projekt"}
+                        </Card>
+                        <Card sectioned title={"Hinweistext Verfügbarkeit"}>
+                            <TextField disabled={isLoading} value={hintText} onChange={onHintChange.bind(this)}/>
+                        </Card>
+                        <Card sectioned title={"Abonnement"}>
+                            <TextField label={"Bezugsquelle"} disabled={isLoading} value={bqNumber}
+                                       onChange={onBqNumberChange}/>
+                            <p>
+                                <br/>
+                                <Select
+                                    options={subscriptionRelationOptions}
+                                    label={"Bezugstyp"}
+                                    disabled={isLoading}
+                                    value={relation.value}
+                                    onChange={onRelationChange.bind(this)}
+                                />
+                                <TextContainer>
+                                    {relation.value && (
+                                        <p>
+                                            <br/>
+                                            <TextStyle variation="subdued">entspricht {relation.value}</TextStyle>
+                                        </p>
+                                    )}
+                                </TextContainer>
+                            </p>
+                            <p>
+                                <br/>
+                                <Select
+                                    options={subscriptionProjects}
+                                    label={"MPN / Projekt"}
+                                    disabled={isLoading}
+                                    value={project.value}
+                                    onChange={onProjectChange.bind(this)}
+                                />
+                                <TextContainer>
+                                    {project.value && (
+                                        <p>
+                                            <br/>
+                                            <TextStyle variation="subdued">entspricht {project.value}</TextStyle>
+                                        </p>
+                                    )}
+                                </TextContainer>
+                            </p>
+                        </Card>
+                        <Card sectioned title={"Varianten"}>
+                            <VariantList existingProduct={existingProduct}/>
+                        </Card>
+                        {renderExistingProduct()}
+                        <Card sectioned title={"Upload Dateianhang"}>
+                            {isLoading ? (
+                                <Spinner size="large"/>
+                            ) : (
+                                <FileInput files={files} onSelect={onSelect.bind(this)}/>
+                            )}
+                        </Card>
+                        <Card sectioned title={"Freigabedatum Download (Abonnenten werden 2 Tage früher freigeschalten)"}>
+                            <DatePicker
+                                allowRange={false}
+                                month={month}
+                                year={year}
+                                onMonthChange={handleMonthChange.bind(this)}
+                                onChange={onDateChange.bind(this)}
+                                selected={uploadDate}
                                 disabled={isLoading}
-                                value={project.value}
-                                onChange={onProjectChange.bind(this)}
+                            />
+                        </Card>
+                        <Card sectioned title={"Lieferant/Fremdartikelnummer"}>
+                            <Select
+                                label="Lieferantennummer"
+                                options={supplierOptions}
+                                onChange={handleSupplierChange.bind(this)}
+                                value={supplier.value}
+                                disabled={isLoading}
                             />
                             <TextContainer>
-                                {project.value && (
+                                {supplier.value && (
                                     <p>
                                         <br/>
-                                        <TextStyle variation="subdued">entspricht {project.value}</TextStyle>
+                                        <TextStyle
+                                            variation="subdued">{supplier.value} {supplier.label} ({supplier.short})</TextStyle>
                                     </p>
                                 )}
                             </TextContainer>
-                        </p>
-                    </Card>
-                    <Card sectioned title={"Varianten"}>
-                        <VariantList existingProduct={existingProduct}/>
-                    </Card>
-                    {renderExistingProduct()}
-                    <Card sectioned title={"Upload Dateianhang"}>
-                        {isLoading ? (
-                            <Spinner size="large"/>
-                        ) : (
-                            <FileInput files={files} onSelect={onSelect.bind(this)}/>
-                        )}
-                    </Card>
-                    <Card sectioned title={"Freigabedatum Download (Abonnenten werden 2 Tage früher freigeschalten)"}>
-                        <DatePicker
-                            allowRange={false}
-                            month={month}
-                            year={year}
-                            onMonthChange={handleMonthChange.bind(this)}
-                            onChange={onDateChange.bind(this)}
-                            selected={uploadDate}
-                            disabled={isLoading}
-                        />
-                    </Card>
-                    <Card sectioned title={"Lieferant/Fremdartikelnummer"}>
-                        <Select
-                            label="Lieferantennummer"
-                            options={supplierOptions}
-                            onChange={handleSupplierChange.bind(this)}
-                            value={supplier.value}
-                            disabled={isLoading}
-                        />
-                        <TextContainer>
-                            {supplier.value && (
-                                <p>
-                                    <br/>
-                                    <TextStyle
-                                        variation="subdued">{supplier.value} {supplier.label} ({supplier.short})</TextStyle>
-                                </p>
-                            )}
-                        </TextContainer>
-                    </Card>
-                </Layout.Section>
-            </Layout>
-        </Page>
+                        </Card>
+                    </Layout.Section>
+                </Layout>
+            </Page>
+        </Frame>
     )
 };
 
