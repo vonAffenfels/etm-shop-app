@@ -567,7 +567,7 @@ const Upload = () => {
     console.log(existingProduct)
     return (
         <Frame>
-            <Page title={renderSupplierNote()}></Page>
+            <Page subtitle={renderSupplierNote()}></Page>
             <Page
                 title={getTitle()}
                 titleMetadata={renderTitleMetadata()}
