@@ -542,7 +542,7 @@ const Upload = () => {
     }
 
     function renderSupplierNote() {
-        console.log("renderSupplierNote", supplier);
+        console.log("renderSupplierNote", supplier, foreignSku);
         const missingFields = [];
         if (!supplier || !supplier.value) {
             missingFields.push("Lieferantennummer");
@@ -550,6 +550,7 @@ const Upload = () => {
         if (!foreignSku) {
             missingFields.push("Fremdartikelnummer");
         }
+        console.log("missingFields", missingFields)
 
         if (missingFields.length) {
             return (
