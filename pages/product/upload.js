@@ -594,7 +594,6 @@ const Upload = () => {
     console.log(existingProduct)
     return (
         <Frame>
-            <Page subtitle={renderSupplierNote()}></Page>
             <Page
                 title={getTitle()}
                 titleMetadata={renderTitleMetadata()}
@@ -610,6 +609,7 @@ const Upload = () => {
                         onAction: reset.bind(this)
                     }
                 ]}
+                subtitle={renderSupplierNote()}
             >
                 <Layout>
                     <Layout.Section>
