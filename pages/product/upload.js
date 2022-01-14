@@ -338,7 +338,7 @@ const Upload = () => {
         }
 
         try {
-            console.log(Object.fromEntries(formData));
+            console.log("FORMDATA", Object.fromEntries(formData));
             const data = await fetch("/product/upload/" + productId, {
                 method: "post",
                 body: formData
@@ -373,7 +373,6 @@ const Upload = () => {
 
         let metafields = data.product.metafields;
         let mappedFields = {};
-        console.log("data.product", data.product)
 
         if (metafields && metafields.edges && metafields.edges.length) {
             metafields.edges.map(edge => edge.node).forEach(node => {
@@ -381,6 +380,7 @@ const Upload = () => {
             });
         }
 
+        console.log("data.product", data.product)
         console.log("getInitialFormValues, mappedFields:", mappedFields);
 
         if (mappedFields["downloaddate"]) {
@@ -710,15 +710,18 @@ const Upload = () => {
                                 value={supplier.value}
                                 disabled={isLoading}
                             />
-                            <TextContainer>
-                                {supplier.value && (
-                                    <p>
-                                        <br/>
-                                        <TextStyle
-                                            variation="subdued">{supplier.value} {supplier.label} ({supplier.short})</TextStyle>
-                                    </p>
-                                )}
-                            </TextContainer>
+                            <p>
+                                <br/>
+                                <TextContainer>
+                                    {supplier.value && (
+                                        <p>
+                                            <br/>
+                                            <TextStyle
+                                                variation="subdued">{supplier.value} {supplier.label} ({supplier.short})</TextStyle>
+                                        </p>
+                                    )}
+                                </TextContainer>
+                            </p>
                         </Card>
                     </Layout.Section>
                 </Layout>

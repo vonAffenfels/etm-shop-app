@@ -2,7 +2,6 @@ import {ResourceList, TextStyle, ButtonGroup, Button, TextField, Badge} from "@s
 import React, {useState, useEffect, useCallback} from "react";
 
 const VariantItem = ({item}) => {
-    console.log("VariantItem", item);
     const {node: {id, image, metafields, price, sku, title}} = item;
 
     const [loading, setLoading] = useState(false);
