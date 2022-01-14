@@ -307,8 +307,8 @@ const Upload = () => {
             formData.append("suppliermetaid", String(mappedFields["supplierid"]));
         }
 
-        formData.append("foreignsku", supplier.value);
-        if (mappedFields["foreignsku"]) {
+        formData.append("foreignsku", foreignSku);
+        if (mappedFields["foreignSku"]) {
             formData.append("foreignskuid", String(mappedFields["foreignSku"]));
         }
 
