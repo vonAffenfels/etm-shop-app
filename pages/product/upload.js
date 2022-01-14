@@ -149,6 +149,7 @@ const Upload = () => {
     const [bqNumber, setBqNumber] = useState("");
     const [relation, setRelation] = useState({value: null, label: ""});
     const [project, setProject] = useState({value: null, label: ""});
+    const [foreignSku, setForeignSku] = useState("");
     const handleMonthChange = useCallback((month, year) => setDate({month, year}), []);
 
     useEffect(() => {
@@ -210,6 +211,11 @@ const Upload = () => {
 
     function onBqNumberChange(input) {
         setBqNumber(input);
+        setTouched(true);
+    }
+
+    function onForeignSkuChange(input) {
+        setForeignSku(input);
         setTouched(true);
     }
 
@@ -301,6 +307,11 @@ const Upload = () => {
             formData.append("suppliermetaid", String(mappedFields["supplierid"]));
         }
 
+        formData.append("foreignsku", supplier.value);
+        if (mappedFields["foreignsku"]) {
+            formData.append("foreignskuid", String(mappedFields["foreignSku"]));
+        }
+
         formData.append("hidden", hidden ? "1" : "0");
         if (mappedFields["hidden"]) {
             formData.append("hiddenid", String(mappedFields["hidden"]));
@@ -327,7 +338,6 @@ const Upload = () => {
         }
 
         try {
-            console.log("FORMDATA:::");
             console.log(Object.fromEntries(formData));
             const data = await fetch("/product/upload/" + productId, {
                 method: "post",
@@ -371,6 +381,8 @@ const Upload = () => {
             });
         }
 
+        console.log("getInitialFormValues, mappedFields:", mappedFields);
+
         if (mappedFields["downloaddate"]) {
             setUploadDate({
                 start: new Date(mappedFields["downloaddate"]),
@@ -402,10 +414,16 @@ const Upload = () => {
             setHidden(false);
         }
 
-        if (mappedFields["hiddenzenit"]) {
-            setHiddenZenit(mappedFields["hiddenzenit"] == "1" ? true : false);
+        if (mappedFields["hiddenZenit"]) {
+            setHiddenZenit(mappedFields["hiddenZenit"] == "1" ? true : false);
         } else {
             setHiddenZenit(false);
+        }
+
+        if (mappedFields["foreignSku"]) {
+            setForeignSku(mappedFields["foreignSku"]);
+        } else {
+            setForeignSku("");
         }
 
         if (mappedFields["bqnumber"]) {
@@ -525,10 +543,18 @@ const Upload = () => {
 
     function renderSupplierNote() {
         console.log("renderSupplierNote", supplier);
+        const missingFields = [];
         if (!supplier || !supplier.value) {
+            missingFields.push("Lieferantennummer");
+        }
+        if (!foreignSku) {
+            missingFields.push("Fremdartikelnummer");
+        }
+
+        if (missingFields.length) {
             return (
                 <Stack>
-                    <Badge status="warning">Lieferant fehlt</Badge>
+                    <Badge status="warning">{missingFields.join(", ")} {missingFields.length > 1 ? "fehlen" : "fehlt"}</Badge>
                     <TextContainer>
                         <p>
                             <TextStyle variation="subdued">Das Produkt kann nicht mit Zenit synchronisiert werden</TextStyle>
@@ -676,6 +702,7 @@ const Upload = () => {
                             />
                         </Card>
                         <Card sectioned title={"Lieferant/Fremdartikelnummer"}>
+                            <TextField label="Fremdartikelnummer" disabled={isLoading} value={foreignSku} onChange={onForeignSkuChange}/>
                             <Select
                                 label="Lieferantennummer"
                                 options={supplierOptions}

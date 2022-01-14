@@ -419,6 +419,22 @@ app.prepare().then(async () => {
             await removeMetafield(client, body.suppliermetaid);
         }
 
+        if (body.foreignsku) {
+            let metafield = {
+                description: "producer's sku for corresponding product",
+                namespace: "Additions",
+                key: "foreignSku",
+                value: body.foreignsku,
+                valueType: "STRING"
+            };
+            if (body.foreignsku) {
+                metafield.id = body.foreignsku;
+            }
+            metafields.push(metafield);
+        } else if (body.foreignskuid) {
+            await removeMetafield(client, body.foreignskuid);
+        }
+
         if (body.hinttext) {
             let metafield = {
                 description: "hint text for display of availability",
