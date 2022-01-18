@@ -551,14 +551,17 @@ const Upload = () => {
                         </TextContainer>
                     </Stack>
                     {(missingForeignSkuVariants.length > 0) && (
-                        <Stack>
-                            <Badge status="warning">{missingForeignSkuVariants.join(", ")}</Badge>
-                            <TextContainer>
-                                <p>
-                                    <TextStyle variation="subdued">Fremdartikelnummer fehlt. Variante kann nicht mit Zenit synchronisiert werden.</TextStyle>
-                                </p>
-                            </TextContainer>
-                        </Stack>
+                        <>
+                            <br/>
+                            <Stack>
+                                <Badge status="warning">{missingForeignSkuVariants.join(", ")}</Badge>
+                                <TextContainer>
+                                    <p>
+                                        <TextStyle variation="subdued">Fremdartikelnummer fehlt. Variante kann nicht mit Zenit synchronisiert werden.</TextStyle>
+                                    </p>
+                                </TextContainer>
+                            </Stack>
+                        </>
                     )}
                 </>
             );
