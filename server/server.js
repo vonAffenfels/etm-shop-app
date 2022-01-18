@@ -280,7 +280,7 @@ app.prepare().then(async () => {
         console.log("body", ctx.request.body)
 
         const shopifyId = "gid://shopify/ProductVariant/" + productVariantId;
-        const {subPrice, subSku, subPriceId, subSkuId, alertInventoryCount, alertInventoryCountId} = ctx.request.body;
+        const {subPrice, subSku, subPriceId, subSkuId, alertInventoryCount, alertInventoryCountId, foreignSku, foreignSkuId} = ctx.request.body;
 
         try {
             let metafields = [];
@@ -330,6 +330,22 @@ app.prepare().then(async () => {
                 metafields.push(metafield);
             } else if (alertInventoryCountId) {
                 await removeMetafield(client, alertInventoryCountId)
+            }
+
+            if (foreignSku) {
+                let metafield = {
+                    description: "producer's sku for corresponding product",
+                    namespace: "Additions",
+                    key: "foreignSku",
+                    value: foreignSku,
+                    valueType: "STRING"
+                };
+                if (foreignSkuId) {
+                    metafield.id = foreignSkuId;
+                }
+                metafields.push(metafield);
+            } else if (foreignSkuId) {
+                await removeMetafield(foreignSkuId);
             }
 
             if (metafields.length) {
@@ -417,22 +433,6 @@ app.prepare().then(async () => {
             metafields.push(metafield);
         } else if (body.suppliermetaid) {
             await removeMetafield(client, body.suppliermetaid);
-        }
-
-        if (body.foreignsku) {
-            let metafield = {
-                description: "producer's sku for corresponding product",
-                namespace: "Additions",
-                key: "foreignSku",
-                value: body.foreignsku,
-                valueType: "STRING"
-            };
-            if (body.foreignsku) {
-                metafield.id = body.foreignsku;
-            }
-            metafields.push(metafield);
-        } else if (body.foreignskuid) {
-            await removeMetafield(client, body.foreignskuid);
         }
 
         if (body.hinttext) {

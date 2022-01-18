@@ -19,6 +19,7 @@ import {useState, useEffect, useCallback} from "react";
 import {useRouter} from "next/router";
 import FileInput from "../../components/form/FileInput";
 import VariantList from "../../components/molecules/VariantList";
+import {ProductContext} from "../../components/form/ProductContext";
 
 const supplierOptions = [
     {
@@ -149,8 +150,18 @@ const Upload = () => {
     const [bqNumber, setBqNumber] = useState("");
     const [relation, setRelation] = useState({value: null, label: ""});
     const [project, setProject] = useState({value: null, label: ""});
-    const [foreignSku, setForeignSku] = useState("");
+    const [missingForeignSkuVariants, setMissingForeignSkuVariants] = useState([]);
     const handleMonthChange = useCallback((month, year) => setDate({month, year}), []);
+
+    function _setMissingForeignSkuVariants(sku, isMissing) {
+        if (isMissing) {
+            if (missingForeignSkuVariants.indexOf(sku) === -1) {
+                setMissingForeignSkuVariants([...missingForeignSkuVariants, sku]);
+            }
+        } else if (missingForeignSkuVariants.indexOf(sku) !== -1) {
+            setMissingForeignSkuVariants([...missingForeignSkuVariants.filter(v => v != sku)])
+        }
+    }
 
     useEffect(() => {
         fetchProduct();
@@ -211,11 +222,6 @@ const Upload = () => {
 
     function onBqNumberChange(input) {
         setBqNumber(input);
-        setTouched(true);
-    }
-
-    function onForeignSkuChange(input) {
-        setForeignSku(input);
         setTouched(true);
     }
 
@@ -305,11 +311,6 @@ const Upload = () => {
         formData.append("supplierid", supplier.value);
         if (mappedFields["supplierid"]) {
             formData.append("suppliermetaid", String(mappedFields["supplierid"]));
-        }
-
-        formData.append("foreignsku", foreignSku);
-        if (mappedFields["foreignSku"]) {
-            formData.append("foreignskuid", String(mappedFields["foreignSku"]));
         }
 
         formData.append("hidden", hidden ? "1" : "0");
@@ -418,12 +419,6 @@ const Upload = () => {
             setHiddenZenit(mappedFields["hiddenZenit"] == "1" ? true : false);
         } else {
             setHiddenZenit(false);
-        }
-
-        if (mappedFields["foreignSku"]) {
-            setForeignSku(mappedFields["foreignSku"]);
-        } else {
-            setForeignSku("");
         }
 
         if (mappedFields["bqnumber"]) {
@@ -542,26 +537,33 @@ const Upload = () => {
     }
 
     function renderSupplierNote() {
-        console.log("renderSupplierNote", supplier, foreignSku);
         const missingFields = [];
         if (!supplier || !supplier.value) {
             missingFields.push("Lieferantennummer");
         }
-        if (!foreignSku) {
-            missingFields.push("Fremdartikelnummer");
-        }
-        console.log("missingFields", missingFields)
 
         if (missingFields.length) {
             return (
-                <Stack>
-                    <Badge status="warning">{missingFields.join(", ")} {missingFields.length > 1 ? "fehlen" : "fehlt"}</Badge>
-                    <TextContainer>
-                        <p>
-                            <TextStyle variation="subdued">Das Produkt kann nicht mit Zenit synchronisiert werden</TextStyle>
-                        </p>
-                    </TextContainer>
-                </Stack>
+                <>
+                    <Stack>
+                        <Badge status="warning">Lieferantennummer fehlt</Badge>
+                        <TextContainer>
+                            <p>
+                                <TextStyle variation="subdued">Das Produkt kann nicht mit Zenit synchronisiert werden.</TextStyle>
+                            </p>
+                        </TextContainer>
+                    </Stack>
+                    {missingForeignSkuVariants.length > 0 && (
+                        <Stack>
+                            <Badge status="warning">{missingForeignSkuVariants.join(", ")}</Badge>
+                            <TextContainer>
+                                <p>
+                                    <TextStyle variation="subdued">Fremdartikelnummer fehlt. Variante kann nicht mit Zenit synchronisiert werden.</TextStyle>
+                                </p>
+                            </TextContainer>
+                        </Stack>
+                    )}
+                </>
             );
         }
 
@@ -681,7 +683,13 @@ const Upload = () => {
                             </p>
                         </Card>
                         <Card sectioned title={"Varianten"}>
-                            <VariantList existingProduct={existingProduct}/>
+                            <ProductContext.Provider value={{
+                                product: existingProduct?.product,
+                                supplier: supplier,
+                                setMissingForeignSkuVariants: _setMissingForeignSkuVariants
+                            }}>
+                                <VariantList existingProduct={existingProduct}/>
+                            </ProductContext.Provider>
                         </Card>
                         {renderExistingProduct()}
                         <Card sectioned title={"Upload Dateianhang"}>
@@ -703,7 +711,6 @@ const Upload = () => {
                             />
                         </Card>
                         <Card sectioned title={"Lieferant/Fremdartikelnummer"}>
-                            <TextField label="Fremdartikelnummer" disabled={isLoading} value={foreignSku} onChange={onForeignSkuChange}/>
                             <Select
                                 label="Lieferantennummer"
                                 options={supplierOptions}

@@ -1,11 +1,16 @@
+import React, {useState, useEffect, useCallback, useContext} from "react";
 import {ResourceList, TextStyle, ButtonGroup, Button, TextField, Badge} from "@shopify/polaris";
-import React, {useState, useEffect, useCallback} from "react";
+
+import {ProductContext} from "../form/ProductContext";
 
 const VariantItem = ({item}) => {
+    const {product, supplier, setMissingForeignSkuVariants} = useContext(ProductContext);
+    console.log("productContext", product, supplier)
     const {node: {id, image, metafields, price, sku, title}} = item;
 
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(null);
+    const [missingForeignSku, setMissingForeignSku] = useState(false);
 
     const [priceInput, setPriceInput] = useState("");
     const [priceInputMetafield, setPriceInputMetafield] = useState(null);
@@ -15,6 +20,9 @@ const VariantItem = ({item}) => {
 
     const [subSkuInput, setSubSkuInput] = useState("");
     const [subSkuMetafieldInput, setSubSkuInputMetafield] = useState(null);
+
+    const [foreignSku, setForeignSku] = useState("");
+    const [foreignSkuMetafield, setForeignSkuMetafield] = useState("");
 
     useEffect(() => {
         if (typeof window === "undefined") {
@@ -35,6 +43,10 @@ const VariantItem = ({item}) => {
                     setAlertInventoryCountMetafield(edge);
                     setAlertInventoryCount(edge.node.value);
                 }
+                if (edge.node.key === "foreignSku") {
+                    setForeignSkuMetafield(edge);
+                    setForeignSku(edge.node.value);
+                }
             });
         }
     }, []);
@@ -50,9 +62,13 @@ const VariantItem = ({item}) => {
     }
 
     function onAlertInventoryCountChange(input) {
-        console.log("onAlertInventoryCountChange", input);
         setSuccess(null);
         setAlertInventoryCount(input);
+    }
+
+    function onForeignSkuChange(input) {
+        setSuccess(null);
+        setForeignSku(input);
     }
 
     function save() {
@@ -63,7 +79,8 @@ const VariantItem = ({item}) => {
         let data = {
             subPrice: priceInput,
             subSku: subSkuInput,
-            alertInventoryCount: alertInventoryCount
+            alertInventoryCount: alertInventoryCount,
+            foreignSku: foreignSku
         };
 
         if (priceInputMetafield) {
@@ -78,6 +95,10 @@ const VariantItem = ({item}) => {
             data.alertInventoryCountId = alertInventoryCountMetafield.node.id;
         }
 
+        if (foreignSkuMetafield) {
+            data.foreignSkuId = foreignSkuMetafield.node.id;
+        }
+
         try {
             fetch("/product/variant/save/" + id.replace("gid://shopify/ProductVariant/", ""), {
                 method: "post",
@@ -86,6 +107,16 @@ const VariantItem = ({item}) => {
                 },
                 body: JSON.stringify(data)
             }).then(res => res.json()).then(res => {
+                const supplierId = supplier?.value || "";
+                const isNonDigitalSupplier = (supplierId !== "000013") && (supplierId !== "000014");
+
+                if (!foreignSku && isNonDigitalSupplier) {
+                    setMissingForeignSku(true);
+                    setMissingForeignSkuVariants(sku, true);
+                } else {
+                    setMissingForeignSku(false);
+                    setMissingForeignSkuVariants(sku, false);
+                }
                 setSuccess(true);
             }).catch(err => {
                 setSuccess(false);
@@ -93,6 +124,14 @@ const VariantItem = ({item}) => {
         } catch (e) {
             console.log(e);
         }
+    }
+
+    function renderSyncState() {
+        if (missingForeignSku) {
+            return <Badge status="warning">Fremdartikelnummer fehlt</Badge>;
+        }
+
+        return null;
     }
 
     return (
@@ -110,6 +149,7 @@ const VariantItem = ({item}) => {
                             <h3>
                                 <TextStyle variation="strong">{title} ({sku})</TextStyle>
                                 <span style={{paddingLeft: "7px"}}></span>
+                                {renderSyncState()}
                                 {success !== null && (
                                     <Badge status={success ? "success" : "error"}>
                                         {success ? "gespeichert" : "Fehler aufgetreten"}
@@ -144,6 +184,7 @@ const VariantItem = ({item}) => {
                                 min={0}
                                 onChange={onAlertInventoryCountChange.bind(this)}
                             />
+                            <TextField label="Fremdartikelnummer" disabled={loading} value={foreignSku} onChange={onForeignSkuChange}/>
                         </div>
                         <div style={{marginTop: "10px"}}>
                             <ButtonGroup>

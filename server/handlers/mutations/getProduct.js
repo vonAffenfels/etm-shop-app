@@ -30,7 +30,7 @@ const getProduct = async (client, id) => {
                                     image {
                                         transformedSrc(maxHeight: 50, maxWidth: 50, preferredContentType: WEBP)
                                     }
-                                    metafields(first: 3) {
+                                    metafields(first: 4) {
                                         edges {
                                             node {
                                                 id
