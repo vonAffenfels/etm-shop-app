@@ -681,6 +681,27 @@ const Upload = () => {
                                 </TextContainer>
                             </p>
                         </Card>
+                        <Card sectioned title={"Lieferant/Fremdartikelnummer"}>
+                            <Select
+                                label="Lieferantennummer"
+                                options={supplierOptions}
+                                onChange={handleSupplierChange.bind(this)}
+                                value={supplier.value}
+                                disabled={isLoading}
+                            />
+                            <p>
+                                <br/>
+                                <TextContainer>
+                                    {supplier.value && (
+                                        <p>
+                                            <br/>
+                                            <TextStyle
+                                                variation="subdued">{supplier.value} {supplier.label} ({supplier.short})</TextStyle>
+                                        </p>
+                                    )}
+                                </TextContainer>
+                            </p>
+                        </Card>
                         <Card sectioned title={"Varianten"}>
                             <ProductContext.Provider value={{
                                 product: existingProduct?.product,
@@ -708,27 +729,6 @@ const Upload = () => {
                                 selected={uploadDate}
                                 disabled={isLoading}
                             />
-                        </Card>
-                        <Card sectioned title={"Lieferant/Fremdartikelnummer"}>
-                            <Select
-                                label="Lieferantennummer"
-                                options={supplierOptions}
-                                onChange={handleSupplierChange.bind(this)}
-                                value={supplier.value}
-                                disabled={isLoading}
-                            />
-                            <p>
-                                <br/>
-                                <TextContainer>
-                                    {supplier.value && (
-                                        <p>
-                                            <br/>
-                                            <TextStyle
-                                                variation="subdued">{supplier.value} {supplier.label} ({supplier.short})</TextStyle>
-                                        </p>
-                                    )}
-                                </TextContainer>
-                            </p>
                         </Card>
                     </Layout.Section>
                 </Layout>
