@@ -288,8 +288,6 @@ const Upload = () => {
             });
         }
 
-        console.log("mappedFields", mappedFields)
-
         if (files.length) {
             formData.append("file", files[0]);
             if (mappedFields["filename"]) {
@@ -381,9 +379,6 @@ const Upload = () => {
                 mappedFields[node.key] = node.value;
             });
         }
-
-        console.log("data.product", data.product)
-        console.log("getInitialFormValues, mappedFields:", mappedFields);
 
         if (mappedFields["downloaddate"]) {
             setUploadDate({
@@ -595,7 +590,6 @@ const Upload = () => {
         return retVal;
     }
 
-    console.log(existingProduct)
     return (
         <Frame>
             <Page

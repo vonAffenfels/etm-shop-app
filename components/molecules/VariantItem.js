@@ -110,6 +110,8 @@ const VariantItem = ({item}) => {
                 const supplierId = supplier?.value || "";
                 const isNonDigitalSupplier = (supplierId !== "000013") && (supplierId !== "000014");
 
+                console.log("foreignSku", foreignSku, "isNonDigitalSupplier", isNonDigitalSupplier, "sku", sku)
+
                 if (!foreignSku && isNonDigitalSupplier) {
                     setMissingForeignSku(true);
                     setMissingForeignSkuVariants(sku, true);
