@@ -49,6 +49,8 @@ const VariantItem = ({item}) => {
                 }
             });
         }
+
+        setExternalSku();
     }, []);
 
     function onPriceChange(input) {
@@ -107,24 +109,26 @@ const VariantItem = ({item}) => {
                 },
                 body: JSON.stringify(data)
             }).then(res => res.json()).then(res => {
-                const supplierId = supplier?.value || "";
-                const isNonDigitalSupplier = (supplierId !== "000013") && (supplierId !== "000014");
-
-                console.log("foreignSku", foreignSku, "isNonDigitalSupplier", isNonDigitalSupplier, "sku", sku)
-
-                if (!foreignSku && isNonDigitalSupplier) {
-                    setMissingForeignSku(true);
-                    setMissingForeignSkuVariants(sku, true);
-                } else {
-                    setMissingForeignSku(false);
-                    setMissingForeignSkuVariants(sku, false);
-                }
+                setExternalSku();
                 setSuccess(true);
             }).catch(err => {
                 setSuccess(false);
             });
         } catch (e) {
             console.log(e);
+        }
+    }
+
+    function setExternalSku() {
+        const supplierId = supplier?.value || "";
+        const isNonDigitalSupplier = (supplierId !== "000013") && (supplierId !== "000014");
+
+        if (!foreignSku && isNonDigitalSupplier) {
+            setMissingForeignSku(true);
+            setMissingForeignSkuVariants(sku, true);
+        } else {
+            setMissingForeignSku(false);
+            setMissingForeignSkuVariants(sku, false);
         }
     }
 
