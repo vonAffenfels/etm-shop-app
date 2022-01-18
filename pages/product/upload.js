@@ -154,6 +154,7 @@ const Upload = () => {
     const handleMonthChange = useCallback((month, year) => setDate({month, year}), []);
 
     function _setMissingForeignSkuVariants(sku, isMissing) {
+        console.log("_setMissingForeignSkuVariants", sku, isMissing);
         if (isMissing) {
             if (missingForeignSkuVariants.indexOf(sku) === -1) {
                 setMissingForeignSkuVariants([...missingForeignSkuVariants, sku]);
@@ -541,6 +542,7 @@ const Upload = () => {
         if (!supplier || !supplier.value) {
             missingFields.push("Lieferantennummer");
         }
+        console.log("renderSupplierNote", missingForeignSkuVariants)
 
         if (missingFields.length) {
             return (
@@ -553,7 +555,7 @@ const Upload = () => {
                             </p>
                         </TextContainer>
                     </Stack>
-                    {missingForeignSkuVariants.length > 0 && (
+                    {(missingForeignSkuVariants.length > 0) && (
                         <Stack>
                             <Badge status="warning">{missingForeignSkuVariants.join(", ")}</Badge>
                             <TextContainer>
