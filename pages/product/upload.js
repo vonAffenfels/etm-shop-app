@@ -380,6 +380,8 @@ const Upload = () => {
             });
         }
 
+        console.log("mappedFields", mappedFields);
+
         if (mappedFields["downloaddate"]) {
             setUploadDate({
                 start: new Date(mappedFields["downloaddate"]),
@@ -391,6 +393,7 @@ const Upload = () => {
 
         if (mappedFields["supplierid"]) {
             supplierOptions.forEach((supplierOption) => {
+                console.log("supplierOption", supplierOption);
                 if (supplierOption.value === mappedFields["supplierid"]) {
                     setSupplier(supplierOption);
                 }

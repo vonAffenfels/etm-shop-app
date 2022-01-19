@@ -49,9 +49,11 @@ const VariantItem = ({item}) => {
                 }
             });
         }
-
-        setExternalSku();
     }, []);
+
+    useEffect(() => {
+        setExternalSku();
+    }, [foreignSku]);
 
     function onPriceChange(input) {
         setSuccess(null);
@@ -109,7 +111,6 @@ const VariantItem = ({item}) => {
                 },
                 body: JSON.stringify(data)
             }).then(res => res.json()).then(res => {
-                setExternalSku();
                 setSuccess(true);
             }).catch(err => {
                 setSuccess(false);
