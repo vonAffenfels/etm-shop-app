@@ -154,7 +154,6 @@ const Upload = () => {
     const handleMonthChange = useCallback((month, year) => setDate({month, year}), []);
 
     function _setMissingForeignSkuVariants(sku, isMissing) {
-        console.log("_setMissingForeignSkuVariants", sku, isMissing);
         if (isMissing) {
             if (missingForeignSkuVariants.indexOf(sku) === -1) {
                 setMissingForeignSkuVariants([...missingForeignSkuVariants, sku]);
@@ -380,8 +379,6 @@ const Upload = () => {
             });
         }
 
-        console.log("mappedFields", mappedFields);
-
         if (mappedFields["downloaddate"]) {
             setUploadDate({
                 start: new Date(mappedFields["downloaddate"]),
@@ -391,10 +388,13 @@ const Upload = () => {
             setUploadDate(null);
         }
 
-        if (mappedFields["supplierid"]) {
+        let supplierId = mappedFields["supplierid"];
+        if (supplierId) {
+            while (String(supplierId).length < 6) {
+                supplierId = "0" + supplierId;
+            }
             supplierOptions.forEach((supplierOption) => {
-                console.log("supplierOption", supplierOption);
-                if (supplierOption.value === mappedFields["supplierid"]) {
+                if (supplierOption.value === supplierId) {
                     setSupplier(supplierOption);
                 }
             });
@@ -540,7 +540,6 @@ const Upload = () => {
         if (!supplier || !supplier.value) {
             missingFields.push("Lieferantennummer");
         }
-        console.log("renderSupplierNote", missingForeignSkuVariants)
 
         if (missingFields.length) {
             return (
