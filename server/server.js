@@ -7,6 +7,7 @@ import "isomorphic-fetch";
 import createShopifyAuth, {verifyRequest} from "@shopify/koa-shopify-auth";
 import Shopify, {ApiVersion} from "@shopify/shopify-api";
 import {createClient, updateProduct, updateProductVariant, removeMetafield, getProduct, getProductBySku} from "./handlers/index";
+import {getProductBySkuQueryString} from "./handlers/mutations/getProduct";
 import Koa from "koa";
 import next from "next";
 import Router from "koa-router";
@@ -545,6 +546,25 @@ app.prepare().then(async () => {
 
         try {
             const res = await getProductBySku(client, `sku:${sku}`);
+
+            console.log("hallo")
+            const rezz = await fetch(process.env.TOKEN_API + "/shopify-api/graph-ql/", {
+                method: "post",
+                body: JSON.stringify({
+                    query: getProductBySkuQueryString(),
+                    variables: {
+                        query: `sku:${sku}`
+                    }
+                }),
+                headers: {
+                    "Content-Type": "application/json",
+                    "x-ape-rock-super-secret": process.env.TOKEN_API_SECRET
+                }
+            });
+            const respi = await rezz.json();
+            console.log(respi)
+            console.log("hallo2")
+
             ctx.body = res.data;
         } catch (e) {
             console.log(e);
