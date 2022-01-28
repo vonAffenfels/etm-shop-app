@@ -154,7 +154,7 @@ app.prepare().then(async () => {
             id: shopifyId
         });
 
-        if (!res.data || !res.data.product) {
+        if (!res || !res.product) {
             ctx.res.status = 404;
             ctx.body = {
                 error: "no product found for id " + shopifyId
@@ -162,7 +162,7 @@ app.prepare().then(async () => {
             return;
         }
 
-        const metafields = res.data.product.metafields;
+        const metafields = res.product.metafields;
 
         if (!metafields || !metafields.edges || !metafields.edges.length) {
             ctx.res.status = 404;
@@ -226,14 +226,14 @@ app.prepare().then(async () => {
         });
         console.log("gotProduct", !!res)
 
-        if (!res.data || !res.data.product) {
+        if (!res || !res.product) {
             ctx.res.status = 404;
             ctx.body = "no product found for id " + shopifyId;
             console.log("no product found for id " + shopifyId)
             return;
         }
 
-        const metafields = res.data.product.metafields;
+        const metafields = res.product.metafields;
 
         if (!metafields || !metafields.edges || !metafields.edges.length) {
             ctx.res.status = 404;
@@ -711,8 +711,8 @@ app.prepare().then(async () => {
                 id: shopifyId
             });
             console.log("res", res)
-            res.data.shopUrl = process.env.TOKEN_API + "/" + speakingurl("shop-" + res.data?.product?.title) + "/" + productId + "/";
-            ctx.body = res.data;
+            res.shopUrl = process.env.TOKEN_API + "/" + speakingurl("shop-" + res?.product?.title) + "/" + productId + "/";
+            ctx.body = res;
         } catch (e) {
             console.log(e);
             ctx.body = {
