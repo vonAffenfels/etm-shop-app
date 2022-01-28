@@ -7,7 +7,7 @@ import "isomorphic-fetch";
 import createShopifyAuth, {verifyRequest} from "@shopify/koa-shopify-auth";
 import Shopify, {ApiVersion} from "@shopify/shopify-api";
 import {createClient, updateProduct, updateProductVariant, removeMetafield, getProduct, getProductBySku} from "./handlers/index";
-import {getProductBySkuQueryString} from "./handlers/mutations/getProduct";
+import {getProductBySkuQueryString} from "./handlers/mutations/getProductBySku";
 import Koa from "koa";
 import next from "next";
 import Router from "koa-router";
