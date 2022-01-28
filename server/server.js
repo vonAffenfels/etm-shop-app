@@ -6,8 +6,7 @@ import dotenv from "dotenv";
 import "isomorphic-fetch";
 import createShopifyAuth, {verifyRequest} from "@shopify/koa-shopify-auth";
 import Shopify, {ApiVersion} from "@shopify/shopify-api";
-import {createClient, updateProduct, updateProductVariant, removeMetafield, getProduct, getProductBySku} from "./handlers/index";
-import {getProductBySkuQueryString} from "./handlers/mutations/getProductBySku";
+import {request, updateProduct, updateProductVariant, removeMetafield, getProduct, getProductBySku} from "./handlers/index";
 import Koa from "koa";
 import next from "next";
 import Router from "koa-router";
@@ -25,7 +24,6 @@ const app = next({
 });
 const handle = app.getRequestHandler();
 const aws = new AWSService();
-const client = createClient(process.env.SHOP, process.env.ETM_SHOPIFY_KEY, process.env.ETM_SHOPIFY_PASSWORD);
 
 Shopify.Context.initialize({
     API_KEY: process.env.SHOPIFY_API_KEY,
@@ -125,7 +123,12 @@ app.prepare().then(async () => {
             };
         }
 
-        await removeMetafield(client, "gid://shopify/Metafield/" + id);
+        // await removeMetafield(client, );
+        await request(removeMetafield(), {
+            input: {
+                id: "gid://shopify/Metafield/" + id
+            }
+        })
 
         ctx.res.status = 200;
         ctx.body = {
@@ -146,7 +149,10 @@ app.prepare().then(async () => {
 
         // const productId = Buffer.from(productHash, "hex").toString();
         const shopifyId = "gid://shopify/Product/" + productId;
-        const res = await getProduct(client, shopifyId);
+        // const res = await getProduct(client, shopifyId);
+        const res = await request(getProduct(), {
+            id: shopifyId
+        });
 
         if (!res.data || !res.data.product) {
             ctx.res.status = 404;
@@ -214,7 +220,10 @@ app.prepare().then(async () => {
 
         // const productId = Buffer.from(productHash, "hex").toString();
         const shopifyId = "gid://shopify/Product/" + productId;
-        const res = await getProduct(client, shopifyId);
+        // const res = await getProduct(client, shopifyId);
+        const res = await request(getProduct(), {
+            id: shopifyId
+        });
         console.log("gotProduct", !!res)
 
         if (!res.data || !res.data.product) {
@@ -298,7 +307,12 @@ app.prepare().then(async () => {
                 }
                 metafields.push(metafield);
             } else if (subPriceId) {
-                await removeMetafield(client, subPriceId);
+                // await removeMetafield(client, subPriceId);
+                await request(removeMetafield(), {
+                    input: {
+                        id: subPriceId
+                    }
+                });
             }
 
             if (subSku) {
@@ -314,7 +328,11 @@ app.prepare().then(async () => {
                 }
                 metafields.push(metafield);
             } else if (subSkuId) {
-                await removeMetafield(client, subPriceId)
+                await request(removeMetafield(), {
+                    input: {
+                        id: subSkuId
+                    }
+                });
             }
 
             if (parseInt(alertInventoryCount)) {
@@ -330,7 +348,11 @@ app.prepare().then(async () => {
                 }
                 metafields.push(metafield);
             } else if (alertInventoryCountId) {
-                await removeMetafield(client, alertInventoryCountId)
+                await request(removeMetafield(), {
+                    input: {
+                        id: alertInventoryCountId
+                    }
+                });
             }
 
             if (foreignSku) {
@@ -346,11 +368,21 @@ app.prepare().then(async () => {
                 }
                 metafields.push(metafield);
             } else if (foreignSkuId) {
-                await removeMetafield(foreignSkuId);
+                await request(removeMetafield(), {
+                    input: {
+                        id: foreignSkuId
+                    }
+                });
             }
 
             if (metafields.length) {
-                await updateProductVariant(client, shopifyId, metafields);
+                // await updateProductVariant(client, shopifyId, metafields);
+                await request(updateProductVariant(), {
+                    input: {
+                        id: shopifyId,
+                        metafields: metafields
+                    }
+                });
             }
             ctx.body = {success: true};
 
@@ -401,7 +433,11 @@ app.prepare().then(async () => {
                 ctx.body = e.toString();
             }
         } else if (body.downloads) {
-            await removeMetafield(client, body.downloads);
+            await request(removeMetafield(), {
+                input: {
+                    id: body.downloads
+                }
+            });
         }
 
         if (body.downloaddate) {
@@ -417,7 +453,11 @@ app.prepare().then(async () => {
             }
             metafields.push(metafield);
         } else if (body.downloaddateid) {
-            await removeMetafield(client, body.downloaddateid);
+            await request(removeMetafield(), {
+                input: {
+                    id: body.downloaddateid
+                }
+            });
         }
 
         if (body.supplierid && body.supplierid !== "null") {
@@ -433,7 +473,11 @@ app.prepare().then(async () => {
             }
             metafields.push(metafield);
         } else if (body.suppliermetaid) {
-            await removeMetafield(client, body.suppliermetaid);
+            await request(removeMetafield(), {
+                input: {
+                    id: body.suppliermetaid
+                }
+            });
         }
 
         if (body.hinttext) {
@@ -449,7 +493,11 @@ app.prepare().then(async () => {
             }
             metafields.push(metafield);
         } else if (body.hinttextid) {
-            await removeMetafield(client, body.hinttextid);
+            await request(removeMetafield(), {
+                input: {
+                    id: body.hinttextid
+                }
+            });
         }
 
         if (body.hidden === "0" || body.hidden === "1") {
@@ -493,7 +541,11 @@ app.prepare().then(async () => {
             }
             metafields.push(metafield);
         } else if (body.bqnumberid) {
-            await removeMetafield(client, body.bqnumberid);
+            await request(removeMetafield(), {
+                input: {
+                    id: body.bqnumberid
+                }
+            });
         }
 
         if (body.bqrelation && body.bqrelation !== "null") {
@@ -509,7 +561,11 @@ app.prepare().then(async () => {
             }
             metafields.push(metafield);
         } else if (body.bqrelationid) {
-            await removeMetafield(client, body.bqrelationid);
+            await request(removeMetafield(), {
+                input: {
+                    id: body.bqrelationid
+                }
+            });
         }
 
         if (body.project && body.project !== "null") {
@@ -525,12 +581,20 @@ app.prepare().then(async () => {
             }
             metafields.push(metafield);
         } else if (body.projectid) {
-            await removeMetafield(client, body.projectid);
+            await request(removeMetafield(), {
+                input: {
+                    id: body.projectid
+                }
+            });
         }
 
         if (metafields.length) {
-            console.log(metafields)
-            const res = await updateProduct(client, shopifyId, metafields);
+            await request(updateProduct(), {
+                input: {
+                    id: shopifyId,
+                    metafields: metafields
+                }
+            });
         }
         ctx.body = "ok";
     });
@@ -545,27 +609,11 @@ app.prepare().then(async () => {
         }
 
         try {
-            const res = await getProductBySku(client, `sku:${sku}`);
-
-            console.log("hallo")
-            const rezz = await fetch(process.env.TOKEN_API + "/shopify-api/graph-ql/", {
-                method: "post",
-                body: JSON.stringify({
-                    query: getProductBySkuQueryString(),
-                    variables: {
-                        query: `sku:${sku}`
-                    }
-                }),
-                headers: {
-                    "Content-Type": "application/json",
-                    "x-ape-rock-super-secret": process.env.TOKEN_API_SECRET
-                }
+            const data = request(getProductBySku(), {
+                query: `sku:${sku}`
             });
-            const respi = await rezz.json();
-            console.log(respi)
-            console.log("hallo2")
 
-            ctx.body = res.data;
+            ctx.body = data;
         } catch (e) {
             console.log(e);
             ctx.body = {
@@ -658,7 +706,11 @@ app.prepare().then(async () => {
 
         try {
             console.log("FETCH PRODUCT", shopifyId)
-            const res = await getProduct(client, shopifyId);
+            // const res = await getProduct(client, shopifyId);
+            const res = await request(getProduct(), {
+                id: shopifyId
+            });
+            console.log("res", res)
             res.data.shopUrl = process.env.TOKEN_API + "/" + speakingurl("shop-" + res.data?.product?.title) + "/" + productId + "/";
             ctx.body = res.data;
         } catch (e) {
