@@ -123,7 +123,6 @@ app.prepare().then(async () => {
             };
         }
 
-        // await removeMetafield(client, );
         await request(removeMetafield(), {
             input: {
                 id: "gid://shopify/Metafield/" + id
@@ -147,9 +146,7 @@ app.prepare().then(async () => {
             return;
         }
 
-        // const productId = Buffer.from(productHash, "hex").toString();
         const shopifyId = "gid://shopify/Product/" + productId;
-        // const res = await getProduct(client, shopifyId);
         const res = await request(getProduct(), {
             id: shopifyId
         });
@@ -210,26 +207,20 @@ app.prepare().then(async () => {
     router.get("/product/download/:productId", async (ctx, next) => {
         const {productId} = ctx.params;
 
-        console.log("/product/download called for", productId);
-
         if (!productId) {
             ctx.res.status = 400;
             ctx.body = "productId missing";
             return;
         }
 
-        // const productId = Buffer.from(productHash, "hex").toString();
         const shopifyId = "gid://shopify/Product/" + productId;
-        // const res = await getProduct(client, shopifyId);
         const res = await request(getProduct(), {
             id: shopifyId
         });
-        console.log("gotProduct", !!res)
 
         if (!res || !res.product) {
             ctx.res.status = 404;
             ctx.body = "no product found for id " + shopifyId;
-            console.log("no product found for id " + shopifyId)
             return;
         }
 
@@ -287,7 +278,6 @@ app.prepare().then(async () => {
 
     router.post("/product/variant/save/:productVariantId", KoaBody(), async (ctx, next) => {
         const {productVariantId} = ctx.params;
-        console.log("body", ctx.request.body)
 
         const shopifyId = "gid://shopify/ProductVariant/" + productVariantId;
         const {subPrice, subSku, subPriceId, subSkuId, alertInventoryCount, alertInventoryCountId, foreignSku, foreignSkuId} = ctx.request.body;
@@ -307,7 +297,6 @@ app.prepare().then(async () => {
                 }
                 metafields.push(metafield);
             } else if (subPriceId) {
-                // await removeMetafield(client, subPriceId);
                 await request(removeMetafield(), {
                     input: {
                         id: subPriceId
@@ -376,7 +365,6 @@ app.prepare().then(async () => {
             }
 
             if (metafields.length) {
-                // await updateProductVariant(client, shopifyId, metafields);
                 await request(updateProductVariant(), {
                     input: {
                         id: shopifyId,
@@ -398,8 +386,6 @@ app.prepare().then(async () => {
         const {productId} = ctx.params;
         const body = ctx.request.body;
         const file = ctx.request.files?.file;
-
-        console.log("body", JSON.stringify(body, null, 3))
 
         if (!productId) {
             ctx.res.status = 400;
@@ -705,12 +691,9 @@ app.prepare().then(async () => {
         const shopifyId = "gid://shopify/Product/" + productId;
 
         try {
-            console.log("FETCH PRODUCT", shopifyId)
-            // const res = await getProduct(client, shopifyId);
             const res = await request(getProduct(), {
                 id: shopifyId
             });
-            console.log("res", res)
             res.shopUrl = process.env.TOKEN_API + "/" + speakingurl("shop-" + res?.product?.title) + "/" + productId + "/";
             ctx.body = res;
         } catch (e) {
