@@ -1,6 +1,6 @@
 import gql from "graphql-tag";
 
-const getProduct = async (client, id) => {
+const getProduct = () => {
     return gql`
         query($id:ID!) {
             product(id:$id) {

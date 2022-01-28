@@ -1,6 +1,6 @@
 import gql from "graphql-tag";
 
-const updateProductVariant = async (client, id, metafields) => {
+const updateProductVariant = () => {
     return gql`
         mutation productVariantUpdate($input: ProductVariantInput!) {
             productVariantUpdate(input: $input) {

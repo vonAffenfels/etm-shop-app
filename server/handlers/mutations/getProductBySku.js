@@ -1,6 +1,6 @@
 import gql from "graphql-tag";
 
-const getProductBySku = async (client, query) => {
+const getProductBySku = () => {
     return gql`
         query($query:String!) {
             productVariants(query:$query, first: 15) {

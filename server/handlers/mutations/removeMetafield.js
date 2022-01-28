@@ -1,7 +1,7 @@
 import gql from "graphql-tag";
 
-const removeMetafield = async (client, id) => {
-    gql`
+const removeMetafield = () => {
+    return gql`
         mutation metafieldDelete($input: MetafieldDeleteInput!) {
             metafieldDelete(input: $input) {
                 deletedId
