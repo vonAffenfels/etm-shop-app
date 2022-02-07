@@ -183,8 +183,9 @@ const VariantItemLazy = ({item}) => {
                         <div>
                             <h3>
                                 <TextStyle variation="strong">{title} ({sku})</TextStyle>
-                                <span style={{paddingLeft: "7px"}}></span>
-                                <Button onClick={handleToggle}>{isOpen ? "Schließen" : "Öffnen"}</Button>
+                                <div style={{float: "right", marginTop: "-5px"}}>
+                                    <Button onClick={handleToggle}>{isOpen ? "Schließen" : "Öffnen"}</Button>
+                                </div>
                                 {detailData && isOpen && (
                                     <>
                                         <span style={{paddingLeft: "7px"}}></span>
