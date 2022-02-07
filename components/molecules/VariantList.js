@@ -7,15 +7,11 @@ const VariantList = ({existingProduct}) => {
         return null;
     }
 
-    // const variants = existingProduct.product.variants;
-    //
-    // if (!variants || !variants.edges || !variants.edges.length) {
-    //     return null;
-    // }
-    const variants = {
-        edges: []
-    };
-    console.log(existingProduct)
+    const variants = existingProduct.product.variants;
+
+    if (!variants || !variants.edges || !variants.edges.length) {
+        return null;
+    }
 
     return (
         <div className="Polaris-ResourceList__ResourceListWrapper">
@@ -25,7 +21,7 @@ const VariantList = ({existingProduct}) => {
                     <div>
                         <div className="Polaris-ResourceList__HeaderWrapper">
                             <div className="Polaris-ResourceList__HeaderContentWrapper">
-                                <div className="Polaris-ResourceList__HeaderTitleWrapper">{variants.edges.length} Varianten {existingProduct.product.totalVariants}</div>
+                                <div className="Polaris-ResourceList__HeaderTitleWrapper">{existingProduct.product.totalVariants} Varianten</div>
                             </div>
                         </div>
                     </div>
