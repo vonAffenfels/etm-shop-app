@@ -1,6 +1,7 @@
 import {createClient} from "./client";
 import getProduct from "./mutations/getProduct";
 import getProductBySku from "./mutations/getProductBySku";
+import getVariants, {getVariantsSmall} from "./mutations/getVariants";
 import updateProduct from "./mutations/updateProduct";
 import updateProductVariant from "./mutations/updateProductVariant";
 import removeMetafield from "./mutations/removeMetafield";
@@ -22,4 +23,4 @@ async function request(query, variables) {
     return res.json();
 }
 
-export {request, createClient, getProduct, getProductBySku, updateProduct, updateProductVariant, removeMetafield};
+export {request, createClient, getProduct, getProductBySku, getVariants, getVariantsSmall, updateProduct, updateProductVariant, removeMetafield};

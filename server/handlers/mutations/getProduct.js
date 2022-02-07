@@ -19,29 +19,6 @@ const getProduct = () => {
                     }
                 }
                 totalVariants
-                variants(first: 25) {
-                    edges {
-                        node {
-                            id
-                            price
-                            sku
-                            title
-                            image {
-                                transformedSrc(maxHeight: 50, maxWidth: 50, preferredContentType: WEBP)
-                            }
-                            metafields(first: 4) {
-                                edges {
-                                    node {
-                                        id
-                                        key
-                                        namespace
-                                        value
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
             }
         }
     `;

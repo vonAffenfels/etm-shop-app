@@ -6,7 +6,7 @@ import dotenv from "dotenv";
 import "isomorphic-fetch";
 import createShopifyAuth, {verifyRequest} from "@shopify/koa-shopify-auth";
 import Shopify, {ApiVersion} from "@shopify/shopify-api";
-import {request, updateProduct, updateProductVariant, removeMetafield, getProduct, getProductBySku} from "./handlers/index";
+import {request, updateProduct, updateProductVariant, removeMetafield, getProduct, getProductBySku, getVariants, getVariantsSmall} from "./handlers/index";
 import Koa from "koa";
 import next from "next";
 import Router from "koa-router";
@@ -380,6 +380,26 @@ app.prepare().then(async () => {
                 error: e.toString()
             }
         }
+    });
+
+    router.post("/product/variants/", async (ctx, next) => {
+        let {limit, cursor, productId, pkgSize} = ctx.request.body;
+        limit = parseInt(limit);
+
+        if (!limit || !productId) {
+            ctx.res.status = 400;
+            ctx.body = "productId missing";
+            return;
+        }
+
+        const result = await request(pkgSize === "small" ? getVariantsSmall() : getVariants(), {
+            limit: limit,
+            cursor: cursor,
+            id: productId
+        });
+
+        ctx.res.status = 200;
+        ctx.body = result?.product?.variants;
     });
 
     router.post("/product/upload/:productId", KoaBody({multipart: true, keepExtensions: true}), async (ctx, next) => {

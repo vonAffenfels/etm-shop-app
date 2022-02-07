@@ -1,17 +1,52 @@
 import {ResourceList, TextStyle, ButtonGroup, Button, TextField} from "@shopify/polaris";
-import React, {useState, useEffect, useCallback} from "react";
-import VariantItem from "./VariantItem";
+import React, {useState, useEffect} from "react";
+import VariantItemSmall from "./VariantItemSmall";
+import {useRouter} from "next/router";
 
 const VariantList = ({existingProduct}) => {
+    const router = useRouter();
+    const productId = router.query.id;
+    const [variants, setVariants] = useState([]);
+
+    useEffect(() => {
+        if (existingProduct.product.totalVariants && variants.length < existingProduct.product.totalVariants) {
+            let lastVariant = null;
+            if (variants.length) {
+                lastVariant = {
+                    ...variants[variants.length - 1]
+                };
+            }
+            fetchVariants(5, lastVariant?.cursor);
+        }
+    }, [variants]);
+
     if (!existingProduct || !existingProduct.product) {
         return null;
     }
 
-    const variants = existingProduct.product.variants;
-
-    if (!variants || !variants.edges || !variants.edges.length) {
+    if (!existingProduct.product.totalVariants) {
         return null;
     }
+
+    const fetchVariants = async (limit, after) => {
+        try {
+            const data = await fetch("/product/variants/", {
+                method: "post",
+                body: {
+                    productId: productId,
+                    limit: limit,
+                    cursor: after,
+                    pkgSize: "small"
+                }
+            }).then(response => response.json());
+            console.log("data", data);
+            if (data.length) {
+                setVariants([...variants, ...data])
+            }
+        } catch (e) {
+            console.log(e)
+        }
+    };
 
     return (
         <div className="Polaris-ResourceList__ResourceListWrapper">
@@ -28,7 +63,7 @@ const VariantList = ({existingProduct}) => {
                 </div>
             </div>
             <ul className="Polaris-ResourceList">
-                {variants.edges.map((item) => <VariantItem item={item} />)}
+                {variants.map((item) => <VariantItemSmall item={item} />)}
             </ul>
         </div>
     );
