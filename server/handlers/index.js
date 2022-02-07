@@ -7,9 +7,6 @@ import removeMetafield from "./mutations/removeMetafield";
 import fetch from "node-fetch";
 
 async function request(query, variables) {
-    console.log("REQUEST:::");
-    console.log(query);
-    console.log(variables)
     const res = await fetch(process.env.TOKEN_API + "/shopify-api/graph-ql/", {
         method: "post",
         body: JSON.stringify({
@@ -21,8 +18,6 @@ async function request(query, variables) {
             "x-ape-rock-super-secret": process.env.TOKEN_API_SECRET
         }
     });
-    console.log("res", res)
-    console.log(res)
 
     return res.json();
 }
