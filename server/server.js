@@ -394,11 +394,16 @@ app.prepare().then(async () => {
             return;
         }
 
-        const result = await request(pkgSize === "small" ? getVariantsSmall() : getVariants(), {
+        let variables = {
             limit: limit,
-            cursor: cursor,
             id: productId
-        });
+        };
+
+        if (cursor) {
+            variables.cursor = cursor;
+        }
+
+        let result = await request(pkgSize === "small" ? getVariantsSmall() : getVariants(), variables);
 
         ctx.res.status = 200;
         ctx.body = result?.product?.variants;

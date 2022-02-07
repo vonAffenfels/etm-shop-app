@@ -34,17 +34,20 @@ const VariantList = ({existingProduct}) => {
     const fetchVariants = async (limit, after) => {
         try {
             console.log("fetchVariants")
-            const data = await fetch("/product/variants/", {
+            let body = {
+                productId: productId,
+                limit: limit,
+                pkgSize: "small"
+            };
+            if (after) {
+                body.cursor = after;
+            }
+            let data = await fetch("/product/variants/", {
                 method: "post",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({
-                    productId: productId,
-                    limit: limit,
-                    cursor: after,
-                    pkgSize: "small"
-                })
+                body: JSON.stringify(body)
             }).then(response => response.json());
             console.log("data", data);
             if (data.length) {
