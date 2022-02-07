@@ -403,10 +403,15 @@ app.prepare().then(async () => {
             variables.cursor = cursor;
         }
 
-        let result = await request(pkgSize === "small" ? getVariantsSmall() : getVariants(), variables);
+        try {
+            let result = await request(pkgSize === "small" ? getVariantsSmall() : getVariants(), variables);
+            console.log(result)
 
-        ctx.res.status = 200;
-        ctx.body = result?.product?.variants;
+            ctx.res.status = 200;
+            ctx.body = result?.product?.variants;
+        } catch (e) {
+            console.log(e)
+        }
     });
 
     router.post("/product/upload/:productId", KoaBody({multipart: true, keepExtensions: true}), async (ctx, next) => {
