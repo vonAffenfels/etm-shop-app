@@ -135,6 +135,8 @@ const VariantItemLazy = ({item}) => {
             if (data) {
                 setLoading(false);
                 setDetailData(detailData);
+            } else {
+                setDetailData({missing: true});
             }
         } catch (e) {
             console.log(e)
@@ -163,6 +165,9 @@ const VariantItemLazy = ({item}) => {
     }
 
     const handleToggle = useCallback(() => {
+        if (!isOpen && !detailData.price && !detailData.missing) {
+            loadDetails();
+        }
         setOpen((open) => !open);
     }, []);
 
