@@ -404,6 +404,7 @@ app.prepare().then(async () => {
         }
 
         try {
+            console.log(variables)
             let result = await request(pkgSize === "small" ? getVariantsSmall() : getVariants(), variables);
             console.log(result)
 
