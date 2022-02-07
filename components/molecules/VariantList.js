@@ -9,6 +9,12 @@ const VariantList = ({existingProduct}) => {
     const [variants, setVariants] = useState([]);
 
     useEffect(() => {
+        if (existingProduct?.product?.totalVariants) {
+            fetchVariants(5);
+        }
+    }, []);
+
+    useEffect(() => {
         if (existingProduct?.product?.totalVariants && (variants.length < existingProduct?.product?.totalVariants)) {
             let lastVariant = null;
             if (variants.length) {
@@ -20,11 +26,7 @@ const VariantList = ({existingProduct}) => {
         }
     }, [variants]);
 
-    if (!existingProduct || !existingProduct.product) {
-        return null;
-    }
-
-    if (!existingProduct.product.totalVariants) {
+    if (!existingProduct || !existingProduct.product || !existingProduct.product.totalVariants) {
         return null;
     }
 
