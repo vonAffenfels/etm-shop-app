@@ -383,9 +383,7 @@ app.prepare().then(async () => {
     });
 
     router.post("/product/variants/", KoaBody(), async (ctx, next) => {
-        console.log("ctx.request.body", ctx.request.body)
         let {limit, cursor, productId, pkgSize} = ctx.request.body;
-        console.log("limit, cursor, productId, pkgSize", limit, cursor, productId, pkgSize)
         limit = parseInt(limit);
 
         if (!limit || !productId) {
@@ -404,12 +402,10 @@ app.prepare().then(async () => {
         }
 
         try {
-            console.log(variables)
             let result = await request(pkgSize === "small" ? getVariantsSmall() : getVariants(), variables);
-            console.log(result)
 
             ctx.res.status = 200;
-            ctx.body = result?.product?.variants;
+            ctx.body = result?.product?.variants?.edges || [];
         } catch (e) {
             console.log(e)
         }
