@@ -36,12 +36,12 @@ const VariantList = ({existingProduct}) => {
             console.log("fetchVariants")
             const data = await fetch("/product/variants/", {
                 method: "post",
-                body: {
+                body: JSON.stringify({
                     productId: productId,
                     limit: limit,
                     cursor: after,
                     pkgSize: "small"
-                }
+                })
             }).then(response => response.json());
             console.log("data", data);
             if (data.length) {
