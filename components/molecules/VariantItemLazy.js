@@ -27,9 +27,8 @@ const VariantItemLazy = ({item}) => {
     const [foreignSku, setForeignSku] = useState("");
     const [foreignSkuMetafield, setForeignSkuMetafield] = useState("");
 
-    const {image, metafields, price} = detailData;
-
     useEffect(() => {
+        const metafields = detailData.metafields;
         if (metafields && metafields.edges) {
             metafields.edges.forEach(edge => {
                 if (edge.node.key === "realSku") {
@@ -50,7 +49,7 @@ const VariantItemLazy = ({item}) => {
                 }
             });
         }
-    }, []);
+    }, [detailData]);
 
     useEffect(() => {
         setExternalSku();
@@ -175,7 +174,7 @@ const VariantItemLazy = ({item}) => {
                 <div className="Polaris-ResourceItem__Container">
                     <div className="Polaris-ResourceItem__Owned">
                         <div className="Polaris-ResourceItem__Media">
-                            {image && <img src={image.transformedSrc} alt={sku} />}
+                            {detailData.image && <img src={detailData.image.transformedSrc} alt={sku} />}
                         </div>
                     </div>
 
