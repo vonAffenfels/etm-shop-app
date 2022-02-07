@@ -396,7 +396,7 @@ app.prepare().then(async () => {
 
         let variables = {
             limit: limit,
-            id: productId
+            id: "gid://shopify/Product/" + productId
         };
 
         if (cursor) {
