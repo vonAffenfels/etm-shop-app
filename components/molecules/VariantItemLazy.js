@@ -165,7 +165,9 @@ const VariantItemLazy = ({item}) => {
 
     const handleToggle = useCallback(() => {
         setOpen((open) => !open);
-    }, [])
+    }, []);
+
+    console.log("detailData", detailData)
 
     return (
         <li className="Polaris-ResourceItem__ListItem">
@@ -181,7 +183,8 @@ const VariantItemLazy = ({item}) => {
                         <div>
                             <h3>
                                 <TextStyle variation="strong">{title} ({sku})</TextStyle>
-                                {!isOpen && <Button onClick={handleToggle}>{isOpen ? "Öffnen" : "Schließen"}</Button>}
+                                <span style={{paddingLeft: "7px"}}></span>
+                                <Button onClick={handleToggle}>{isOpen ? "Schließen" : "Öffnen"}</Button>
                                 {detailData && isOpen && (
                                     <>
                                         <span style={{paddingLeft: "7px"}}></span>
