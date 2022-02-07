@@ -1,19 +1,12 @@
 import {ResourceList, TextStyle, ButtonGroup, Button, TextField} from "@shopify/polaris";
 import React, {useState, useEffect} from "react";
-import VariantItemSmall from "./VariantItemSmall";
+import VariantItemLazy from "./VariantItemLazy";
 import {useRouter} from "next/router";
 
 const VariantList = ({existingProduct}) => {
     const router = useRouter();
     const productId = router.query.id;
     const [variants, setVariants] = useState([]);
-    console.log("VariantList", existingProduct)
-
-    // useEffect(() => {
-    //     if (existingProduct?.product?.totalVariants) {
-    //         fetchVariants(5);
-    //     }
-    // }, []);
 
     useEffect(() => {
         if (existingProduct?.product?.totalVariants && (variants.length < existingProduct?.product?.totalVariants)) {
@@ -33,7 +26,6 @@ const VariantList = ({existingProduct}) => {
 
     const fetchVariants = async (limit, after) => {
         try {
-            console.log("fetchVariants")
             let body = {
                 productId: productId,
                 limit: limit,
@@ -49,7 +41,6 @@ const VariantList = ({existingProduct}) => {
                 },
                 body: JSON.stringify(body)
             }).then(response => response.json());
-            console.log("data", data);
             if (data.length) {
                 setVariants([...variants, ...data])
             }
@@ -73,7 +64,7 @@ const VariantList = ({existingProduct}) => {
                 </div>
             </div>
             <ul className="Polaris-ResourceList">
-                {variants.map((item) => <VariantItemSmall item={item} />)}
+                {variants.map((item, i) => <VariantItemLazy item={item} key={"lazy-item-" + i} />)}
             </ul>
         </div>
     );
