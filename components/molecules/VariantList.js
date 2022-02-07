@@ -7,6 +7,7 @@ const VariantList = ({existingProduct}) => {
     const router = useRouter();
     const productId = router.query.id;
     const [variants, setVariants] = useState([]);
+    console.log("VariantList", existingProduct)
 
     useEffect(() => {
         if (existingProduct?.product?.totalVariants) {
@@ -32,6 +33,7 @@ const VariantList = ({existingProduct}) => {
 
     const fetchVariants = async (limit, after) => {
         try {
+            console.log("fetchVariants")
             const data = await fetch("/product/variants/", {
                 method: "post",
                 body: {

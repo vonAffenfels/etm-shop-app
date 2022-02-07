@@ -384,6 +384,7 @@ app.prepare().then(async () => {
 
     router.post("/product/variants/", async (ctx, next) => {
         let {limit, cursor, productId, pkgSize} = ctx.request.body;
+        console.log("limit, cursor, productId, pkgSize", limit, cursor, productId, pkgSize)
         limit = parseInt(limit);
 
         if (!limit || !productId) {
