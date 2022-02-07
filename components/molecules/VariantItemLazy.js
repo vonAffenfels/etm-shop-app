@@ -9,7 +9,7 @@ const VariantItemLazy = ({item}) => {
     console.log("productContext", product, supplier)
 
     const [isOpen, setOpen] = useState(false);
-    const [detailData, setDetailData] = useState(null);
+    const [detailData, setDetailData] = useState({});
 
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(null);
@@ -171,6 +171,12 @@ const VariantItemLazy = ({item}) => {
         <li className="Polaris-ResourceItem__ListItem">
             <div className="Polaris-ResourceItem__ItemWrapper">
                 <div className="Polaris-ResourceItem__Container">
+                    <div className="Polaris-ResourceItem__Owned">
+                        <div className="Polaris-ResourceItem__Media">
+                            {image && <img src={image.transformedSrc} alt={sku} />}
+                        </div>
+                    </div>
+
                     <div className="Polaris-ResourceItem__Content">
                         <div>
                             <h3>
