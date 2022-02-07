@@ -382,7 +382,7 @@ app.prepare().then(async () => {
         }
     });
 
-    router.post("/product/variants/", async (ctx, next) => {
+    router.post("/product/variants/", KoaBody(), async (ctx, next) => {
         console.log("ctx.request.body", ctx.request.body)
         let {limit, cursor, productId, pkgSize} = ctx.request.body;
         console.log("limit, cursor, productId, pkgSize", limit, cursor, productId, pkgSize)
