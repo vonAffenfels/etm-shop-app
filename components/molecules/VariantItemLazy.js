@@ -3,10 +3,8 @@ import React, {useState, useEffect, useContext, useCallback} from "react";
 import {ProductContext} from "../form/ProductContext";
 
 const VariantItemLazy = ({item}) => {
-    console.log("VariantItemSmall", item);
     const {node: {id, sku, title}} = item;
     const {product, supplier, setMissingForeignSkuVariants} = useContext(ProductContext);
-    console.log("productContext", product, supplier)
 
     const [isOpen, setOpen] = useState(false);
     const [detailData, setDetailData] = useState({});
@@ -134,7 +132,7 @@ const VariantItemLazy = ({item}) => {
             console.log("data", data);
             if (data) {
                 setLoading(false);
-                setDetailData(detailData);
+                setDetailData(data);
             } else {
                 setDetailData({missing: true});
             }
@@ -165,13 +163,12 @@ const VariantItemLazy = ({item}) => {
     }
 
     const handleToggle = useCallback(() => {
+        console.log("handleToggle", isOpen, detailData)
         if (!isOpen && !detailData.price && !detailData.missing) {
             loadDetails();
         }
         setOpen((open) => !open);
     }, []);
-
-    console.log("detailData", detailData)
 
     return (
         <li className="Polaris-ResourceItem__ListItem">
