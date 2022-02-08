@@ -39,6 +39,7 @@ export const getVariantsSmall = () => {
             product(id:$id) {
                 variants(first: $limit, after: $cursor) {
                     edges {
+                        cursor
                         node {
                             id
                             sku
