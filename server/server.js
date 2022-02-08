@@ -413,6 +413,7 @@ app.prepare().then(async () => {
 
     router.post("/product/variants/detail", KoaBody(), async (ctx, next) => {
         let {variantId} = ctx.request.body;
+        console.log("detail", variantId)
 
         if (!variantId) {
             ctx.res.status = 400;
@@ -422,6 +423,7 @@ app.prepare().then(async () => {
 
         try {
             let result = await request(getVariantDetails(), {id: variantId});
+            console.log("vres", result)
 
             ctx.res.status = 200;
             ctx.body = result?.productVariant
