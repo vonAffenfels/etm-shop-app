@@ -162,13 +162,13 @@ const VariantItemLazy = ({item}) => {
         return null;
     }
 
-    const handleToggle = useCallback(() => {
+    const handleToggle = () => {
         console.log("handleToggle", isOpen, detailData)
         if (!isOpen && !detailData.price && !detailData.missing) {
             loadDetails();
         }
         setOpen((open) => !open);
-    }, []);
+    };
 
     return (
         <li className="Polaris-ResourceItem__ListItem">
