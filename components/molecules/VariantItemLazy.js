@@ -176,7 +176,8 @@ const VariantItemLazy = ({item}) => {
                 <div className="Polaris-ResourceItem__Container">
                     <div className="Polaris-ResourceItem__Owned">
                         <div className="Polaris-ResourceItem__Media">
-                            {detailData.image && <img src={detailData.image.transformedSrc} alt={sku} />}
+                            {detailData.image ? <img src={detailData.image.transformedSrc} alt={sku} /> :
+                            <div style={{width: "50px", height: "50px"}} />}
                         </div>
                     </div>
 
