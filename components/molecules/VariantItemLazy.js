@@ -124,7 +124,7 @@ const VariantItemLazy = ({item}) => {
         setLoading(true);
         try {
             console.log("fetchVariants")
-            let data = await fetch("/product/variants/", {
+            let data = await fetch("/product/variants/detail/", {
                 method: "post",
                 headers: {
                     "Content-Type": "application/json"
