@@ -16,6 +16,7 @@ const VariantList = ({existingProduct}) => {
                     ...variants[variants.length - 1]
                 };
             }
+            console.log("useEffect", lastVariant, variants)
             fetchVariants(5, lastVariant?.cursor);
         }
     }, [variants, existingProduct?.product?.totalVariants]);

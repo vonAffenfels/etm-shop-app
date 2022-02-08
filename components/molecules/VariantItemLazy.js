@@ -121,7 +121,6 @@ const VariantItemLazy = ({item}) => {
     const loadDetails = async () => {
         setLoading(true);
         try {
-            console.log("fetchVariants", detailData)
             let data = await fetch("/product/variants/detail/", {
                 method: "post",
                 headers: {
@@ -129,7 +128,6 @@ const VariantItemLazy = ({item}) => {
                 },
                 body: JSON.stringify({variantId: id})
             }).then(response => response.json());
-            console.log("data", data);
             if (data) {
                 setLoading(false);
                 setDetailData(data);
@@ -163,7 +161,6 @@ const VariantItemLazy = ({item}) => {
     }
 
     const handleToggle = () => {
-        console.log("handleToggle", isOpen, detailData)
         if (!isOpen && !detailData.price && !detailData.missing) {
             loadDetails();
         }

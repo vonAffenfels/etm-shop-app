@@ -6,6 +6,7 @@ const getVariants = () => {
             product(id:$id) {
                 variants(first: $limit, after: $cursor) {
                     edges {
+                        cursor
                         node {
                             id
                             price
