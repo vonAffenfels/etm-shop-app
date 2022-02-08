@@ -404,6 +404,7 @@ app.prepare().then(async () => {
         try {
             let result = await request(pkgSize === "small" ? getVariantsSmall() : getVariants(), variables);
 
+            console.log("result?.product?.variants", result?.product?.variants)
             ctx.res.status = 200;
             ctx.body = result?.product?.variants?.edges || [];
         } catch (e) {
