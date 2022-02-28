@@ -643,7 +643,7 @@ const Upload = () => {
                         <Card sectioned title={"Hinweistext Verfügbarkeit"}>
                             <TextField disabled={isLoading} value={hintText} onChange={onHintChange.bind(this)}/>
                         </Card>
-                        <Card sectioned title={"Abonnement"}>
+                        <Card sectioned title={"Abonnement/Hefte"}>
                             <TextField label={"Bezugsquelle"} disabled={isLoading} value={bqNumber}
                                        onChange={onBqNumberChange}/>
                             <p>
