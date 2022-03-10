@@ -253,7 +253,7 @@ app.prepare().then(async () => {
                 let compareTime = new Date();
 
                 if (isSubscriber) {
-                    compareTime.setDate(compareTime.getDate() - 2);
+                    dateTime.setDate(dateTime.getDate() - 2);
                 }
 
                 console.log("second compareTime", compareTime, new Date(downloadDateFields[0].value), compareTime.getTime(), dateTime, (compareTime.getTime() < dateTime))
