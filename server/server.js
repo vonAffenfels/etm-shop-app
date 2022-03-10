@@ -256,7 +256,7 @@ app.prepare().then(async () => {
                     compareTime.setDate(compareTime.getDate() - 2);
                 }
 
-                console.log("second compareTime", compareTime, compareTime.getTime(), dateTime)
+                console.log("second compareTime", compareTime, compareTime.getTime(), dateTime, (compareTime.getTime() < dateTime))
                 if (compareTime.getTime() < dateTime) {
                     return ctx.body = {
                         error: "releasedate not reached"
