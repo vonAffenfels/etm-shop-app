@@ -249,15 +249,15 @@ app.prepare().then(async () => {
         if (userAgent === "euro-api") {
             const downloadDateFields = metafields.edges.map(edge => edge.node).filter(node => node.key === "downloaddate");
             if (downloadDateFields.length) {
-                let dateTime = new Date(downloadDateFields[0].value).getTime();
+                let dateTime = new Date(downloadDateFields[0].value);
                 let compareTime = new Date();
 
                 if (isSubscriber) {
                     dateTime.setDate(dateTime.getDate() - 2);
                 }
 
-                console.log("second compareTime", compareTime, new Date(downloadDateFields[0].value), compareTime.getTime(), dateTime, (compareTime.getTime() < dateTime))
-                if (compareTime.getTime() < dateTime) {
+                console.log("second compareTime", compareTime, dateTime, compareTime.getTime(), dateTime.getTime())
+                if (compareTime.getTime() < dateTime.getTime()) {
                     return ctx.body = {
                         error: "releasedate not reached"
                     }
