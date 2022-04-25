@@ -5,8 +5,8 @@ const path = require('path');
 module.exports = class AWSService {
     constructor() {
         AWS.config.update({
-            accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-            secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+            accessKeyId: process.env.CUSTOM_AWS_ACCESS_KEY_ID,
+            secretAccessKey: process.env.CUSTOM_AWS_SECRET_ACCESS_KEY
         });
 
         this.s3 = new AWS.S3();
@@ -40,7 +40,7 @@ module.exports = class AWSService {
 
     upload(readStream, fileName) {
         const params = {
-            Bucket: process.env.AWS_BUCKET_NAME,
+            Bucket: process.env.CUSTOM_AWS_BUCKET_NAME,
             Body: readStream,
             Key: fileName
         };
@@ -58,7 +58,7 @@ module.exports = class AWSService {
 
     download(fileName) {
         const params = {
-            Bucket: process.env.AWS_BUCKET_NAME,
+            Bucket: process.env.CUSTOM_AWS_BUCKET_NAME,
             Key: fileName
         };
 
