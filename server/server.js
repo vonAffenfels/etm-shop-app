@@ -27,7 +27,7 @@ const aws = new AWSService();
 
 Shopify.Context.initialize({
     API_KEY: process.env.SHOPIFY_API_KEY,
-    API_SECRET_KEY: process.env.SHOPIFY_API_SECRET,
+    API_SECRET_KEY: process.env.SHOPIFY_API_SECRET, //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
     SCOPES: process.env.SCOPES.split(","),
     HOST_NAME: process.env.HOST.replace(/https:\/\//, ""),
     API_VERSION: ApiVersion.October20,
@@ -54,6 +54,7 @@ app.prepare().then(async () => {
     const server = new Koa();
     const router = new Router();
     server.keys = [Shopify.Context.API_SECRET_KEY];
+
     server.use(
         createShopifyAuth({
             async afterAuth(ctx) {

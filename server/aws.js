@@ -61,6 +61,7 @@ module.exports = class AWSService {
             Bucket: process.env.CUSTOM_AWS_BUCKET_NAME,
             Key: fileName
         };
+        console.log("AWS Download:", params);
 
         return new Promise((resolve, reject) => {
             this.s3.getObject(params, function (err, data) {
