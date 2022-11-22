@@ -57,6 +57,7 @@ app.prepare().then(async () => {
     server.use(
         createShopifyAuth({
             async afterAuth(ctx) {
+                console.log("afterAuth");
                 // Access token and shop available in ctx.state.shopify
                 const {shop, accessToken, scope} = ctx.state.shopify;
                 const host = ctx.query.host;
@@ -70,6 +71,7 @@ app.prepare().then(async () => {
                     webhookHandler: async (topic, shop, body) =>
                         delete ACTIVE_SHOPIFY_SHOPS[shop],
                 });
+                console.log("response", response)
 
                 if (!response.success) {
                     console.log(`Failed to register APP_UNINSTALLED webhook: ${response.result}`);
@@ -760,6 +762,7 @@ app.prepare().then(async () => {
     router.get("/_next/webpack-hmr", handleRequest); // Webpack content is clear
     router.get("(.*)", async (ctx) => {
         const shop = ctx.query.shop;
+        console.log("generic get", ctx.query.shop);
 
         // This shop hasn't been seen yet, go through OAuth to create a session
         if (ACTIVE_SHOPIFY_SHOPS[shop] === undefined) {
@@ -775,13 +778,13 @@ app.prepare().then(async () => {
     server.listen(port, () => {
         console.log(`> Ready on http://localhost:${port}`);
 
-        wakeDyno(process.env.HOST + "/ping?shop=eurotransport.myshopify.com", {
-            interval: 29,
-            logging: false,
-            stopTimes: {
-                start: "20:00",
-                end: "06:00"
-            }
-        });
+        // wakeDyno(process.env.HOST + "/ping?shop=eurotransport.myshopify.com", {
+        //     interval: 29,
+        //     logging: false,
+        //     stopTimes: {
+        //         start: "20:00",
+        //         end: "06:00"
+        //     }
+        // });
     });
 });
