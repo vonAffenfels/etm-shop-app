@@ -763,6 +763,7 @@ app.prepare().then(async () => {
     router.get("(.*)", async (ctx) => {
         const shop = ctx.query.shop;
         console.log("generic get, shop:", ctx.query.shop, "ctx.req.url:", ctx.req.url);
+        console.log("ACTIVE_SHOPIFY_SHOPS", ACTIVE_SHOPIFY_SHOPS, "ACTIVE_SHOPIFY_SHOPS[shop]", ACTIVE_SHOPIFY_SHOPS[shop]);
 
         // This shop hasn't been seen yet, go through OAuth to create a session
         if (ACTIVE_SHOPIFY_SHOPS[shop] === undefined) {
