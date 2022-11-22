@@ -295,7 +295,7 @@ app.prepare().then(async () => {
                     namespace: "subscription",
                     key: "subscriberPrice",
                     value: parseFloat(String(subPrice).replace(",", ".")).toFixed(2),
-                    valueType: "STRING"
+                    type: "single_line_text_field"
                 };
                 if (subPriceId) {
                     metafield.id = subPriceId;
@@ -315,7 +315,7 @@ app.prepare().then(async () => {
                     namespace: "subscription",
                     key: "realSku",
                     value: String(subSku),
-                    valueType: "STRING"
+                    type: "single_line_text_field"
                 };
                 if (subSkuId) {
                     metafield.id = subSkuId;
@@ -335,7 +335,7 @@ app.prepare().then(async () => {
                     namespace: "subscription",
                     key: "alertInventoryCount",
                     value: String(alertInventoryCount),
-                    valueType: "STRING"
+                    type: "single_line_text_field"
                 };
                 if (alertInventoryCountId) {
                     metafield.id = alertInventoryCountId;
@@ -355,7 +355,7 @@ app.prepare().then(async () => {
                     namespace: "Additions",
                     key: "foreignSku",
                     value: foreignSku,
-                    valueType: "STRING"
+                    type: "single_line_text_field"
                 };
                 if (foreignSkuId) {
                     metafield.id = foreignSkuId;
@@ -460,7 +460,7 @@ app.prepare().then(async () => {
                 namespace: "Download",
                 key: "filename",
                 value: slug,
-                valueType: "STRING"
+                type: "single_line_text_field"
             };
             if (body.downloads) {
                 metafield.id = body.downloads;
@@ -487,7 +487,7 @@ app.prepare().then(async () => {
                 namespace: "Download",
                 key: "downloaddate",
                 value: body.downloaddate,
-                valueType: "STRING"
+                type: "single_line_text_field"
             };
             if (body.downloaddateid) {
                 metafield.id = body.downloaddateid;
@@ -507,7 +507,7 @@ app.prepare().then(async () => {
                 namespace: "Download",
                 key: "supplierid",
                 value: body.supplierid,
-                valueType: "STRING"
+                type: "single_line_text_field"
             };
             if (body.suppliermetaid) {
                 metafield.id = body.suppliermetaid;
@@ -527,7 +527,7 @@ app.prepare().then(async () => {
                 namespace: "Additions",
                 key: "hinttext",
                 value: body.hinttext,
-                valueType: "STRING"
+                type: "single_line_text_field"
             };
             if (body.hinttextid) {
                 metafield.id = body.hinttextid;
@@ -547,7 +547,7 @@ app.prepare().then(async () => {
                 namespace: "Additions",
                 key: "hidden",
                 value: body.hidden,
-                valueType: "STRING"
+                type: "single_line_text_field"
             };
             if (body.hiddenid) {
                 metafield.id = body.hiddenid;
@@ -561,7 +561,7 @@ app.prepare().then(async () => {
                 namespace: "Additions",
                 key: "hiddenZenit",
                 value: body.hiddenzenit,
-                valueType: "STRING"
+                type: "single_line_text_field"
             };
             if (body.hiddenzenitid) {
                 metafield.id = body.hiddenzenitid;
@@ -575,7 +575,7 @@ app.prepare().then(async () => {
                 namespace: "Subscriptions",
                 key: "bqnumber",
                 value: body.bqnumber,
-                valueType: "STRING"
+                type: "single_line_text_field"
             };
             if (body.bqnumberid) {
                 metafield.id = body.bqnumberid;
@@ -595,7 +595,7 @@ app.prepare().then(async () => {
                 namespace: "Subscriptions",
                 key: "bqrelation",
                 value: body.bqrelation,
-                valueType: "STRING"
+                type: "single_line_text_field"
             };
             if (body.bqrelationid) {
                 metafield.id = body.bqrelationid;
@@ -615,7 +615,7 @@ app.prepare().then(async () => {
                 namespace: "Subscriptions",
                 key: "project",
                 value: body.project,
-                valueType: "STRING"
+                type: "single_line_text_field"
             };
             if (body.projectid) {
                 metafield.id = body.projectid;
