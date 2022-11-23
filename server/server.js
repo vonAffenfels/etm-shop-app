@@ -783,10 +783,10 @@ app.prepare().then(async () => {
         wakeDyno(process.env.HOST + "/ping?shop=eurotransport.myshopify.com", {
             interval: 14,
             logging: false,
-            // stopTimes: {
-            //     start: "20:00",
-            //     end: "06:00"
-            // }
+            stopTimes: {
+                start: "20:00",
+                end: "06:00"
+            }
         });
     });
 });
