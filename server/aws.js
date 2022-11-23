@@ -45,6 +45,7 @@ module.exports = class AWSService {
             Key: fileName
         };
 
+        console.log("AWS, upload:", fileName);
         return new Promise((resolve, reject) => {
             this.s3.upload(params, function (err, data) {
                 if (err) {
