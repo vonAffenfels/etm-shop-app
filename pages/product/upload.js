@@ -342,6 +342,7 @@ const Upload = () => {
                 method: "post",
                 body: formData
             }).then(response => response.text());
+            console.log("data", data);
 
             setFiles([]);
             setUploadedState("success");

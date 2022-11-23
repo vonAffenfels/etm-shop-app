@@ -441,6 +441,7 @@ app.prepare().then(async () => {
         const {productId} = ctx.params;
         const body = ctx.request.body;
         const file = ctx.request.files?.file;
+        console.log("productId", productId, "body", body);
 
         if (!productId) {
             ctx.res.status = 400;
@@ -629,6 +630,7 @@ app.prepare().then(async () => {
             });
         }
 
+        console.log("metafields", metafields);
         if (metafields.length) {
             await request(updateProduct(), {
                 input: {
