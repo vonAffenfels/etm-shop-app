@@ -617,19 +617,19 @@ const Upload = () => {
                 <Layout>
                     <Layout.Section>
                         <Card sectioned title={"Sichtbarkeit"}>
-                            <Checkbox
-                                label="Bei Kauf nicht an Zenit übertragen"
-                                checked={hiddenZenit}
-                                disabled={isLoading}
-                                onChange={onHiddenZenitChange.bind(this)}
-                            />
-                            <br/>
-                            <Checkbox
-                                label="Produkt verstecken"
-                                checked={hidden}
-                                disabled={isLoading}
-                                onChange={onHiddenChange.bind(this)}
-                            />
+                            {/*<Checkbox*/}
+                            {/*    label="Bei Kauf nicht an Zenit übertragen"*/}
+                            {/*    checked={hiddenZenit}*/}
+                            {/*    disabled={isLoading}*/}
+                            {/*    onChange={onHiddenZenitChange.bind(this)}*/}
+                            {/*/>*/}
+                            {/*<br/>*/}
+                            {/*<Checkbox*/}
+                            {/*    label="Produkt verstecken"*/}
+                            {/*    checked={hidden}*/}
+                            {/*    disabled={isLoading}*/}
+                            {/*    onChange={onHiddenChange.bind(this)}*/}
+                            {/*/>*/}
                             <TextContainer>
                                 {existingProduct && (
                                     <p>
@@ -640,80 +640,80 @@ const Upload = () => {
                                 )}
                             </TextContainer>
                         </Card>
-                        <Card sectioned title={"Hinweistext Verfügbarkeit"}>
-                            <TextField disabled={isLoading} value={hintText} onChange={onHintChange.bind(this)}/>
-                        </Card>
-                        <Card sectioned title={"Abonnement/Hefte"}>
-                            <TextField label={"Bezugsquelle"} disabled={isLoading} value={bqNumber}
-                                       onChange={onBqNumberChange}/>
-                            <p>
-                                <br/>
-                                <Select
-                                    options={subscriptionRelationOptions}
-                                    label={"Bezugstyp"}
-                                    disabled={isLoading}
-                                    value={relation.value}
-                                    onChange={onRelationChange.bind(this)}
-                                />
-                                <TextContainer>
-                                    {relation.value && (
-                                        <p>
-                                            <br/>
-                                            <TextStyle variation="subdued">entspricht {relation.value}</TextStyle>
-                                        </p>
-                                    )}
-                                </TextContainer>
-                            </p>
-                            <p>
-                                <br/>
-                                <Select
-                                    options={subscriptionProjects}
-                                    label={"MPN / Projekt"}
-                                    disabled={isLoading}
-                                    value={project.value}
-                                    onChange={onProjectChange.bind(this)}
-                                />
-                                <TextContainer>
-                                    {project.value && (
-                                        <p>
-                                            <br/>
-                                            <TextStyle variation="subdued">entspricht {project.value}</TextStyle>
-                                        </p>
-                                    )}
-                                </TextContainer>
-                            </p>
-                        </Card>
-                        <Card sectioned title={"Lieferant/Fremdartikelnummer"}>
-                            <Select
-                                label="Lieferantennummer"
-                                options={supplierOptions}
-                                onChange={handleSupplierChange.bind(this)}
-                                value={supplier.value}
-                                disabled={isLoading}
-                            />
-                            <p>
-                                <br/>
-                                <TextContainer>
-                                    {supplier.value && (
-                                        <p>
-                                            <br/>
-                                            <TextStyle
-                                                variation="subdued">{supplier.value} {supplier.label} ({supplier.short})</TextStyle>
-                                        </p>
-                                    )}
-                                </TextContainer>
-                            </p>
-                        </Card>
-                        <Card sectioned title={"Varianten"}>
-                            <ProductContext.Provider value={{
-                                product: existingProduct?.product,
-                                supplier: supplier,
-                                setMissingForeignSkuVariants: _setMissingForeignSkuVariants
-                            }}>
-                                <VariantList existingProduct={existingProduct}/>
-                            </ProductContext.Provider>
-                        </Card>
-                        {renderExistingProduct()}
+                        {/*<Card sectioned title={"Hinweistext Verfügbarkeit"}>*/}
+                        {/*    <TextField disabled={isLoading} value={hintText} onChange={onHintChange.bind(this)}/>*/}
+                        {/*</Card>*/}
+                        {/*<Card sectioned title={"Abonnement/Hefte"}>*/}
+                        {/*    <TextField label={"Bezugsquelle"} disabled={isLoading} value={bqNumber}*/}
+                        {/*               onChange={onBqNumberChange}/>*/}
+                        {/*    <p>*/}
+                        {/*        <br/>*/}
+                        {/*        <Select*/}
+                        {/*            options={subscriptionRelationOptions}*/}
+                        {/*            label={"Bezugstyp"}*/}
+                        {/*            disabled={isLoading}*/}
+                        {/*            value={relation.value}*/}
+                        {/*            onChange={onRelationChange.bind(this)}*/}
+                        {/*        />*/}
+                        {/*        <TextContainer>*/}
+                        {/*            {relation.value && (*/}
+                        {/*                <p>*/}
+                        {/*                    <br/>*/}
+                        {/*                    <TextStyle variation="subdued">entspricht {relation.value}</TextStyle>*/}
+                        {/*                </p>*/}
+                        {/*            )}*/}
+                        {/*        </TextContainer>*/}
+                        {/*    </p>*/}
+                        {/*    <p>*/}
+                        {/*        <br/>*/}
+                        {/*        <Select*/}
+                        {/*            options={subscriptionProjects}*/}
+                        {/*            label={"MPN / Projekt"}*/}
+                        {/*            disabled={isLoading}*/}
+                        {/*            value={project.value}*/}
+                        {/*            onChange={onProjectChange.bind(this)}*/}
+                        {/*        />*/}
+                        {/*        <TextContainer>*/}
+                        {/*            {project.value && (*/}
+                        {/*                <p>*/}
+                        {/*                    <br/>*/}
+                        {/*                    <TextStyle variation="subdued">entspricht {project.value}</TextStyle>*/}
+                        {/*                </p>*/}
+                        {/*            )}*/}
+                        {/*        </TextContainer>*/}
+                        {/*    </p>*/}
+                        {/*</Card>*/}
+                        {/*<Card sectioned title={"Lieferant/Fremdartikelnummer"}>*/}
+                        {/*    <Select*/}
+                        {/*        label="Lieferantennummer"*/}
+                        {/*        options={supplierOptions}*/}
+                        {/*        onChange={handleSupplierChange.bind(this)}*/}
+                        {/*        value={supplier.value}*/}
+                        {/*        disabled={isLoading}*/}
+                        {/*    />*/}
+                        {/*    <p>*/}
+                        {/*        <br/>*/}
+                        {/*        <TextContainer>*/}
+                        {/*            {supplier.value && (*/}
+                        {/*                <p>*/}
+                        {/*                    <br/>*/}
+                        {/*                    <TextStyle*/}
+                        {/*                        variation="subdued">{supplier.value} {supplier.label} ({supplier.short})</TextStyle>*/}
+                        {/*                </p>*/}
+                        {/*            )}*/}
+                        {/*        </TextContainer>*/}
+                        {/*    </p>*/}
+                        {/*</Card>*/}
+                        {/*<Card sectioned title={"Varianten"}>*/}
+                        {/*    <ProductContext.Provider value={{*/}
+                        {/*        product: existingProduct?.product,*/}
+                        {/*        supplier: supplier,*/}
+                        {/*        setMissingForeignSkuVariants: _setMissingForeignSkuVariants*/}
+                        {/*    }}>*/}
+                        {/*        <VariantList existingProduct={existingProduct}/>*/}
+                        {/*    </ProductContext.Provider>*/}
+                        {/*</Card>*/}
+                        {/*{renderExistingProduct()}*/}
                         <Card sectioned title={"Upload Dateianhang"}>
                             {isLoading ? (
                                 <Spinner size="large"/>
@@ -721,17 +721,17 @@ const Upload = () => {
                                 <FileInput files={files} onSelect={onSelect.bind(this)}/>
                             )}
                         </Card>
-                        <Card sectioned title={"Freigabedatum Download (Abonnenten werden 2 Tage früher freigeschalten)"}>
-                            <DatePicker
-                                allowRange={false}
-                                month={month}
-                                year={year}
-                                onMonthChange={handleMonthChange.bind(this)}
-                                onChange={onDateChange.bind(this)}
-                                selected={uploadDate}
-                                disabled={isLoading}
-                            />
-                        </Card>
+                        {/*<Card sectioned title={"Freigabedatum Download (Abonnenten werden 2 Tage früher freigeschalten)"}>*/}
+                        {/*    <DatePicker*/}
+                        {/*        allowRange={false}*/}
+                        {/*        month={month}*/}
+                        {/*        year={year}*/}
+                        {/*        onMonthChange={handleMonthChange.bind(this)}*/}
+                        {/*        onChange={onDateChange.bind(this)}*/}
+                        {/*        selected={uploadDate}*/}
+                        {/*        disabled={isLoading}*/}
+                        {/*    />*/}
+                        {/*</Card>*/}
                     </Layout.Section>
                 </Layout>
             </Page>

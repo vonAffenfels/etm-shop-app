@@ -779,15 +779,14 @@ app.prepare().then(async () => {
     server.use(router.routes());
     server.listen(port, () => {
         console.log(`> Ready on http://localhost:${port}`);
-        console.log(`Time to log some more?`);
 
-        // wakeDyno(process.env.HOST + "/ping?shop=eurotransport.myshopify.com", {
-        //     interval: 29,
-        //     logging: false,
-        //     stopTimes: {
-        //         start: "20:00",
-        //         end: "06:00"
-        //     }
-        // });
+        wakeDyno(process.env.HOST + "/ping?shop=eurotransport.myshopify.com", {
+            interval: 14,
+            logging: false,
+            // stopTimes: {
+            //     start: "20:00",
+            //     end: "06:00"
+            // }
+        });
     });
 });
