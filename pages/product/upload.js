@@ -536,38 +536,38 @@ const Upload = () => {
     }
 
     function renderSupplierNote() {
-        const missingFields = [];
-        if (!supplier || !supplier.value) {
-            missingFields.push("Lieferantennummer");
-        }
-
-        if (missingFields.length) {
-            return (
-                <>
-                    <Stack>
-                        <Badge status="warning">Lieferantennummer fehlt</Badge>
-                        <TextContainer>
-                            <p>
-                                <TextStyle variation="subdued">Das Produkt kann nicht mit Zenit synchronisiert werden.</TextStyle>
-                            </p>
-                        </TextContainer>
-                    </Stack>
-                    {(missingForeignSkuVariants.length > 0) && (
-                        <>
-                            <br/>
-                            <Stack>
-                                <Badge status="warning">{missingForeignSkuVariants.join(", ")}</Badge>
-                                <TextContainer>
-                                    <p>
-                                        <TextStyle variation="subdued">Fremdartikelnummer fehlt. Variante kann nicht mit Zenit synchronisiert werden.</TextStyle>
-                                    </p>
-                                </TextContainer>
-                            </Stack>
-                        </>
-                    )}
-                </>
-            );
-        }
+        // const missingFields = [];
+        // if (!supplier || !supplier.value) {
+        //     missingFields.push("Lieferantennummer");
+        // }
+        //
+        // if (missingFields.length) {
+        //     return (
+        //         <>
+        //             <Stack>
+        //                 <Badge status="warning">Lieferantennummer fehlt</Badge>
+        //                 <TextContainer>
+        //                     <p>
+        //                         <TextStyle variation="subdued">Das Produkt kann nicht mit Zenit synchronisiert werden.</TextStyle>
+        //                     </p>
+        //                 </TextContainer>
+        //             </Stack>
+        //             {(missingForeignSkuVariants.length > 0) && (
+        //                 <>
+        //                     <br/>
+        //                     <Stack>
+        //                         <Badge status="warning">{missingForeignSkuVariants.join(", ")}</Badge>
+        //                         <TextContainer>
+        //                             <p>
+        //                                 <TextStyle variation="subdued">Fremdartikelnummer fehlt. Variante kann nicht mit Zenit synchronisiert werden.</TextStyle>
+        //                             </p>
+        //                         </TextContainer>
+        //                     </Stack>
+        //                 </>
+        //             )}
+        //         </>
+        //     );
+        // }
 
         return null;
     }
