@@ -367,85 +367,85 @@ const Upload = () => {
     }
 
     function getInitialFormValues(data) {
-        if (!data.product) {
-            return;
-        }
-
-        let metafields = data.product.metafields;
-        let mappedFields = {};
-
-        if (metafields && metafields.edges && metafields.edges.length) {
-            metafields.edges.map(edge => edge.node).forEach(node => {
-                mappedFields[node.key] = node.value;
-            });
-        }
-
-        if (mappedFields["downloaddate"]) {
-            setUploadDate({
-                start: new Date(mappedFields["downloaddate"]),
-                end: new Date(mappedFields["downloaddate"])
-            });
-        } else {
-            setUploadDate(null);
-        }
-
-        let supplierId = mappedFields["supplierid"];
-        if (supplierId) {
-            while (String(supplierId).length < 6) {
-                supplierId = "0" + supplierId;
-            }
-            supplierOptions.forEach((supplierOption) => {
-                if (supplierOption.value === supplierId) {
-                    setSupplier(supplierOption);
-                }
-            });
-        } else {
-            setSupplier({value: null, label: "", short: ""});
-        }
-
-        if (mappedFields["hinttext"]) {
-            setHintText(mappedFields["hinttext"]);
-        } else {
-            setHintText("");
-        }
-
-        if (mappedFields["hidden"]) {
-            setHidden(mappedFields["hidden"] == "1" ? true : false);
-        } else {
-            setHidden(false);
-        }
-
-        if (mappedFields["hiddenZenit"]) {
-            setHiddenZenit(mappedFields["hiddenZenit"] == "1" ? true : false);
-        } else {
-            setHiddenZenit(false);
-        }
-
-        if (mappedFields["bqnumber"]) {
-            setBqNumber(mappedFields["bqnumber"]);
-        } else {
-            setBqNumber("");
-        }
-
-        if (mappedFields["bqrelation"]) {
-            subscriptionRelationOptions.forEach((relationOption) => {
-                if (relationOption.value === mappedFields["bqrelation"]) {
-                    setRelation(relationOption);
-                }
-            });
-        } else {
-            setRelation({value: null, label: ""});
-        }
-
-        if (mappedFields["project"]) {
-            subscriptionProjects.forEach((projectOption) => {
-                if (projectOption.value === mappedFields["project"]) {
-                    setProject(projectOption);
-                }
-            });
-        } else {
-            setProject({value: null, label: ""});
-        }
+        // if (!data.product) {
+        //     return;
+        // }
+        //
+        // let metafields = data.product.metafields;
+        // let mappedFields = {};
+        //
+        // if (metafields && metafields.edges && metafields.edges.length) {
+        //     metafields.edges.map(edge => edge.node).forEach(node => {
+        //         mappedFields[node.key] = node.value;
+        //     });
+        // }
+        //
+        // if (mappedFields["downloaddate"]) {
+        //     setUploadDate({
+        //         start: new Date(mappedFields["downloaddate"]),
+        //         end: new Date(mappedFields["downloaddate"])
+        //     });
+        // } else {
+        //     setUploadDate(null);
+        // }
+        //
+        // let supplierId = mappedFields["supplierid"];
+        // if (supplierId) {
+        //     while (String(supplierId).length < 6) {
+        //         supplierId = "0" + supplierId;
+        //     }
+        //     supplierOptions.forEach((supplierOption) => {
+        //         if (supplierOption.value === supplierId) {
+        //             setSupplier(supplierOption);
+        //         }
+        //     });
+        // } else {
+        //     setSupplier({value: null, label: "", short: ""});
+        // }
+        //
+        // if (mappedFields["hinttext"]) {
+        //     setHintText(mappedFields["hinttext"]);
+        // } else {
+        //     setHintText("");
+        // }
+        //
+        // if (mappedFields["hidden"]) {
+        //     setHidden(mappedFields["hidden"] == "1" ? true : false);
+        // } else {
+        //     setHidden(false);
+        // }
+        //
+        // if (mappedFields["hiddenZenit"]) {
+        //     setHiddenZenit(mappedFields["hiddenZenit"] == "1" ? true : false);
+        // } else {
+        //     setHiddenZenit(false);
+        // }
+        //
+        // if (mappedFields["bqnumber"]) {
+        //     setBqNumber(mappedFields["bqnumber"]);
+        // } else {
+        //     setBqNumber("");
+        // }
+        //
+        // if (mappedFields["bqrelation"]) {
+        //     subscriptionRelationOptions.forEach((relationOption) => {
+        //         if (relationOption.value === mappedFields["bqrelation"]) {
+        //             setRelation(relationOption);
+        //         }
+        //     });
+        // } else {
+        //     setRelation({value: null, label: ""});
+        // }
+        //
+        // if (mappedFields["project"]) {
+        //     subscriptionProjects.forEach((projectOption) => {
+        //         if (projectOption.value === mappedFields["project"]) {
+        //             setProject(projectOption);
+        //         }
+        //     });
+        // } else {
+        //     setProject({value: null, label: ""});
+        // }
     }
 
     function reset() {
@@ -495,7 +495,6 @@ const Upload = () => {
         }
 
         const downloadFields = metafields.edges.map(edge => edge.node).filter(node => node.key === "filename");
-        // https://etm-shop-app.herokuapp.com
         return (
             <>
                 {downloadFields.map((node, i) => (
@@ -714,7 +713,7 @@ const Upload = () => {
                         {/*        <VariantList existingProduct={existingProduct}/>*/}
                         {/*    </ProductContext.Provider>*/}
                         {/*</Card>*/}
-                        {/*{renderExistingProduct()}*/}
+                        {renderExistingProduct()}
                         <Card sectioned title={"Upload Dateianhang"}>
                             {isLoading ? (
                                 <Spinner size="large"/>
