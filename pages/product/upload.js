@@ -124,7 +124,7 @@ const zenitItems = [
         apiName: "delivery-code",
         description: "Bestandsstatus",
         values: ["F1: lieferbar", "B1: vergriffen"],
-        dependency: "Für inaktive Produkte immer B1. Bei inaktiven Produkte B1, wenn der Bestand leer ist und nicht weiterverkauft werden soll."
+        dependency: "Für inaktive Produkte immer B1. Bei aktiven Produkte B1, wenn der Bestand leer ist und nicht weiterverkauft werden soll. Ansonsten F1."
     },
     {
         apiName: "article-status",
@@ -407,7 +407,7 @@ const Upload = () => {
 
                                     return (
                                         <ResourceItem id={"zenit-field-" + i}>
-                                            <TextContainer fontWeight="bold">{apiName}</TextContainer>
+                                            <TextContainer><p style={{fontWeight: 700}}>{apiName}</p></TextContainer>
                                             <TextContainer>{description}</TextContainer>
                                             <TextContainer>{values.join(", ")}</TextContainer>
                                             <TextContainer>{dependency}</TextContainer>
