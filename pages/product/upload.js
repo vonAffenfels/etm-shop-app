@@ -384,9 +384,10 @@ const Upload = () => {
                             <DescriptionList items={supplierOptions.map(v => {
                                 return {
                                     term: v.value,
-                                    description: "Abkürzung: " + v.short + ", Bedeutung: " + v.label
+                                    description: v.short + " - " + v.label
                                 }
                             })}/>
+                            <hr style={{marginTop: "20px", marginBottom: "25px", border: "1px solid black"}} />
                             <TextContainer>Bezugstyp</TextContainer>
                             <DescriptionList items={subscriptionRelationOptions.map(v => {
                                 return {
@@ -394,6 +395,7 @@ const Upload = () => {
                                     description: v.label
                                 }
                             })}/>
+                            <hr style={{marginTop: "20px", marginBottom: "25px", border: "1px solid black"}} />
                             <TextContainer>MPN / Projekt</TextContainer>
                             <DescriptionList items={subscriptionProjects.map(v => {
                                 return {
@@ -402,6 +404,7 @@ const Upload = () => {
                                 }
                             })}/>
                         </Card>
+                        <Card sectioned title={"Übersicht: Zenit-Sync Felder"}></Card>
                     </Layout.Section>
                 </Layout>
             </Page>
