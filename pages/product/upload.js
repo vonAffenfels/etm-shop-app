@@ -387,8 +387,8 @@ const Upload = () => {
                                     description: "Abkürzung: " + v.short + ", Bedeutung: " + v.label
                                 }
                             })}/>
-                            <TextContainer>Install the Shopify POS App</TextContainer>
-                            <DescriptionList items={Bezugstyp.map(v => {
+                            <TextContainer>Bezugstyp</TextContainer>
+                            <DescriptionList items={subscriptionRelationOptions.map(v => {
                                 return {
                                     term: v.value,
                                     description: v.label
