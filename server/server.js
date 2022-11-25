@@ -26,10 +26,10 @@ const handle = app.getRequestHandler();
 const aws = new AWSService();
 
 Shopify.Context.initialize({
-    API_KEY: process.env.SHOPIFY_API_KEY,
-    API_SECRET_KEY: process.env.SHOPIFY_API_SECRET, //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
-    SCOPES: process.env.SCOPES.split(","),
-    HOST_NAME: process.env.HOST.replace(/https:\/\//, ""),
+    API_KEY: process.env.SHOPIFY_API_KEY || "",
+    API_SECRET_KEY: process.env.SHOPIFY_API_SECRET || "",
+    SCOPES: (process.env.SCOPES || "").split(","),
+    HOST_NAME: (process.env.HOST || "").replace(/https:\/\//, ""),
     API_VERSION: ApiVersion.October20,
     IS_EMBEDDED_APP: true,
     // This should be replaced with your preferred storage strategy
@@ -483,154 +483,6 @@ app.prepare().then(async () => {
             });
         }
 
-        // if (body.downloaddate) {
-        //     let metafield = {
-        //         description: "release date for download attachments",
-        //         namespace: "Download",
-        //         key: "downloaddate",
-        //         value: body.downloaddate,
-        //         type: "single_line_text_field"
-        //     };
-        //     if (body.downloaddateid) {
-        //         metafield.id = body.downloaddateid;
-        //     }
-        //     metafields.push(metafield);
-        // } else if (body.downloaddateid) {
-        //     await request(removeMetafield(), {
-        //         input: {
-        //             id: body.downloaddateid
-        //         }
-        //     });
-        // }
-        //
-        // if (body.supplierid && body.supplierid !== "null") {
-        //     let metafield = {
-        //         description: "supplier id for corresponding product",
-        //         namespace: "Download",
-        //         key: "supplierid",
-        //         value: body.supplierid,
-        //         type: "single_line_text_field"
-        //     };
-        //     if (body.suppliermetaid) {
-        //         metafield.id = body.suppliermetaid;
-        //     }
-        //     metafields.push(metafield);
-        // } else if (body.suppliermetaid) {
-        //     await request(removeMetafield(), {
-        //         input: {
-        //             id: body.suppliermetaid
-        //         }
-        //     });
-        // }
-        //
-        // if (body.hinttext) {
-        //     let metafield = {
-        //         description: "hint text for display of availability",
-        //         namespace: "Additions",
-        //         key: "hinttext",
-        //         value: body.hinttext,
-        //         type: "single_line_text_field"
-        //     };
-        //     if (body.hinttextid) {
-        //         metafield.id = body.hinttextid;
-        //     }
-        //     metafields.push(metafield);
-        // } else if (body.hinttextid) {
-        //     await request(removeMetafield(), {
-        //         input: {
-        //             id: body.hinttextid
-        //         }
-        //     });
-        // }
-        //
-        // if (body.hidden === "0" || body.hidden === "1") {
-        //     let metafield = {
-        //         description: "0 indicates normal state, 1 hides it",
-        //         namespace: "Additions",
-        //         key: "hidden",
-        //         value: body.hidden,
-        //         type: "single_line_text_field"
-        //     };
-        //     if (body.hiddenid) {
-        //         metafield.id = body.hiddenid;
-        //     }
-        //     metafields.push(metafield);
-        // }
-        //
-        // if (body.hiddenzenit === "0" || body.hiddenzenit === "1") {
-        //     let metafield = {
-        //         description: "0 indicates normal state, 1 hides it",
-        //         namespace: "Additions",
-        //         key: "hiddenZenit",
-        //         value: body.hiddenzenit,
-        //         type: "single_line_text_field"
-        //     };
-        //     if (body.hiddenzenitid) {
-        //         metafield.id = body.hiddenzenitid;
-        //     }
-        //     metafields.push(metafield);
-        // }
-        //
-        // if (body.bqnumber) {
-        //     let metafield = {
-        //         description: "Bezugsquelle, relevant fuer Abos",
-        //         namespace: "Subscriptions",
-        //         key: "bqnumber",
-        //         value: body.bqnumber,
-        //         type: "single_line_text_field"
-        //     };
-        //     if (body.bqnumberid) {
-        //         metafield.id = body.bqnumberid;
-        //     }
-        //     metafields.push(metafield);
-        // } else if (body.bqnumberid) {
-        //     await request(removeMetafield(), {
-        //         input: {
-        //             id: body.bqnumberid
-        //         }
-        //     });
-        // }
-        //
-        // if (body.bqrelation && body.bqrelation !== "null") {
-        //     let metafield = {
-        //         description: "Bezugstyp, relevant fuer Abo Zuordnung",
-        //         namespace: "Subscriptions",
-        //         key: "bqrelation",
-        //         value: body.bqrelation,
-        //         type: "single_line_text_field"
-        //     };
-        //     if (body.bqrelationid) {
-        //         metafield.id = body.bqrelationid;
-        //     }
-        //     metafields.push(metafield);
-        // } else if (body.bqrelationid) {
-        //     await request(removeMetafield(), {
-        //         input: {
-        //             id: body.bqrelationid
-        //         }
-        //     });
-        // }
-        //
-        // if (body.project && body.project !== "null") {
-        //     let metafield = {
-        //         description: "Projekt, relevant fuer Abo Zuordnung",
-        //         namespace: "Subscriptions",
-        //         key: "project",
-        //         value: body.project,
-        //         type: "single_line_text_field"
-        //     };
-        //     if (body.projectid) {
-        //         metafield.id = body.projectid;
-        //     }
-        //     metafields.push(metafield);
-        // } else if (body.projectid) {
-        //     await request(removeMetafield(), {
-        //         input: {
-        //             id: body.projectid
-        //         }
-        //     });
-        // }
-
         console.log("metafields", metafields);
         if (metafields.length) {
             await request(updateProduct(), {
@@ -766,8 +618,6 @@ app.prepare().then(async () => {
     router.get("/_next/webpack-hmr", handleRequest); // Webpack content is clear
     router.get("(.*)", async (ctx) => {
         const shop = ctx.query.shop;
-        console.log("generic get, shop:", ctx.query.shop, "ctx.req.url:", ctx.req.url);
-        console.log("ACTIVE_SHOPIFY_SHOPS", ACTIVE_SHOPIFY_SHOPS, "ACTIVE_SHOPIFY_SHOPS[shop]", ACTIVE_SHOPIFY_SHOPS[shop]);
 
         // This shop hasn't been seen yet, go through OAuth to create a session
         if (ACTIVE_SHOPIFY_SHOPS[shop] === undefined) {
