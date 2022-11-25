@@ -9,8 +9,10 @@ import {
     Spinner,
     Button,
     DescriptionList,
+    ResourceList,
+    ResourceItem,
 } from "@shopify/polaris";
-import {useState, useEffect, useCallback} from "react";
+import {useState, useEffect} from "react";
 import {useRouter} from "next/router";
 import FileInput from "../../components/form/FileInput";
 
@@ -117,6 +119,20 @@ const subscriptionProjects = [
     {value: "00098031", label: "firmenauto Flatrate"},
     {value: "00099118", label: "eurotransport Flatrate"},
 ];
+const zenitItems = [
+    {
+        apiName: "delivery-code",
+        description: "Bestandsstatus",
+        values: ["F1: lieferbar", "B1: vergriffen"],
+        dependency: "Für inaktive Produkte immer B1. Bei inaktiven Produkte B1, wenn der Bestand leer ist und nicht weiterverkauft werden soll."
+    },
+    {
+        apiName: "article-status",
+        description: "Artikelstatus",
+        values: ["1: aktiv", "2: inaktiv"],
+        dependency: "Für alle nicht-aktiven Produkte (Entwurf, archiviert) wird eine 2 übertragen, ansonsten 1."
+    },
+];
 
 const Upload = () => {
     const router = useRouter();
@@ -127,28 +143,7 @@ const Upload = () => {
     const [uploadedState, setUploadedState] = useState(null);
     const [isLoading, setLoading] = useState(false);
     const [existingProduct, setExistingProduct] = useState(null);
-    const [{month, year}, setDate] = useState({month: new Date().getMonth(), year: new Date().getUTCFullYear()});
-    const [uploadDate, setUploadDate] = useState(null);
-    const [supplier, setSupplier] = useState({value: null, label: "", short: ""});
     const [tokens, setTokens] = useState([]);
-    const [hintText, setHintText] = useState("");
-    const [hidden, setHidden] = useState(false);
-    const [hiddenZenit, setHiddenZenit] = useState(false);
-    const [bqNumber, setBqNumber] = useState("");
-    const [relation, setRelation] = useState({value: null, label: ""});
-    const [project, setProject] = useState({value: null, label: ""});
-    const [missingForeignSkuVariants, setMissingForeignSkuVariants] = useState([]);
-    const handleMonthChange = useCallback((month, year) => setDate({month, year}), []);
-
-    function _setMissingForeignSkuVariants(sku, isMissing) {
-        if (isMissing) {
-            if (missingForeignSkuVariants.indexOf(sku) === -1) {
-                setMissingForeignSkuVariants([...missingForeignSkuVariants, sku]);
-            }
-        } else if (missingForeignSkuVariants.indexOf(sku) !== -1) {
-            setMissingForeignSkuVariants([...missingForeignSkuVariants.filter(v => v != sku)])
-        }
-    }
 
     useEffect(() => {
         fetchProduct();
@@ -404,7 +399,23 @@ const Upload = () => {
                                 }
                             })}/>
                         </Card>
-                        <Card sectioned title={"Übersicht: Zenit-Sync Felder"}></Card>
+                        <Card sectioned title={"Übersicht: Zenit-Sync Felder"}>
+                            <ResourceList
+                                items={zenitItems}
+                                renderItem={(item, i) => {
+                                    const {apiName, description, values, dependency} = item;
+
+                                    return (
+                                        <ResourceItem id={"zenit-field-" + i}>
+                                            <TextContainer fontWeight="bold">{apiName}</TextContainer>
+                                            <TextContainer>{description}</TextContainer>
+                                            <TextContainer>{values.join(", ")}</TextContainer>
+                                            <TextContainer>{dependency}</TextContainer>
+                                        </ResourceItem>
+                                    )
+                                }}
+                            />
+                        </Card>
                     </Layout.Section>
                 </Layout>
             </Page>
