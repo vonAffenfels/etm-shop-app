@@ -101,6 +101,11 @@ const supplierOptions = [
         "value": "000017",
         "short": "THO",
         "label": "Thomin"
+    },
+    {
+        "value": "000018",
+        "short": "KOS",
+        "label": "Modelissimo Kosmann oHG"
     }
 ];
 const subscriptionRelationOptions = [
