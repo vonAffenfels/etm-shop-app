@@ -106,6 +106,16 @@ const supplierOptions = [
         "value": "000018",
         "short": "KOS",
         "label": "Modelissimo Kosmann oHG"
+    },
+    {
+        "value": "000019",
+        "short": "LEC",
+        "label": "Lechtoys"
+    },
+    {
+        "value": "000020",
+        "short": "SPE",
+        "label": "Speedbird"
     }
 ];
 const subscriptionRelationOptions = [

@@ -27,6 +27,7 @@
         "@shopify/app-bridge-utils": "^2.0.2",
         "@shopify/koa-shopify-auth": "^4.1.2",
         "@shopify/polaris": "^6.2.0",
+        "@shopify/shopify-api": "^1.4.3",
         "apollo-boost": "^0.4.9",
         "aws-sdk": "^2.990.0",
         "cross-env": "^7.0.3",
