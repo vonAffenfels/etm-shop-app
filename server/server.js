@@ -30,7 +30,7 @@ Shopify.Context.initialize({
     API_SECRET_KEY: process.env.SHOPIFY_API_SECRET || "",
     SCOPES: (process.env.SCOPES || "").split(","),
     HOST_NAME: (process.env.HOST || "").replace(/https:\/\//, ""),
-    API_VERSION: ApiVersion.Unstable,
+    API_VERSION: "unstable",
     IS_EMBEDDED_APP: true,
     // This should be replaced with your preferred storage strategy
     SESSION_STORAGE: new Shopify.Session.MemorySessionStorage(),
@@ -64,6 +64,7 @@ app.prepare().then(async () => {
                 const host = ctx.query.host;
                 ACTIVE_SHOPIFY_SHOPS[shop] = scope;
 
+                console.log("TRYING TO REGISTER", host, shop, accesToken, scope);
                 const response = await Shopify.Webhooks.Registry.register({
                     shop,
                     accessToken,
@@ -80,6 +81,7 @@ app.prepare().then(async () => {
 
                 let redirectUrl = "/";
                 let queryString = "shop=" + shop + "&host=" + host;
+                console.log("redirectUrl", redirectUrl);
                 if (ACTIVE_SHOPIFY_SHOPS_REDIRECTS && ACTIVE_SHOPIFY_SHOPS_REDIRECTS[shop]) {
                     let tempUrl = new URL("https://" + process.env.SHOP + ACTIVE_SHOPIFY_SHOPS_REDIRECTS[shop]);
                     redirectUrl = tempUrl.pathname;
@@ -618,6 +620,7 @@ app.prepare().then(async () => {
     router.get("/_next/webpack-hmr", handleRequest); // Webpack content is clear
     router.get("(.*)", async (ctx) => {
         const shop = ctx.query.shop;
+        console.log("ctx.req.url", ctx.req.url, shop);
 
         // This shop hasn't been seen yet, go through OAuth to create a session
         if (ACTIVE_SHOPIFY_SHOPS[shop] === undefined) {
