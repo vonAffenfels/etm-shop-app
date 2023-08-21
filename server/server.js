@@ -64,7 +64,7 @@ app.prepare().then(async () => {
                 const host = ctx.query.host;
                 ACTIVE_SHOPIFY_SHOPS[shop] = scope;
 
-                console.log("TRYING TO REGISTER", host, shop, accesToken, scope);
+                console.log("TRYING TO REGISTER", host, shop, accessToken, scope);
                 const response = await Shopify.Webhooks.Registry.register({
                     shop,
                     accessToken,
@@ -101,6 +101,7 @@ app.prepare().then(async () => {
     };
 
     router.get("/ping", async (ctx) => {
+        console.log("*** PING CALLED ***", new Date().toISOString());
         ctx.res.status = 200;
         ctx.body = "ok";
     });
