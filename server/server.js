@@ -640,8 +640,8 @@ app.prepare().then(async () => {
             interval: 14,
             logging: false,
             stopTimes: {
-                start: "23:59",
-                end: "00:00"
+                start: "23:58",
+                end: "23:59"
             }
         });
     });
