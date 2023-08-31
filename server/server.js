@@ -89,6 +89,7 @@ app.prepare().then(async () => {
                 }
 
                 // Redirect to app with shop parameter upon auth
+                console.log("REDIRECT_TO:::", `${redirectUrl}?${queryString}`)
                 ctx.redirect(`${redirectUrl}?${queryString}`);
             },
         })
@@ -101,7 +102,7 @@ app.prepare().then(async () => {
     };
 
     router.get("/ping", async (ctx) => {
-        console.log("*** PING CALLED ***", new Date().toISOString());
+        console.log("*** PING CALLED ***", new Date().toISOString(), "ACTIVE_SHOPIFY_SHOPS", ACTIVE_SHOPIFY_SHOPS);
         ctx.res.status = 200;
         ctx.body = "ok";
     });
