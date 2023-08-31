@@ -623,14 +623,15 @@ app.prepare().then(async () => {
     router.get("(.*)", async (ctx) => {
         const shop = ctx.query.shop;
         console.log("ctx.req.url", ctx.req.url, shop);
+        console.log("ctx.req.url", "ACTIVE_SHOPIFY_SHOPS:::", ACTIVE_SHOPIFY_SHOPS);
 
         // This shop hasn't been seen yet, go through OAuth to create a session
-        if (ACTIVE_SHOPIFY_SHOPS[shop] === undefined) {
-            ACTIVE_SHOPIFY_SHOPS_REDIRECTS[shop] = ctx.req.url;
-            ctx.redirect(`/auth?shop=${shop}`);
-        } else {
+        // if (ACTIVE_SHOPIFY_SHOPS[shop] === undefined) {
+        //     ACTIVE_SHOPIFY_SHOPS_REDIRECTS[shop] = ctx.req.url;
+        //     ctx.redirect(`/auth?shop=${shop}`);
+        // } else {
             await handleRequest(ctx);
-        }
+        // }
     });
 
     server.use(router.allowedMethods());
