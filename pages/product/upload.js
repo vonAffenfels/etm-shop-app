@@ -75,7 +75,7 @@ const supplierOptions = [
     {
         value: "000012",
         short: "STD",
-        label: "StarDistribution",
+        label: "Hörtkorn",
     },
     {
         value: "000013",
