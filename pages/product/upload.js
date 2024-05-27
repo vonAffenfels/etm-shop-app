@@ -35,7 +35,7 @@ const supplierOptions = [
     {
         value: "000004",
         short: "GMT",
-        label: "GMTS Brinkmeier GmbH",
+        label: "nicht vergeben (ehem. GMTS)",
     },
     {
         value: "000005",
