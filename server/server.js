@@ -1,12 +1,20 @@
 import "@babel/polyfill";
 import fs from "fs";
-import path from "path";
-import gql from "graphql-tag";
 import dotenv from "dotenv";
 import "isomorphic-fetch";
 import createShopifyAuth, {verifyRequest} from "@shopify/koa-shopify-auth";
-import Shopify, {ApiVersion} from "@shopify/shopify-api";
-import {request, updateProduct, updateProductVariant, removeMetafield, getProduct, getProductBySku, getVariants, getVariantsSmall, getVariantDetails} from "./handlers/index";
+import Shopify from "@shopify/shopify-api";
+import {
+    request,
+    updateProduct,
+    updateProductVariant,
+    removeMetafield,
+    getProduct,
+    getProductBySku,
+    getVariants,
+    getVariantsSmall,
+    getVariantDetails,
+} from "./handlers/index";
 import Koa from "koa";
 import next from "next";
 import Router from "koa-router";
@@ -58,13 +66,11 @@ app.prepare().then(async () => {
     server.use(
         createShopifyAuth({
             async afterAuth(ctx) {
-                console.log("afterAuth");
                 // Access token and shop available in ctx.state.shopify
                 const {shop, accessToken, scope} = ctx.state.shopify;
                 const host = ctx.query.host;
                 ACTIVE_SHOPIFY_SHOPS[shop] = scope;
 
-                console.log("TRYING TO REGISTER", host, shop, accessToken, scope);
                 const response = await Shopify.Webhooks.Registry.register({
                     shop,
                     accessToken,
@@ -73,7 +79,6 @@ app.prepare().then(async () => {
                     webhookHandler: async (topic, shop, body) =>
                         delete ACTIVE_SHOPIFY_SHOPS[shop],
                 });
-                console.log("response", response)
 
                 if (!response.success) {
                     console.log(`Failed to register APP_UNINSTALLED webhook: ${response.result}`);
@@ -81,7 +86,7 @@ app.prepare().then(async () => {
 
                 let redirectUrl = "/";
                 let queryString = "shop=" + shop + "&host=" + host;
-                console.log("redirectUrl", redirectUrl);
+
                 if (ACTIVE_SHOPIFY_SHOPS_REDIRECTS && ACTIVE_SHOPIFY_SHOPS_REDIRECTS[shop]) {
                     let tempUrl = new URL("https://" + process.env.SHOP + ACTIVE_SHOPIFY_SHOPS_REDIRECTS[shop]);
                     redirectUrl = tempUrl.pathname;
@@ -89,7 +94,6 @@ app.prepare().then(async () => {
                 }
 
                 // Redirect to app with shop parameter upon auth
-                console.log("REDIRECT_TO:::", `${redirectUrl}?${queryString}`)
                 ctx.redirect(`${redirectUrl}?${queryString}`);
             },
         })
@@ -622,16 +626,9 @@ app.prepare().then(async () => {
     router.get("/_next/webpack-hmr", handleRequest); // Webpack content is clear
     router.get("(.*)", async (ctx) => {
         const shop = ctx.query.shop;
-        console.log("ctx.req.url", ctx.req.url, shop);
-        console.log("ctx.req.url", "ACTIVE_SHOPIFY_SHOPS:::", ACTIVE_SHOPIFY_SHOPS);
-
-        // This shop hasn't been seen yet, go through OAuth to create a session
-        // if (ACTIVE_SHOPIFY_SHOPS[shop] === undefined) {
-        //     ACTIVE_SHOPIFY_SHOPS_REDIRECTS[shop] = ctx.req.url;
-        //     ctx.redirect(`/auth?shop=${shop}`);
-        // } else {
-            await handleRequest(ctx);
-        // }
+        console.log("REQUEST", ctx.req.url, shop);
+        console.log("REQUEST", "ACTIVE_SHOPIFY_SHOPS:::", ACTIVE_SHOPIFY_SHOPS);
+        await handleRequest(ctx);
     });
 
     server.use(router.allowedMethods());

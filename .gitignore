@@ -23,3 +23,6 @@ config/tunnel.pid
 
 # misc data
 data
+
+#VS Code
+.history

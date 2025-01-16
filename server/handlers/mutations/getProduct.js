@@ -18,7 +18,9 @@ const getProduct = () => {
                         }
                     }
                 }
-                totalVariants
+                variantsCount {
+                    count
+                }
             }
         }
     `;

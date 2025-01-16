@@ -5,23 +5,24 @@ import {useRouter} from "next/router";
 
 const VariantList = ({existingProduct}) => {
     const router = useRouter();
-    const productId = router.query.id;
     const [variants, setVariants] = useState([]);
 
+    const productId = router.query.id;
+    const variantsCount = existingProduct?.product?.variantsCount?.count;
+
     useEffect(() => {
-        if (existingProduct?.product?.totalVariants && (variants.length < existingProduct?.product?.totalVariants)) {
+        if (variantsCount && (variants.length < variantsCount)) {
             let lastVariant = null;
             if (variants.length) {
                 lastVariant = {
                     ...variants[variants.length - 1]
                 };
             }
-            console.log("useEffect", lastVariant, variants)
             fetchVariants(5, lastVariant?.cursor);
         }
-    }, [variants, existingProduct?.product?.totalVariants]);
+    }, [variants, variantsCount]);
 
-    if (!existingProduct || !existingProduct.product || !existingProduct.product.totalVariants) {
+    if (!variantsCount) {
         return null;
     }
 
@@ -58,7 +59,7 @@ const VariantList = ({existingProduct}) => {
                     <div>
                         <div className="Polaris-ResourceList__HeaderWrapper">
                             <div className="Polaris-ResourceList__HeaderContentWrapper">
-                                <div className="Polaris-ResourceList__HeaderTitleWrapper">{existingProduct.product.totalVariants} Varianten</div>
+                                <div className="Polaris-ResourceList__HeaderTitleWrapper">{variantsCount} Varianten</div>
                             </div>
                         </div>
                     </div>
