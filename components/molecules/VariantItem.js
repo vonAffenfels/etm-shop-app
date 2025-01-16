@@ -4,6 +4,8 @@ import {ResourceList, TextStyle, ButtonGroup, Button, TextField, Badge} from "@s
 import {ProductContext} from "../form/ProductContext";
 
 const VariantItem = ({item}) => {
+    const router = useRouter();
+    const productId = router.query.id;
     const {product, supplier, setMissingForeignSkuVariants} = useContext(ProductContext);
     console.log("productContext", product, supplier)
     const {node: {id, image, metafields, price, sku, title}} = item;
@@ -84,7 +86,8 @@ const VariantItem = ({item}) => {
             subPrice: priceInput,
             subSku: subSkuInput,
             alertInventoryCount: alertInventoryCount,
-            foreignSku: foreignSku
+            foreignSku: foreignSku,
+            productId: productId,
         };
 
         if (priceInputMetafield) {

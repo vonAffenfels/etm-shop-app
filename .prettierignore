@@ -5,3 +5,6 @@ coverage
 .sewing-kit
 *.svg
 app/types/graphql.ts
+server
+pages
+components

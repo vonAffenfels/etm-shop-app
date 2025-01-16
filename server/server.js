@@ -2,13 +2,13 @@ import "@babel/polyfill";
 import fs from "fs";
 import dotenv from "dotenv";
 import "isomorphic-fetch";
-import createShopifyAuth, {verifyRequest} from "@shopify/koa-shopify-auth";
+import createShopifyAuth, { verifyRequest } from "@shopify/koa-shopify-auth";
 import Shopify from "@shopify/shopify-api";
 import {
     request,
     updateProduct,
     updateProductVariant,
-    removeMetafield,
+    removeMetafields,
     getProduct,
     getProductBySku,
     getVariants,
@@ -22,7 +22,7 @@ import KoaBody from "koa-body";
 import speakingurl from "speakingurl";
 import AWSService from "./aws";
 import fetch from "node-fetch";
-import {wakeDyno} from "heroku-keep-awake";
+import { wakeDyno } from "heroku-keep-awake";
 
 dotenv.config();
 const port = parseInt(process.env.PORT, 10) || 8081;
@@ -67,7 +67,7 @@ app.prepare().then(async () => {
         createShopifyAuth({
             async afterAuth(ctx) {
                 // Access token and shop available in ctx.state.shopify
-                const {shop, accessToken, scope} = ctx.state.shopify;
+                const { shop, accessToken, scope } = ctx.state.shopify;
                 const host = ctx.query.host;
                 ACTIVE_SHOPIFY_SHOPS[shop] = scope;
 
@@ -120,12 +120,17 @@ app.prepare().then(async () => {
         }
     });
 
-    router.post("/graphql", verifyRequest({returnHeader: true}), async (ctx, next) => {
+    router.post("/graphql", verifyRequest({ returnHeader: true }), async (ctx, next) => {
         await Shopify.Utils.graphqlProxy(ctx.req, ctx.res);
     });
 
-    router.post("/metafield/remove/:id", async (ctx, next) => {
-        const {id} = ctx.params;
+    router.post("/metafield/remove/:id", KoaBody(), async (ctx, next) => {
+        const { id } = ctx.params;
+        const {
+            key,
+            namespace,
+            ownerId,
+        } = ctx.request.body;
 
         if (!id) {
             ctx.res.status = 404;
@@ -134,11 +139,13 @@ app.prepare().then(async () => {
             };
         }
 
-        await request(removeMetafield(), {
-            input: {
-                id: "gid://shopify/Metafield/" + id
-            }
-        })
+        await request(removeMetafields(), {
+            metafields: [{
+                key,
+                namespace,
+                ownerId,
+            }],
+        });
 
         ctx.res.status = 200;
         ctx.body = {
@@ -147,7 +154,7 @@ app.prepare().then(async () => {
     });
 
     router.get("/product/download/valid/:productId", async (ctx, next) => {
-        const {productId} = ctx.params;
+        const { productId } = ctx.params;
 
         if (!productId) {
             ctx.res.status = 400;
@@ -217,7 +224,7 @@ app.prepare().then(async () => {
     });
 
     router.get("/product/download/:productId", async (ctx, next) => {
-        const {productId} = ctx.params;
+        const { productId } = ctx.params;
 
         if (!productId) {
             ctx.res.status = 400;
@@ -290,13 +297,24 @@ app.prepare().then(async () => {
     });
 
     router.post("/product/variant/save/:productVariantId", KoaBody(), async (ctx, next) => {
-        const {productVariantId} = ctx.params;
+        const { productVariantId } = ctx.params;
 
         const shopifyId = "gid://shopify/ProductVariant/" + productVariantId;
-        const {subPrice, subSku, subPriceId, subSkuId, alertInventoryCount, alertInventoryCountId, foreignSku, foreignSkuId} = ctx.request.body;
+        const {
+            subPrice,
+            subSku,
+            subPriceId,
+            subSkuId,
+            alertInventoryCount,
+            alertInventoryCountId,
+            foreignSku,
+            foreignSkuId,
+            productId,
+        } = ctx.request.body;
 
         try {
-            let metafields = [];
+            const metafields = [];
+            const metafieldsRemoveInput = [];
             if (subPrice) {
                 let metafield = {
                     description: "special subscriber price",
@@ -310,10 +328,10 @@ app.prepare().then(async () => {
                 }
                 metafields.push(metafield);
             } else if (subPriceId) {
-                await request(removeMetafield(), {
-                    input: {
-                        id: subPriceId
-                    }
+                metafieldsRemoveInput.push({
+                    key: "subscriberPrice",
+                    namespace: "subscription",
+                    ownerId: productId,
                 });
             }
 
@@ -330,10 +348,10 @@ app.prepare().then(async () => {
                 }
                 metafields.push(metafield);
             } else if (subSkuId) {
-                await request(removeMetafield(), {
-                    input: {
-                        id: subSkuId
-                    }
+                metafieldsRemoveInput.push({
+                    key: "realSku",
+                    namespace: "subscription",
+                    ownerId: productId,
                 });
             }
 
@@ -350,10 +368,10 @@ app.prepare().then(async () => {
                 }
                 metafields.push(metafield);
             } else if (alertInventoryCountId) {
-                await request(removeMetafield(), {
-                    input: {
-                        id: alertInventoryCountId
-                    }
+                metafieldsRemoveInput.push({
+                    key: "alertInventoryCount",
+                    namespace: "subscription",
+                    ownerId: productId,
                 });
             }
 
@@ -370,10 +388,10 @@ app.prepare().then(async () => {
                 }
                 metafields.push(metafield);
             } else if (foreignSkuId) {
-                await request(removeMetafield(), {
-                    input: {
-                        id: foreignSkuId
-                    }
+                metafieldsRemoveInput.push({
+                    key: "foreignSku",
+                    namespace: "Additions",
+                    ownerId: productId,
                 });
             }
 
@@ -385,7 +403,11 @@ app.prepare().then(async () => {
                     }
                 });
             }
-            ctx.body = {success: true};
+            if (metafieldsRemoveInput.length) {
+                await request(removeMetafields(), {metafields: metafieldsRemoveInput});
+            }
+
+            ctx.body = { success: true };
 
         } catch (e) {
             console.log(e);
@@ -396,7 +418,7 @@ app.prepare().then(async () => {
     });
 
     router.post("/product/variants/", KoaBody(), async (ctx, next) => {
-        let {limit, cursor, productId, pkgSize} = ctx.request.body;
+        let { limit, cursor, productId, pkgSize } = ctx.request.body;
         limit = parseInt(limit);
 
         if (!limit || !productId) {
@@ -417,7 +439,6 @@ app.prepare().then(async () => {
         try {
             let result = await request(pkgSize === "small" ? getVariantsSmall() : getVariants(), variables);
 
-            console.log("result?.product?.variants", result?.product?.variants)
             ctx.res.status = 200;
             ctx.body = result?.product?.variants?.edges || [];
         } catch (e) {
@@ -426,7 +447,7 @@ app.prepare().then(async () => {
     });
 
     router.post("/product/variants/detail", KoaBody(), async (ctx, next) => {
-        let {variantId} = ctx.request.body;
+        let { variantId } = ctx.request.body;
 
         if (!variantId) {
             ctx.res.status = 400;
@@ -435,7 +456,7 @@ app.prepare().then(async () => {
         }
 
         try {
-            let result = await request(getVariantDetails(), {id: variantId});
+            let result = await request(getVariantDetails(), { id: variantId });
             console.log("vres", result)
 
             ctx.res.status = 200;
@@ -445,11 +466,10 @@ app.prepare().then(async () => {
         }
     });
 
-    router.post("/product/upload/:productId", KoaBody({multipart: true, keepExtensions: true}), async (ctx, next) => {
-        const {productId} = ctx.params;
+    router.post("/product/upload/:productId", KoaBody({ multipart: true, keepExtensions: true }), async (ctx, next) => {
+        const { productId } = ctx.params;
         const body = ctx.request.body;
         const file = ctx.request.files?.file;
-        console.log("productId", productId);
 
         if (!productId) {
             ctx.res.status = 400;
@@ -484,14 +504,15 @@ app.prepare().then(async () => {
                 ctx.body = e.toString();
             }
         } else if (body.downloads) {
-            await request(removeMetafield(), {
-                input: {
-                    id: body.downloads
-                }
+            await request(removeMetafields(), {
+                metafields: [{
+                    key: "filename",
+                    namespace: "Download",
+                    ownerId: shopifyId,
+                }],
             });
         }
 
-        console.log("metafields", metafields);
         if (metafields.length) {
             await request(updateProduct(), {
                 input: {
@@ -504,7 +525,7 @@ app.prepare().then(async () => {
     });
 
     router.post("/product/find/:sku", async (ctx, next) => {
-        const {sku} = ctx.params;
+        const { sku } = ctx.params;
 
         if (!sku) {
             ctx.res.status = 400;
@@ -527,7 +548,7 @@ app.prepare().then(async () => {
     });
 
     router.post("/product/:productId/token/find", async (ctx, next) => {
-        const {productId} = ctx.params;
+        const { productId } = ctx.params;
 
         try {
             const result = await fetch(process.env.TOKEN_API + "/shopify-api/token/download/find", {
@@ -536,7 +557,7 @@ app.prepare().then(async () => {
                     product: "gid://shopify/Product/" + productId,
                     referer: "admin"
                 }),
-                headers: {"Content-Type": "application/json"}
+                headers: { "Content-Type": "application/json" }
             });
             const response = await result.json();
 
@@ -551,7 +572,7 @@ app.prepare().then(async () => {
     });
 
     router.post("/product/:productId/token/create", async (ctx, next) => {
-        const {productId} = ctx.params;
+        const { productId } = ctx.params;
 
         try {
             const result = await fetch(process.env.TOKEN_API + "/shopify-api/token/download/create", {
@@ -560,7 +581,7 @@ app.prepare().then(async () => {
                     product: "gid://shopify/Product/" + productId,
                     referer: "admin"
                 }),
-                headers: {"Content-Type": "application/json"}
+                headers: { "Content-Type": "application/json" }
             });
             const response = await result.json();
 
@@ -575,7 +596,7 @@ app.prepare().then(async () => {
     });
 
     router.post("/product/:productId/token/delete/:token", async (ctx, next) => {
-        const {productId, token} = ctx.params;
+        const { productId, token } = ctx.params;
 
         try {
             const result = await fetch(process.env.TOKEN_API + "/shopify-api/token/download/delete", {
@@ -583,7 +604,7 @@ app.prepare().then(async () => {
                 body: JSON.stringify({
                     id: token
                 }),
-                headers: {"Content-Type": "application/json"}
+                headers: { "Content-Type": "application/json" }
             });
             const response = await result.json();
 
@@ -598,7 +619,7 @@ app.prepare().then(async () => {
     });
 
     router.post("/product/:productId", async (ctx, next) => {
-        const {productId} = ctx.params;
+        const { productId } = ctx.params;
 
         if (!productId) {
             ctx.res.status = 400;

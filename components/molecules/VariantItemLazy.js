@@ -3,6 +3,8 @@ import React, {useState, useEffect, useContext, useCallback} from "react";
 import {ProductContext} from "../form/ProductContext";
 
 const VariantItemLazy = ({item}) => {
+    const router = useRouter();
+    const productId = router.query.id;
     const {node: {id, sku, title}} = item;
     const {product, supplier, setMissingForeignSkuVariants} = useContext(ProductContext);
 
@@ -82,7 +84,8 @@ const VariantItemLazy = ({item}) => {
             subPrice: priceInput,
             subSku: subSkuInput,
             alertInventoryCount: alertInventoryCount,
-            foreignSku: foreignSku
+            foreignSku: foreignSku,
+            productId: productId,
         };
 
         if (priceInputMetafield) {

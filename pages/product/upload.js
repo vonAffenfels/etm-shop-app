@@ -227,12 +227,14 @@ const Upload = () => {
     }
 
     function deleteDownloadAttachment(id) {
-        fetch(
-            "/metafield/remove/" + id.replace("gid://shopify/Metafield/", ""),
-            {
-                method: "post",
-            }
-        )
+        fetch("/metafield/remove/" + id.replace("gid://shopify/Metafield/", ""), {
+            method: "post",
+            data: JSON.stringify({
+                ownerId: productId,
+                key: "filename",
+                namespace: "Download",
+            }),
+        })
             .then((response) => response.json())
             .then((data) => {
                 fetchProduct();

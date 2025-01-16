@@ -1,10 +1,10 @@
-import {createClient} from "./client";
+import { createClient } from "./client";
 import getProduct from "./mutations/getProduct";
 import getProductBySku from "./mutations/getProductBySku";
-import getVariants, {getVariantsSmall, getVariantDetails} from "./mutations/getVariants";
+import getVariants, { getVariantsSmall, getVariantDetails } from "./mutations/getVariants";
 import updateProduct from "./mutations/updateProduct";
 import updateProductVariant from "./mutations/updateProductVariant";
-import removeMetafield from "./mutations/removeMetafield";
+import removeMetafields from "./mutations/removeMetafields";
 import fetch from "node-fetch";
 
 async function request(query, variables) {
@@ -23,4 +23,15 @@ async function request(query, variables) {
     return res.json();
 }
 
-export {request, createClient, getProduct, getProductBySku, getVariants, getVariantsSmall, getVariantDetails, updateProduct, updateProductVariant, removeMetafield};
+export {
+    request,
+    createClient,
+    getProduct,
+    getProductBySku,
+    getVariants,
+    getVariantsSmall,
+    getVariantDetails,
+    updateProduct,
+    updateProductVariant,
+    removeMetafields,
+};
