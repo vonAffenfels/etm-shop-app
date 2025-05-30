@@ -122,6 +122,11 @@ const supplierOptions = [
         short: "MOPC",
         label: "Motorpresse (Kalender + DBL)",
     },
+    {
+        value: "000022",
+        short: "RAC",
+        label: "racefoxx (LTP Litschka GmbH & Co. KG)",
+    },
 ];
 const subscriptionRelationOptions = [
     { value: "01", label: "Print" },
