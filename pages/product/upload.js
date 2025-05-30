@@ -128,6 +128,7 @@ const supplierOptions = [
         label: "racefoxx (LTP Litschka GmbH & Co. KG)",
     },
 ];
+
 const subscriptionRelationOptions = [
     { value: "01", label: "Print" },
     { value: "15", label: "Kombi" },
@@ -135,6 +136,7 @@ const subscriptionRelationOptions = [
     { value: "50", label: "firmenauto Basis-Flat" },
     { value: "51", label: "Flatrate" },
 ];
+
 const subscriptionProjects = [
     { value: "00004453", label: "lastauto omnibus PLUS" },
     { value: "00006035", label: "trans aktuell" },
@@ -144,6 +146,7 @@ const subscriptionProjects = [
     { value: "00098031", label: "firmenauto Flatrate" },
     { value: "00099118", label: "eurotransport Flatrate" },
 ];
+
 const zenitItems = [
     {
         apiName: "delivery-code",
