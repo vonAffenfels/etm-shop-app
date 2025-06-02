@@ -12,7 +12,10 @@ The "master" branch is used for deployments to the live environment
 The Render.com is linked to the repository https://github.com/VaJulianLindner/etm-shop-app/. Ownership to vA organization might be required.
 
 ### Deployment Steps
-* open "Manual Deploy" dropdown
-* press "Deploy latest commit" or "Deploy a specific commit" depending on your needs
 
-(this is subject to updates to render.com)
+-   automatic deployment on push to master
+
+OR
+
+1. open "Manual Deploy" dropdown
+2. press "Deploy latest commit" or "Deploy a specific commit" depending on your needs
